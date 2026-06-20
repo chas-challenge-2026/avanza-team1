@@ -1,0 +1,35 @@
+version: "3.9"
+name: avanza
+
+services:
+  db:
+    image: postgres:12
+    environment:
+      POSTGRES_DB: avanza
+      POSTGRES_USER: avanza
+      POSTGRES_PASSWORD: avanza123
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./seed.sql:/docker-entrypoint-initdb.d/seed.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U avanza"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build:
+      context: ../backend/AvanzaPortal
+      dockerfile: Dockerfile
+    ports:
+      - "8082:8082"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/avanza
+      - SPRING_DATASOURCE_USERNAME=avanza
+      - SPRING_DATASOURCE_PASSWORD=avanza123
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  postgres_data:

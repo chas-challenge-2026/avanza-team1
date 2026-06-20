@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout :: head('Portfolio')">
+    <title>Dashboard</title>
+</head>
+<body>
+<div th:replace="layout :: navbar"></div>
+
+<div class="container-fluid" style="margin-top: 70px; padding: 20px;">
+
+    <!-- Header row -->
+    <div class="row">
+        <div class="col-sm-8">
+            <h2>Min Portfölj
+                <small th:text="'Totalt värde: ' + ${totalPortfolioValue} + ' SEK'">totalt</small>
+            </h2>
+        </div>
+        <div class="col-sm-4 text-right">
+            <p class="text-muted small">
+                USD/SEK-kurs (fast): <strong th:text="${usdToSek}">10.45</strong>
+            </p>
+        </div>
+    </div>
+
+    <!-- Drift warning banner -->
+    <div th:if="${anyDrift}" class="alert alert-warning">
+        <strong>Varning!</strong> En eller fler kontotyper avviker mer än 5% från målallokering.
+        Se tabellen nedan eller gå till <a href="/alerts">Notiser</a>.
+    </div>
+
+    <!-- Account summary -->
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-heading"><h4 class="panel-title">Konton</h4></div>
+                <div class="panel-body">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th>Konto</th>
+                            <th>Typ</th>
+                            <th>Värde (SEK)</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="acc : ${accounts}">
+                            <td th:text="${acc.account_name}">Kontonamn</td>
+                            <td><span class="label label-info" th:text="${acc.account_type}">ISK</span></td>
+                            <td th:text="${acc.totalValueSek}">0.00</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Allocation vs target table -->
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">Allokering vs Mål (tröskelvärde: 5%)</h4>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-condensed">
+                        <thead>
+                        <tr>
+                            <th>Typ</th>
+                            <th>Faktisk %</th>
+                            <th>Mål %</th>
+                            <th>Avvikelse %</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="row : ${allocationRows}"
+                            th:class="${row.overThreshold} ? 'danger' : ''">
+                            <td th:text="${row.accountType}">ISK</td>
+                            <td th:text="${row.actual}">0.0</td>
+                            <td th:text="${row.target}">0.0</td>
+                            <td>
+                                <span th:text="${row.drift} + '%'">0.0%</span>
+                                <span th:if="${row.overThreshold}" class="label label-danger">DRIFT</span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent alerts summary -->
+        <div class="col-sm-6">
+            <div class="panel panel-warning">
+                <div class="panel-heading">
+                    <h4 class="panel-title">Aktiva notiser
+                        <a href="/alerts" class="pull-right btn btn-xs btn-default">Visa alla</a>
+                    </h4>
+                </div>
+                <div class="panel-body">
+                    <p th:if="${#lists.isEmpty(recentAlerts)}" class="text-muted">Inga aktiva notiser.</p>
+                    <ul class="list-unstyled" th:if="${!#lists.isEmpty(recentAlerts)}">
+                        <li th:each="alert : ${recentAlerts}" style="margin-bottom:8px;">
+                            <span class="label label-warning" th:text="${alert.alert_type}">DRIFT</span>
+                            <span th:text="${alert.message}">meddelande</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Holdings summary (top 5 only — wait no, actually all of them, no limit) -->
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">Innehav
+                        <a href="/holdings" class="pull-right btn btn-xs btn-primary">Hantera innehav</a>
+                    </h4>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                        <tr>
+                            <th>Ticker</th>
+                            <th>Instrument</th>
+                            <th>Antal</th>
+                            <th>Snittpris</th>
+                            <th>Aktuell kurs</th>
+                            <th>Valuta</th>
+                            <th>Marknadsvärde (SEK)</th>
+                            <th>Orealiserat P&amp;L</th>
+                            <th>Avk %</th>
+                            <th>Sharpe*</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="h : ${holdings}"
+                            th:class="${h.unrealizedReturn >= 0} ? 'success' : 'danger'">
+                            <td><strong th:text="${h.ticker}">ERIC-B</strong></td>
+                            <td th:text="${h.instrument_name}">Ericsson B</td>
+                            <td th:text="${h.quantity}">500</td>
+                            <td th:text="${h.avg_buy_price}">68.50</td>
+                            <td th:text="${h.currentPrice}">74.20</td>
+                            <td><span class="label label-default" th:text="${h.displayCurrency}">SEK</span></td>
+                            <td th:text="${h.valueSek}">37100.00</td>
+                            <td th:text="${h.unrealizedReturn}">2850.00</td>
+                            <td th:text="${h.unrealizedReturnPct} + '%'">8.3%</td>
+                            <td th:text="${h.sharpe}">0.40</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <p class="text-muted small">
+                        * Sharpe beräknad per innehav med riskfri ränta 2% och hårdkodad volatilitet 15%. Ej meningsfullt.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</body>
+</html>
