@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Logga in – Avanza Portföljhälsa</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" th:href="@{/style.css}"/>
+    <style>
+        body { background: #f4f6f9; }
+        .login-card { margin-top: 80px; }
+        .panel-heading { background: #00c281 !important; color: #fff !important; border: none; }
+        .brand-title { font-size: 1.2em; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4 login-card">
+            <div class="panel panel-default">
+                <div class="panel-heading text-center">
+                    <h3 class="panel-title brand-title">
+                        <strong>Avanza</strong> Portföljhälsa
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <div th:if="${error}" class="alert alert-danger" th:text="${error}">
+                        Fel meddelande
+                    </div>
+                    <form method="post" action="/login">
+                        <div class="form-group">
+                            <label for="email">E-post</label>
+                            <input type="email" class="form-control" id="email" name="email"
+                                   placeholder="din@email.se" required autofocus/>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Lösenord</label>
+                            <input type="password" class="form-control" id="password" name="password"
+                                   placeholder="Lösenord" required/>
+                        </div>
+                        <button type="submit" class="btn btn-block"
+                                style="background:#00c281;color:#fff;font-weight:bold;">
+                            Logga in
+                        </button>
+                    </form>
+                    <hr/>
+                    <p class="text-muted text-center small">
+                        Testanvändare: anna@example.com / password123
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

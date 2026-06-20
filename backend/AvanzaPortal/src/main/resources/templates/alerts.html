@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout :: head('Notiser')">
+    <title>Notiser</title>
+</head>
+<body>
+<div th:replace="layout :: navbar"></div>
+
+<div class="container-fluid" style="margin-top: 70px; padding: 20px;">
+
+    <h2>Notiser
+        <small>Tröskelvärde för drift-notiser på denna sida: <span th:text="${driftThreshold}">7</span>%
+            (OBS: dashboardsidan använder 5% — inkonsekvent by design)</small>
+    </h2>
+
+    <!-- Live drift alerts (computed inline in controller) -->
+    <div th:if="${!#lists.isEmpty(liveAlerts)}">
+        <h4>Aktiva avvikelser just nu</h4>
+        <div th:each="alert : ${liveAlerts}" class="alert alert-warning">
+            <strong th:text="${alert.alert_type}">LIVE_DRIFT</strong>:
+            <span th:text="${alert.message}">meddelande</span>
+            <em class="text-muted small"> (beräknad realtid, sparas ej)</em>
+        </div>
+    </div>
+
+    <div th:if="${#lists.isEmpty(liveAlerts)}" class="alert alert-success">
+        Alla allokeringar inom acceptabel gräns (&lt;<span th:text="${driftThreshold}">7</span>%).
+    </div>
+
+    <!-- Stored alerts from database -->
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">Sparade notiser (från databas)</h4>
+        </div>
+        <div class="panel-body">
+            <p th:if="${#lists.isEmpty(storedAlerts)}" class="text-muted">Inga sparade notiser.</p>
+
+            <table th:if="${!#lists.isEmpty(storedAlerts)}"
+                   class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                    <th>Typ</th>
+                    <th>Meddelande</th>
+                    <th>Skapad</th>
+                    <th>Status</th>
+                    <th>Åtgärd</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="alert : ${storedAlerts}"
+                    th:class="${alert.dismissed} ? 'text-muted' : ''">
+                    <td>
+                        <span th:text="${alert.alert_type}"
+                              th:class="${alert.dismissed} ? 'label label-default' : 'label label-warning'">
+                            DRIFT
+                        </span>
+                    </td>
+                    <td th:text="${alert.message}">meddelande</td>
+                    <td th:text="${alert.created_at}">2024-01-01</td>
+                    <td>
+                        <span th:if="${alert.dismissed}" class="text-muted">Avfärdad</span>
+                        <span th:if="${!alert.dismissed}" class="label label-warning">Aktiv</span>
+                    </td>
+                    <td>
+                        <form th:if="${!alert.dismissed}" method="post" action="/alerts/dismiss"
+                              style="display:inline;">
+                            <!-- Ingen ägarskapskontroll — kan avfärda andras notiser via alertId -->
+                            <input type="hidden" name="alertId" th:value="${alert.id}"/>
+                            <button type="submit" class="btn btn-xs btn-default">Avfärda</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout :: head('Innehav')">
+    <title>Innehav</title>
+</head>
+<body>
+<div th:replace="layout :: navbar"></div>
+
+<div class="container-fluid" style="margin-top: 70px; padding: 20px;">
+
+    <h2>Mina Innehav</h2>
+
+    <!-- Holdings table -->
+    <div class="panel panel-default">
+        <div class="panel-heading"><h4 class="panel-title">Nuvarande innehav (inga kurslimiter — alla rader laddas)</h4></div>
+        <div class="panel-body">
+            <table class="table table-bordered table-hover table-striped">
+                <thead>
+                <tr>
+                    <th>Ticker</th>
+                    <th>Instrument</th>
+                    <th>Konto</th>
+                    <th>Typ</th>
+                    <th>Antal</th>
+                    <th>Snittpris</th>
+                    <th>Aktuell kurs</th>
+                    <th>Marknadsvärde</th>
+                    <th>P&amp;L</th>
+                    <th>Åtgärd</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="h : ${holdings}"
+                    th:class="${h.pnl >= 0} ? 'success' : 'danger'">
+                    <td><strong th:text="${h.ticker}">ERIC-B</strong></td>
+                    <td th:text="${h.instrument_name}">Ericsson B</td>
+                    <td th:text="${h.account_name}">Anna ISK</td>
+                    <td><span class="label label-info" th:text="${h.account_type}">ISK</span></td>
+                    <td th:text="${h.quantity}">500</td>
+                    <td th:text="${h.avg_buy_price}">68.50</td>
+                    <td th:text="${h.currentPrice}">74.20</td>
+                    <td th:text="${h.marketValue}">37100.00</td>
+                    <td>
+                        <span th:text="${h.pnl}"
+                              th:class="${h.pnl >= 0} ? 'text-success' : 'text-danger'">2850.00</span>
+                    </td>
+                    <td>
+                        <form method="post" action="/holdings/delete" style="display:inline;"
+                              onsubmit="return confirm('Ta bort ' + this.dataset.ticker + '?')"
+                              th:data-ticker="${h.ticker}">
+                            <input type="hidden" name="holdingId" th:value="${h.id}"/>
+                            <!-- NOTE: ingen ägarskapskontroll — vem som helst kan ta bort vad som helst -->
+                            <button type="submit" class="btn btn-xs btn-danger">Ta bort</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Add holding form -->
+    <div class="panel panel-primary">
+        <div class="panel-heading"><h4 class="panel-title">Lägg till innehav</h4></div>
+        <div class="panel-body">
+            <form method="post" action="/holdings/add" class="form-horizontal">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Konto</label>
+                    <div class="col-sm-4">
+                        <select name="accountId" class="form-control" required>
+                            <option value="">Välj konto...</option>
+                            <option th:each="acc : ${accounts}"
+                                    th:value="${acc.id}"
+                                    th:text="${acc.account_name} + ' (' + ${acc.account_type} + ')'">
+                                Konto
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Ticker</label>
+                    <div class="col-sm-4">
+                        <input type="text" name="ticker" class="form-control"
+                               placeholder="t.ex. ERIC-B" required/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Instrumentnamn</label>
+                    <div class="col-sm-4">
+                        <input type="text" name="instrumentName" class="form-control"
+                               placeholder="t.ex. Ericsson B" required/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Antal</label>
+                    <div class="col-sm-2">
+                        <!-- No validation — negative numbers accepted, server side does nothing either -->
+                        <input type="text" name="quantity" class="form-control" placeholder="100" required/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Snittpris</label>
+                    <div class="col-sm-2">
+                        <input type="text" name="avgBuyPrice" class="form-control" placeholder="150.00" required/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Valuta</label>
+                    <div class="col-sm-2">
+                        <select name="currency" class="form-control">
+                            <option value="SEK">SEK</option>
+                            <option value="USD">USD</option>
+                            <option value="EUR">EUR</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-4">
+                        <button type="submit" class="btn btn-primary">Lägg till</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</body>
+</html>
