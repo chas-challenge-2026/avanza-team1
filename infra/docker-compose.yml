@@ -21,8 +21,8 @@ services:
     build:
       context: ../backend/AvanzaPortal
       dockerfile: Dockerfile
-    ports:
-      - "8082:8082"
+    expose:
+      - "8082"
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/avanza
       - SPRING_DATASOURCE_USERNAME=avanza
