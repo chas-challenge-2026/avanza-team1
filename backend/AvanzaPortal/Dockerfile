@@ -3,7 +3,7 @@ WORKDIR /app
 COPY pom.xml .
 RUN mvn dependency:resolve -q
 COPY src ./src
-RUN mvn package -DskipTests
+RUN mvn package -DskipTests -q
 
 FROM eclipse-temurin:21-jre-jammy
 WORKDIR /app
