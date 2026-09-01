@@ -1,3 +1,20 @@
-main {
-    height: 100%;
+/* Mobile-first, responsive, matches issue 25 design */
+.app-content {
+  background-color: #f5f5f5;
+  min-height: calc(100vh - 80px);
+  padding: 1rem;
+}
+
+.page {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+}
+
+@media (min-width: 768px) {
+  .app-content {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
 }
