@@ -3,3 +3,10 @@
     flex-direction: row;
     justify-content: space-between;
 }
+
+.navbar nav {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--gap-medium);
+}
