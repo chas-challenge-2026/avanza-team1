@@ -1,0 +1,15 @@
+/* Put global styles and resets here */
+:root {
+    /* global variables */
+    --gap: 1rem;
+
+    /* resets */
+    box-sizing: border-box;
+
+    /* colors */
+}
+body {
+    margin: 0;
+    padding: 0;
+    height: 100dvh;
+}
