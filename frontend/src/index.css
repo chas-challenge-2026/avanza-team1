@@ -1,0 +1,79 @@
+/* Put global styles and resets here */
+:root {
+    /* global variables */
+
+    /* spacing */
+    --gap-large: 1.5rem;
+    --gap-medium: 1rem;
+    --gap-small: 0.5rem;
+
+    /* colors */
+    --white: #ffffff;
+    --off-white: #f4f6f9;
+    --light-gray: #f0f0f0;
+    --black: #000000;
+    --dark-gray: #222222;
+
+    --primary-color: #00c281;
+
+    --background: var(--off-white);
+    --background-alt: var(--light-gray);
+
+    --text-color: var(--black);
+    --text-color-alt: var(--dark-gray);
+}   
+* {
+    /* resets */
+    box-sizing: border-box;
+
+}
+body {
+    margin: 0;
+    padding: 0;
+    height: 100dvh;
+
+    background-color: var(--background);
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+/* below are v1 styles, some properties have been updated  */
+/* TODO: Place remaining properties in the appropriate places according to STYLING.md as components are built */
+
+/* .navbar-default {
+    background-color: #ffffff;
+    border-color: #00c281;
+}
+
+.navbar-default .navbar-brand,
+.navbar-default .navbar-nav>li>a,
+.navbar-default .navbar-text {
+    color: #222222 !important;
+}
+
+.navbar-default .navbar-nav>li>a:hover {
+    color: #00a36c !important;
+    background-color: transparent;
+}
+
+.panel-heading {
+    font-weight: 600;
+}
+
+.table th {
+    background-color: #f0f0f0;
+}
+
+.label-info {
+    background-color: #17a2b8;
+}
+
+/* Make drift warnings more visible
+tr.danger td {
+    color: #721c24;
+}
+
+tr.success td {
+    color: #155724;
+} 
+
+*/
