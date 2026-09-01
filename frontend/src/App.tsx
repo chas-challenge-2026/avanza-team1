@@ -9,18 +9,17 @@ function App() {
     <>
       <header>
         <Navbar/>
-          <Routes>
-            <Route path="/" element={null} />
-            <Route path="/holdings" element={null} />
-            <Route path="/login" element={null} />
-            <Route path="/alerts" element={null} />
-          </Routes>
       </header>
       <main>
-
+        <Routes>
+          <Route path="/" element={null} />
+          <Route path="/holdings" element={null} />
+          <Route path="/login" element={null} />
+          <Route path="/alerts" element={null} />
+        </Routes>
       </main>
       <footer>
-        
+        {/* Place footer component here */}
       </footer>
     </>
   )
