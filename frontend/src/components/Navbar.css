@@ -3,6 +3,9 @@
   border-bottom: 4px solid #00a651;
   padding: 1rem 2rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 .navbar-container {
@@ -18,11 +21,6 @@
   font-weight: 700;
   margin: 0;
   color: #000;
-}
-
-nav {
-  display: flex;
-  gap: 2rem;
 }
 
 a {
@@ -41,4 +39,11 @@ a:hover {
 a.active {
   color: #00a651;
   border-bottom-color: #00a651;
+}
+
+.navbar nav {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--gap-medium);
 }
