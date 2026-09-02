@@ -11,6 +11,25 @@
   border-radius: 8px;
 }
 
+.table th {
+  background-color: #f0f0f0;
+}
+
+.label-info {
+  background-color: #17a2b8;
+}
+
+/* Make drift warnings more visible */
+tr.danger td {
+  color: #721c24;
+}
+
+tr.success td {
+  color: #155724;
+}
+
+/* Media queries */
+
 @media (min-width: 768px) {
   .app-content {
     padding: 2rem;

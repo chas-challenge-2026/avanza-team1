@@ -36,10 +36,14 @@ body {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+
 /* below are v1 styles, some properties have been updated  */
 /* TODO: Place remaining properties in the appropriate places according to STYLING.md as components are built */
 
-/* .navbar-default {
+/* Belongs in Navbar.css */
+
+/* 
+.navbar-default {
     background-color: #ffffff;
     border-color: #00c281;
 }
@@ -55,25 +59,11 @@ body {
     background-color: transparent;
 }
 
+*/
+
+/* Belongs in components/Panel.css */
+/* 
 .panel-heading {
     font-weight: 600;
-}
+} */
 
-.table th {
-    background-color: #f0f0f0;
-}
-
-.label-info {
-    background-color: #17a2b8;
-}
-
-/* Make drift warnings more visible
-tr.danger td {
-    color: #721c24;
-}
-
-tr.success td {
-    color: #155724;
-} 
-
-*/
