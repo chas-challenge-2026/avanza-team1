@@ -41,7 +41,7 @@ void fx_convert()
     response.string = (char*)malloc(1);
     response.size = 0;
 
-    curl_easy_setopt(handle, CURLOPT_URL, "https://www.google.com");
+    curl_easy_setopt(handle, CURLOPT_URL, "https://api.riksbank.se/swea/v1/Observations/Latest/sekeurpmi"); // The Riksbank API allows 5 calls per minute and 1000 calls per day
     curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, write_data);
     curl_easy_setopt(handle, CURLOPT_WRITEDATA, (void*)&response);
 
@@ -60,7 +60,39 @@ void fx_convert()
     char *full_string = (char*)malloc(len + 1);
     strncpy(full_string, response.string, len);
 
-    std::cout << "Response: " << response.string << "\r\n";
-    
     free(response.string);
+
+    std::cout << "Response: " << full_string << "\r\n";
+
+    free(full_string);
+}
+
+void fx_parse_string()
+{
+    const char *test_string = "{\"date\":\"2026-09-01\",\"value\":11.1145}";
+
+    json_error_t json_error;
+    json_t *json = json_loads(test_string, 0, &json_error);
+    if (!json)
+    {
+        std::cout << "Error on line " << json_error.line << ": " << json_error.text << "\r\n";
+    }
+
+    json_t *json_date = json_object_get(json, "date");
+    if (json_is_string(json_date))
+    {
+        const char *str = json_string_value(json_date);
+
+        std::cout << "str: " << str << "\r\n";
+    }
+    json_t *json_value = json_object_get(json, "value");
+    if (json_is_real(json_value))
+    {
+        double value = json_real_value(json_value);
+
+        std::cout << "value: " << value << "\r\n";
+    }
+   
+
+    json_decref(json);
 }
