@@ -2,8 +2,11 @@
 :root {
     /* global variables */
 
+    /* sizes */
+    --max-width: 1200px;
+
     /* spacing */
-    --gap-large: 1.5rem;
+    --gap-large: 2rem;
     --gap-medium: 1rem;
     --gap-small: 0.5rem;
 
@@ -13,6 +16,7 @@
     --light-gray: #f0f0f0;
     --black: #000000;
     --dark-gray: #222222;
+    --green: #00a651;
 
     --primary-color: #00c281;
 
@@ -30,7 +34,7 @@
 body {
     margin: 0;
     padding: 0;
-    height: 100dvh;
+    min-height: 100dvh;
 
     background-color: var(--background);
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;

@@ -1,7 +1,8 @@
 /* Mobile-first, responsive, matches issue 25 design */
 .app-content {
   background-color: #f5f5f5;
-  min-height: calc(100vh - 80px);
+  /* min-height: calc(100vh - 80px); */
+  height: 100%;
   padding: 1rem;
 }
 

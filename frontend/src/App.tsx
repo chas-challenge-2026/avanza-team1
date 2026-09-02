@@ -21,9 +21,6 @@ function App() {
         <Route path="/login" element={null} />
         </Routes>
       </main>
-      <footer>
-        {/* Place footer component here */}
-      </footer>
     </>
   )
 }

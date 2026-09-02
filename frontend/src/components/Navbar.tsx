@@ -1,5 +1,5 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import "./Navbar.css";
+import styles from "./Navbar.module.css";
 
 function Navbar() {
   const navigate = useNavigate();
@@ -10,16 +10,16 @@ function Navbar() {
 
 
   return (
-    <header className="navbar">
-        <div className="navbar-brand">
+    <header className={styles.navbar}>
+        <div className={styles["navbar-brand"]}>
           <h1>Avanza</h1>
         </div>
         <nav>
-          <NavLink to="/">Portfolio</NavLink>
-          <NavLink to="/holdings">Innehav</NavLink>
-          <NavLink to="/alerts">Notiser</NavLink>
+          <NavLink to="/" end className={({ isActive }) => isActive ? styles.active : ""}>Portfolio</NavLink>
+          <NavLink to="/holdings" className={({ isActive }) => isActive ? styles.active : ""}>Innehav</NavLink>
+          <NavLink to="/alerts" className={({ isActive }) => isActive ? styles.active : ""}>Notiser</NavLink>
         </nav>
-        <button className="logout-button" onClick={() => navigate("/login")}>
+        <button className={styles["logout-button"]} onClick={() => navigate("/login")}>
           Logga ut
         </button>
     </header>
