@@ -1,3 +1,5 @@
+import "./Panel.module.css";
+
 interface PanelProps {
   title: string;
   size?: 'small' | 'medium' | 'large';
