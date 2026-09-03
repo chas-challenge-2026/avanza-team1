@@ -14,3 +14,6 @@
     
     Put styles for individual components here, ensuring they are scoped to avoid conflicts with other components.
 
+## Naming conventions
+
+- *Use camelCase for class names and IDs.* This makes for cleaner code when applying modular styles in React components (`className={styles.myClass}` instead of `className={styles["logout-button"]}`).
