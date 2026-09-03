@@ -1,4 +1,4 @@
-# Styling Guidelines
+# Styling Guidelines for CSS
 
 ## File structure (what goes where)
 
@@ -16,4 +16,5 @@
 
 ## Naming conventions
 
-- *Use camelCase for class names and IDs.* This makes for cleaner code when applying modular styles in React components (`className={styles.myClass}` instead of `className={styles["logout-button"]}`).
+- Use kebab-case for class names, IDs and CSS variables.
+- Avoid concatenating class names for specificity (ex: .card .card-title .card-body). Instead, use a class name that describes that element and rely on the component structure and scoped CSS modules to manage styles (ex: .card .title .body).
