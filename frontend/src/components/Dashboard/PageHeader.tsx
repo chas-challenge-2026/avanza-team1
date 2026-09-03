@@ -1,3 +1,5 @@
+import styles from './PageHeader.module.css';
+
 interface PageHeaderProps {
   title?: string;
   totalValue?: number;
@@ -10,12 +12,12 @@ function PageHeader({
   exchange = 'USD/SEK 10:45'
 }: PageHeaderProps): JSX.Element {
   return (
-    <div className="page-header">
-      <h1>{title}</h1>
-      <div style={{ fontSize: '2.5rem', fontWeight: 'bold', color: '#333', marginBottom: '0.5rem' }}>
-        {totalValue.toLocaleString('sv-SE')} <span style={{ fontSize: '1rem', fontWeight: 'normal' }}>SEK</span>
+    <div className={styles.pageHeader}>
+      <h1 className={styles.title}>{title}</h1>
+      <div className={styles.value}>
+        {totalValue.toLocaleString('sv-SE')} <span>SEK</span>
       </div>
-      <p className="subtitle" style={{ color: '#666', fontSize: '0.875rem' }}>Värde: {exchange}</p>
+      <p className={styles.subtitle}>Värde: {exchange}</p>
     </div>
   );
 }

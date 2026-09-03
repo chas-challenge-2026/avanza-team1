@@ -1,0 +1,30 @@
+.container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-top: 1rem;
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+}
+
+.percentage {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 0.25rem;
+}
+
+.target {
+  font-size: 0.75rem;
+  color: #999;
+  margin-bottom: 0.5rem;
+}
+
+.name {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #333;
+}

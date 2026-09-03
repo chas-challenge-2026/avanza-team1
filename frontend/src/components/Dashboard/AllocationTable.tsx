@@ -1,31 +1,32 @@
 import Panel from '../Panel';
+import styles from './AllocationTable.module.css';
 
 function AllocationTable(): JSX.Element {
   return (
     <Panel title="Fördelning" size="large">
-      <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-        <thead>
-          <tr style={{ borderBottom: '2px solid #e0e0e0' }}>
-            <th style={{ textAlign: 'left', padding: '0.75rem', fontSize: '0.875rem', fontWeight: '600', color: '#666' }}>Tillgångsslag</th>
-            <th style={{ textAlign: 'right', padding: '0.75rem', fontSize: '0.875rem', fontWeight: '600', color: '#666' }}>Andel</th>
-            <th style={{ textAlign: 'right', padding: '0.75rem', fontSize: '0.875rem', fontWeight: '600', color: '#666' }}>Värde</th>
+      <table className={styles.table}>
+        <thead className={styles.tableHead}>
+          <tr>
+            <th className={styles.headerCell}>Tillgångsslag</th>
+            <th className={`${styles.headerCell} ${styles.headerCellRight}`}>Andel</th>
+            <th className={`${styles.headerCell} ${styles.headerCellRight}`}>Värde</th>
           </tr>
         </thead>
         <tbody>
-          <tr style={{ borderBottom: '1px solid #f0f0f0' }}>
-            <td style={{ padding: '0.75rem' }}>Aktier</td>
-            <td style={{ padding: '0.75rem', textAlign: 'right', color: '#00a651', fontWeight: '600' }}>75%</td>
-            <td style={{ padding: '0.75rem', textAlign: 'right' }}>523 837 kr</td>
+          <tr className={styles.row}>
+            <td className={styles.cell}>Aktier</td>
+            <td className={`${styles.cell} ${styles.cellPercentage}`}>75%</td>
+            <td className={`${styles.cell} ${styles.cellValue}`}>523 837 kr</td>
           </tr>
-          <tr style={{ borderBottom: '1px solid #f0f0f0' }}>
-            <td style={{ padding: '0.75rem' }}>Obligationer</td>
-            <td style={{ padding: '0.75rem', textAlign: 'right', color: '#00a651', fontWeight: '600' }}>15%</td>
-            <td style={{ padding: '0.75rem', textAlign: 'right' }}>104 767 kr</td>
+          <tr className={styles.row}>
+            <td className={styles.cell}>Obligationer</td>
+            <td className={`${styles.cell} ${styles.cellPercentage}`}>15%</td>
+            <td className={`${styles.cell} ${styles.cellValue}`}>104 767 kr</td>
           </tr>
           <tr>
-            <td style={{ padding: '0.75rem' }}>Kontanter</td>
-            <td style={{ padding: '0.75rem', textAlign: 'right', color: '#00a651', fontWeight: '600' }}>10%</td>
-            <td style={{ padding: '0.75rem', textAlign: 'right' }}>69 846 kr</td>
+            <td className={styles.cell}>Kontanter</td>
+            <td className={`${styles.cell} ${styles.cellPercentage}`}>10%</td>
+            <td className={`${styles.cell} ${styles.cellValue}`}>69 846 kr</td>
           </tr>
         </tbody>
       </table>

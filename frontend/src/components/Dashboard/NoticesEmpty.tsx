@@ -1,15 +1,11 @@
 import Panel from '../Panel';
+import styles from './NoticesEmpty.module.css';
 
 function NoticesEmpty(): JSX.Element {
   return (
     <Panel title="Meddelanden" size="medium">
-      <div style={{
-        textAlign: 'center',
-        color: '#999',
-        padding: '2rem 0',
-        fontSize: '0.875rem'
-      }}>
-        <p>Inga nya meddelanden</p>
+      <div className={styles.empty}>
+        <p className={styles.emptyText}>Inga nya meddelanden</p>
       </div>
     </Panel>
   );
