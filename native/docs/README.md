@@ -7,7 +7,9 @@
 * 
 
 ### FX-Pipeline
-*  
+* Uses Sveriges Riksbank's exchange rate API to get the current exchange rate between Swedish kronor (SEK) and any other currency.
+* Uses libcurl and Jansson to call the API and process the received JSON data.
+* For now it will only be able to handle conversions between SEK and another currency, but later on we might support comparing any two currencies.
 
 ### Backtest-Engine
 * 
