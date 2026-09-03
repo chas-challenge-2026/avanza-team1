@@ -1,0 +1,10 @@
+.empty {
+  text-align: center;
+  color: #999;
+  padding: 2rem 0;
+  font-size: 0.875rem;
+}
+
+.emptyText {
+  margin: 0;
+}

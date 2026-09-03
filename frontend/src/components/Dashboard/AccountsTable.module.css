@@ -1,0 +1,29 @@
+.container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.columnTitle {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.875rem;
+}
+
+.value {
+  font-weight: 600;
+  color: #00a651;
+}

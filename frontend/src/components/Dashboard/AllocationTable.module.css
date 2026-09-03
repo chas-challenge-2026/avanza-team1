@@ -1,0 +1,39 @@
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tableHead {
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.headerCell {
+  text-align: left;
+  padding: 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #666;
+}
+
+.headerCellRight {
+  text-align: right;
+}
+
+.row {
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.cell {
+  padding: 0.75rem;
+  font-size: 0.875rem;
+}
+
+.cellPercentage {
+  text-align: right;
+  color: #00a651;
+  font-weight: 600;
+}
+
+.cellValue {
+  text-align: right;
+}
