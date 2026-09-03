@@ -9,12 +9,12 @@ Använd denna tillsammans med README.md för maximal träffsäkerhet och kraft.
 ## 🚀 Skill 1: Ge mig en lämplig commit-besked
 
 **Syfte:** AI genererar en commit-besked i rätt format  
-**Filer:** AGENT.md (Git Workflow-avsnitt)  
+**Filer:** TEAMSTANDARDS.md (Git Workflow-avsnitt)  
 **Relevans:** ⭐⭐⭐⭐⭐ (Mycket vanlig)
 
 ### Steg-för-steg
 1. Läs användarens fråga: "Vad gjorde du sedan senaste commit?"
-2. Öppna AGENT.md, leta efter avsnitt "Git Workflow" och "Commit Format"
+2. Öppna TEAMSTANDARDS.md, leta efter avsnitt "Git Workflow" och "Commit Format"
 3. Identifiera vilken **type** det är:
    - `build` = Ny feature eller större arbete
    - `refactor` = Omstrukturering utan nya features
@@ -314,12 +314,12 @@ Risker:
 ## 🚀 Skill 9: Är detta ett bra issue-description?
 
 **Syfte:** AI validerar GitHub issues  
-**Filer:** AGENT.md (DoR-avsnitt), DEFINITION_OF_DONE.md  
+**Filer:** TEAMSTANDARDS.md (DoR-avsnitt), DEFINITION_OF_DONE.md  
 **Relevans:** ⭐⭐⭐ (Viktigt för kvalitet)
 
 ### Steg-för-steg
 1. Läs användarens issue-text
-2. Öppna AGENT.md, leta efter "Definition of Ready"
+2. Öppna TEAMSTANDARDS.md, leta efter "Definition of Ready"
 3. Kolla:
    - ✅ Issue är tydligt definierat
    - ✅ Acceptance criteria är klara
@@ -350,12 +350,12 @@ Förslag: Lägg till 'Teams: Frontend + Backend' och 'Estimat: 8h'"
 ## 🚀 Skill 10: Kan jag commita detta till main?
 
 **Syfte:** AI validerar att branchen är redo för merge  
-**Filer:** AGENT.md (Git Workflow), DEFINITION_OF_DONE.md  
+**Filer:** TEAMSTANDARDS.md (Git Workflow), DEFINITION_OF_DONE.md  
 **Relevans:** ⭐⭐⭐⭐ (Kritiskt för stabilitet)
 
 ### Steg-för-steg
 1. Läs användarens branch-namn och commits
-2. Öppna AGENT.md, se "PR Requirements"
+2. Öppna TEAMSTANDARDS.md, se "PR Requirements"
 3. Verifiera:
    - ✅ Branch är från `develop`, inte från `main`
    - ✅ Commits följer format: `type(scope): message (#issue)`

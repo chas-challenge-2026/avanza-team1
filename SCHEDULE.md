@@ -14,7 +14,6 @@ Kursen omfattar **40 timmar per vecka**. När inget annat är schemalagt arbetar
 **Tid:** 12:30–14:00
 **Lunch:** 11:15–12:15 (innan mötet, för att kunna prata i lugn och ro)
 
-*SEB-teamen har motsvarande möten måndagar 12:30–14:00 istället.*
 
 **Vad som granskas (varierar per vecka):**
 - V2: MVP, backlog, arbetsstruktur

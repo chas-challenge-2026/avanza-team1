@@ -10,7 +10,7 @@ Det här projekt-repot innehåller tre viktiga filer för teamet:
 
 | Fil | Innehål |
 |-----|---------|
-| **AGENT.md** | Teamstandards, commits, branches, kodstil |
+| **TEAMSTANDARDS.md** | Teamstandards, commits, branches, kodstil |
 | **PROJEKTKONTEXT.md** | Kundens problem, vad vi bygger, MVP-features |
 | **DEFINITION_OF_DONE.md** | Godkänd-krav, checklista, vad som krävs |
 
@@ -22,7 +22,7 @@ https://github.com/chas-challenge-2026/avanza-team1/tree/docs/team-standards
 **Instruera AI så här:**
 ```
 "Läs från denna GitHub-branch (docs/team-standards) för kontext:
-- AGENT.md (teamstandards)
+- TEAMSTANDARDS.md (teamstandards)
 - PROJEKTKONTEXT.md (vad vi bygger)  
 - DEFINITION_OF_DONE.md (godkänd-krav)
 
@@ -598,7 +598,7 @@ git branch -a                         # Se alla branches någonsin skapade
 **Exempel-förfrågan:**
 ```
 Jag behöver skapa en ny React-komponent kallad "TransactionTable".
-Följ standarderna i AGENT.md från branch docs/team-standards.
+Följ standarderna i TEAMSTANDARDS.md från branch docs/team-standards.
 Komponenten ska visa transaktioner och tillåta filtrering.
 ```
 
@@ -608,7 +608,7 @@ Komponenten ska visa transaktioner och tillåta filtrering.
 2. **Filvägar** - Var ska detta hamna?
 3. **Begränsningar** - Några specifika krav?
 4. **Kontext** - Vad relaterar detta till?
-5. **Referens** - "Följ AGENT.md-standarder"
+5. **Referens** - "Följ TEAMSTANDARDS.md-standarder"
 
 ### Förväntad svarsformat
 
@@ -785,7 +785,7 @@ Kan du förklara varför denna komponent är viktig för Annas portföljöversik
 
 - `PROJEKTKONTEXT.md` - "Det här uppfyller Annas behov av..."
 - `DEFINITION_OF_DONE.md` - "Checklist innan vi är klara..."
-- `AGENT.md` (denna fil) - "Enligt våra standards..."
+- `TEAMSTANDARDS.md` (denna fil) - "Enligt våra standards..."
 
 ### Granska Gruppens Förförståelse
 

@@ -150,7 +150,7 @@ Vi behöver visa henne detta tydligt utan att göra det för komplicerat.
 Använd denna kontext från docs/team-standards-branchen:
 - PROJEKTKONTEXT.md (denna fil)
 - DEFINITION_OF_DONE.md (vad som krävs)
-- AGENT.md (teamstandards)"
+- TEAMSTANDARDS.md (teamstandards)"
 ```
 
 Med denna kontext ger AI mycket bättre vägledning på:

@@ -54,7 +54,7 @@ Måste innehålla:
 - [ ] **Arkitektur-översikt** - Hur fungerar systemet?
 - [ ] **Kända brister** - Vad fungerar inte än?
 - [ ] **Avgränsningar** - Vad gjorde vi INTE?
-- [ ] **Bransch-kontakt** - Länk till AGENT.md, PROJEKTKONTEXT.md
+- [ ] **Bransch-kontakt** - Länk till TEAMSTANDARDS.md, PROJEKTKONTEXT.md
 
 ### Beslutslogg (DECISIONS.md eller i README)
 Måste dokumentera:

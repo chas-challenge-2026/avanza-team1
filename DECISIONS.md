@@ -21,6 +21,8 @@ Uppdatera denna när ett beslut tas. Se varför vi gjorde valen vi gjorde.
 
 ---
 
+
+
 ## V1 - Uppstart (17-21 Augusti)
 
 ### Beslut: TypeScript för frontend
@@ -67,6 +69,32 @@ Uppdatera denna när ett beslut tas. Se varför vi gjorde valen vi gjorde.
 - **Påverkan:** Alla commits måste följa format, men gör review och bisect enklare
 - **Alternativ övervägda:** Fri commit-stil (enklare men oläslig historia)
 - **Status:** ✅ Implementerat
+
+### Beslut: Ansvarsfullt AI-bruk genom strukturerad instruktion
+
+**Reflektion: Ansvarsfullt AI-bruk i Team 1**
+
+#### Problem
+Om vi promptar AI varje gång, riskerar vi:
+- Inkonsistenta svar
+- Upprepning av instruktioner
+- Att AI missar teamstandards
+- Att det ser ut som vi "fuskar"
+
+#### Lösning: TEAMSTANDARDS.md
+Vi skapade en central dokumentation som:
+- Definierar commit-format, kodstil, Git-workflow
+- Är länkbar så AI läser den automatiskt
+- Möjliggör tydlig kommunikation: "Följ TEAMSTANDARDS.md"
+- Visar att vi styr AI:n ansvarsfullt, inte blindt
+
+#### Ansvarsfullt för att:
+✅ **Transparens** — Alla kan se AI:ns instruktioner
+✅ **Konsistens** — AI följer samma regler som människor
+✅ **Kontroll** — Vi styr AI:n, inte tvärtum
+✅ **Lärande** — AI hjälper oss förstå, inte ersätta
+
+- **Status:** ✅ Implementerat - Demonstrerar kursmål om ansvarsfullt AI-bruk
 
 ---
 
@@ -173,5 +201,5 @@ Uppdatera denna när ett beslut tas. Se varför vi gjorde valen vi gjorde.
 
 ---
 
-**Senast uppdaterad:** 2026-09-03  
+**Senast uppdaterad:** 2026-09-03
 **Ansvarig:** Team 1 - Avanza Portföljhälsa

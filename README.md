@@ -8,8 +8,11 @@ Använd denna mapp som referens när du arbetar med AI-verktyg. Klipp in länken
 
 ## 🧭 Navigation för AI & Humans
 
+**Fråga:** "Vilka AI-instruktioner och uppgifter finns?"  
+→ Läs **[SKILLS.md](SKILLS.md)** - AI-verktyg, 10 vanliga uppgifter, instruktioner
+
 **Fråga:** "Vilken commit-format ska jag använda?"  
-→ Läs **[AGENT.md](AGENT.md)** - Team standards, Git workflow, branch naming
+→ Läs **[TEAMSTANDARDS.md](TEAMSTANDARDS.md)** - Team standards, Git workflow, branch naming
 
 **Fråga:** "Vad är kundproblemet och vad bygger vi?"  
 → Läs **[PROJEKTKONTEXT.md](PROJEKTKONTEXT.md)** - Kundens behov (Anna), MVP-features, tech stack
@@ -30,9 +33,15 @@ Använd denna mapp som referens när du arbetar med AI-verktyg. Klipp in länken
 
 ## 📋 Så använder du denna prompt med AI
 
+### Option 1: GitHub Navigation (Läsbar för människor)
 **Kopiera denna länk:**
 ```
-https://github.com/chas-challenge-2026/avanza-team1/tree/docs/team-prompt/docs/team-prompt
+https://github.com/chas-challenge-2026/avanza-team1/blob/team-prompt/team-prompt/README.md
+```
+
+**Om länken inte fungerar, använd denna raw-länk istället:**
+```
+https://raw.githubusercontent.com/chas-challenge-2026/avanza-team1/team-prompt/team-prompt/README.md
 ```
 
 **Säg till AI:n:**
@@ -43,6 +52,17 @@ Läs huvudfilen och navigera till relevanta filer för min fråga.
 Min fråga är: [din fråga här]"
 ```
 
+### Option 2: Raw Links (Bäst för AI - direkt läsning)
+**För sprint-planering och issue-förslag:**
+```
+Läs från denna GitHub-branch för att föreslå issues:
+- https://raw.githubusercontent.com/chas-challenge-2026/avanza-team1/team-prompt/team-prompt/PROJEKTKONTEXT.md (vad vi bygger)
+- https://raw.githubusercontent.com/chas-challenge-2026/avanza-team1/team-prompt/team-prompt/SCHEDULE.md (vecka-fokus)
+- https://raw.githubusercontent.com/chas-challenge-2026/avanza-team1/team-prompt/team-prompt/DEFINITION_OF_DONE.md (acceptance criteria)
+
+Föreslå 5 issues för nästa sprint baserat på detta.
+```
+
 **Exempel:**
 ```
 "Ge mig en lämplig commit-besked för vad jag just gjort.
@@ -51,8 +71,22 @@ Använd guidelines från: [länk]"
 
 AI:n kommer att:
 1. Läsa denna README
-2. Navigera till AGENT.md för commit-format
+2. Navigera till TEAMSTANDARDS.md för commit-format
 3. Ge dig en commit-besked i rätt format
+
+---
+
+## ⚙️ Uppdatering & Ansvar
+
+**Underhålls av:** Team 1  
+**Senast uppdaterad:** 2026-09-03  
+
+Denna prompt är levande dokumentation. Uppdatera relevant fil när:
+- Teamstandards ändras → **[TEAMSTANDARDS.md](TEAMSTANDARDS.md)**
+- Kundens behov uppdateras → **[PROJEKTKONTEXT.md](PROJEKTKONTEXT.md)**
+- Deadlines ändras → **[SCHEDULE.md](SCHEDULE.md)**
+- Nya beslut fattas → **[DECISIONS.md](DECISIONS.md)**
+- Acceptanskriterier ändras → **[DEFINITION_OF_DONE.md](DEFINITION_OF_DONE.md)**
 
 ---
 
@@ -61,7 +95,7 @@ AI:n kommer att:
 | Fil | Syfte | Använd när |
 |-----|-------|-----------|
 | **SKILLS.md** | AI-instruktioner för 10 vanliga uppgifter | AI:n läser detta först för att förstå vad den kan göra |
-| **AGENT.md** | Team standards, Git workflow | Du behöver veta teamets regler, commit-format |
+| **TEAMSTANDARDS.md** | Team standards, Git workflow | Du behöver veta teamets regler, commit-format |
 | **PROJEKTKONTEXT.md** | Kundens problem & MVP | Du behöver förstå vad vi bygger och varför |
 | **DEFINITION_OF_DONE.md** | Acceptance criteria & timeline | Du behöver veta vad som är godkänt och deadlines |
 | **SCHEDULE.md** | Master schedule Team 1 | Du behöver veta tider för möten och planering |
@@ -78,7 +112,7 @@ AI:n kommer att:
 3. **Gå till rätt fil** - Baserat på användarens fråga
 
 **För Team 1 (börja här):**
-1. **Läs AGENT.md** - Förstå teamstandards och Git-workflow
+1. **Läs TEAMSTANDARDS.md** - Förstå teamstandards och Git-workflow
 2. **Läs PROJEKTKONTEXT.md** - Förstå kundproblem och MVP
 3. **Läs DEFINITION_OF_DONE.md** - Förstå vad som krävs för godkänt
 4. **Läs SCHEDULE.md** - Planera din vecka enligt denna timeline
