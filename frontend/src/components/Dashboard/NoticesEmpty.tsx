@@ -1,18 +1,15 @@
 import Panel from '../Panel';
 
-interface NoticesEmptyProps {
-  emptyMessage?: string;
-}
-
-function NoticesEmpty({ emptyMessage = 'Inga nya meddelanden' }: NoticesEmptyProps): JSX.Element {
+function NoticesEmpty(): JSX.Element {
   return (
     <Panel title="Meddelanden" size="medium">
       <div style={{
         textAlign: 'center',
         color: '#999',
-        padding: '2rem 0'
+        padding: '2rem 0',
+        fontSize: '0.875rem'
       }}>
-        <p>{emptyMessage}</p>
+        <p>Inga nya meddelanden</p>
       </div>
     </Panel>
   );

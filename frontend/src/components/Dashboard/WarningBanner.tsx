@@ -2,7 +2,9 @@ interface WarningBannerProps {
   message?: string;
 }
 
-function WarningBanner({ message = 'Uppdatera dina kontoinställningar för bättre säkerhet.' }: WarningBannerProps): JSX.Element {
+function WarningBanner({
+  message = 'Portföljen har glidit från målat — alloker 75% mot mål 60% (gratis 5%)'
+}: WarningBannerProps): JSX.Element {
   return (
     <div style={{
       backgroundColor: '#fff3cd',
@@ -10,9 +12,13 @@ function WarningBanner({ message = 'Uppdatera dina kontoinställningar för bät
       borderRadius: '4px',
       padding: '1rem',
       marginBottom: '1rem',
-      color: '#856404'
+      color: '#856404',
+      display: 'flex',
+      alignItems: 'flex-start',
+      gap: '0.75rem'
     }}>
-      <strong>Varning:</strong> {message}
+      <span style={{ fontSize: '1.2rem', flexShrink: 0 }}>⚠️</span>
+      <span>{message}</span>
     </div>
   );
 }
