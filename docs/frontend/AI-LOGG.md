@@ -13,3 +13,9 @@
 - **Vad som gick fel:** kodstaket i markdown bröts vid inklistring; mappträdet såg ut att tappa controller-filer.
 - **Vad jag ändrade:** hela `README.md` ersatt med en sluten version. Review på PR #47 fångade felet.
 - **Lärdom:** inte klistra README ur chatt; använd en nedladdad fil eller skriv rutan själv.
+
+## 2026-09-03 — frontend-loggar (Tomac, Grok)
+
+- **Användning:** mall för BESLUT / AI-LOGG / BIDRAG.
+- **Vad jag ändrade:** egna rader för #24, #47 och risk A-23 / R-08 / R-24 / R-25. Länken i `frontend/README.md` bara, inte en kopia av tabellen.
+- **Ägarskap:** jag kan förklara varför tre filer slår en fil per person.
