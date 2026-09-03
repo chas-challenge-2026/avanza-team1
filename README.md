@@ -3,43 +3,63 @@
 Pedagogisk kodbas för kursen "Java Backend-utveckling med Spring Boot".
 v1 innehåller avsiktliga antipatterns — er uppgift är att refaktorera till v2.
 
+## Frontend (v2)
+
+React 18 + Vite + TypeScript. Se [frontend/README.md](frontend/README.md).
+
+````bash
+cd frontend && npm install && npm run dev
+
 ## Snabbstart
 
 ```bash
 cd infra && docker compose up
-```
+````
 
 Öppna: http://localhost:8082
 
+Frontend (mockad data, ingen Java krävs):
+
+```bash
+cd frontend && npm install && npm run dev
+```
+
+Öppna: http://localhost:5173
+
 **Testanvändare:**
+
 - `anna@example.com` / `password123`
 - `erik@example.com` / `password123`
 
 ## Mappstruktur
 
 ```
+
 chas-avanza/
 ├── backend/
-│   └── AvanzaPortal/          ← Spring Boot 2.7 Maven-projekt
-│       ├── pom.xml
-│       ├── Dockerfile
-│       └── src/main/java/se/comerit/avanza/
-│           ├── AvanzaPortalApplication.java
-│           └── controller/
-│               ├── AuthController.java
-│               ├── DashboardController.java
-│               ├── HoldingController.java
-│               └── AlertController.java
+│ └── AvanzaPortal/ ← Spring Boot 2.7 Maven-projekt
+│ ├── pom.xml
+│ ├── Dockerfile
+│ └── src/main/java/se/comerit/avanza/
+│ ├── AvanzaPortalApplication.java
+│ └── controller/
+│ ├── AuthController.java
+│ ├── DashboardController.java
+│ ├── HoldingController.java
+│ └── AlertController.java
 ├── infra/
-│   ├── docker-compose.yml
-│   └── seed.sql
+│ ├── docker-compose.yml
+│ └── seed.sql
 ├── docs/
-│   ├── architecture.md        ← Systembeskrivning
-│   ├── known-bugs.md          ← Kända fel (er uppgiftslista)
-│   ├── README-pain-points.md  ← Vad som spricker vid skala
-│   └── v2-targets.md          ← Målarkitektur för v2
+│ ├── architecture.md ← Systembeskrivning
+│ ├── known-bugs.md ← Kända fel (er uppgiftslista)
+│ ├── README-pain-points.md ← Vad som spricker vid skala
+├── frontend/                  ← React 18 + Vite + TypeScript (v2)
+│   └── README.md
+│ └── v2-targets.md ← Målarkitektur för v2
 └── native/
-    └── README.md              ← Planerade C/C++-moduler för v2
+└── README.md ← Planerade C/C++-moduler för v2
+
 ```
 
 ## Kända problem
@@ -60,3 +80,7 @@ Se [`docs/v2-targets.md`](docs/v2-targets.md) för fullständig kravspec och acc
 
 Sammanfattning: Spring Boot 3.2, Java 21, Spring Data JPA, Flyway, Spring Security + JWT,
 React 18-frontend, och minst ett nativt C/C++-riskmått via JNA.
+
+```
+
+```
