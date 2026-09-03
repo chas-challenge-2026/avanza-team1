@@ -3,7 +3,11 @@
 Pedagogisk kodbas för kursen "Java Backend-utveckling med Spring Boot".
 v1 innehåller avsiktliga antipatterns — er uppgift är att refaktorera till v2.
 
+**v2-frontend (React) ligger i [frontend/](frontend/README.md).** Den körs separat från Spring.
+
 ## Snabbstart
+
+Backend (v1):
 
 ```bash
 cd infra && docker compose up
@@ -11,7 +15,16 @@ cd infra && docker compose up
 
 Öppna: http://localhost:8082
 
+Frontend (mockad data, ingen Java krävs):
+
+```bash
+cd frontend && npm install && npm run dev
+```
+
+Öppna: http://localhost:5173
+
 **Testanvändare:**
+
 - `anna@example.com` / `password123`
 - `erik@example.com` / `password123`
 
@@ -30,6 +43,8 @@ chas-avanza/
 │               ├── DashboardController.java
 │               ├── HoldingController.java
 │               └── AlertController.java
+├── frontend/                  ← React 18 + Vite + TypeScript (v2)
+│   └── README.md
 ├── infra/
 │   ├── docker-compose.yml
 │   └── seed.sql

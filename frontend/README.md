@@ -88,9 +88,33 @@ When the frontend calls the backend API, start the backend infrastructure separa
 
 ## Available npm scripts
 
-| Command | Purpose |
-| --- | --- |
-| `npm run dev` | Start the Vite development server |
-| `npm run build` | Type-check and build the production bundle |
-| `npm run preview` | Serve the production bundle locally |
-| `npm run lint` | Run ESLint |
+| Command           | Purpose                                    |
+| ----------------- | ------------------------------------------ |
+| `npm run dev`     | Start the Vite development server          |
+| `npm run build`   | Type-check and build the production bundle |
+| `npm run preview` | Serve the production bundle locally        |
+| `npm run lint`    | Run ESLint                                 |
+
+---
+
+## Mock portfolio data
+
+The UI reads `src/data/portfolio.json` via `import { mockPortfolio } from "./types/portfolio"`.
+This will later be replaced with `GET /api/portfolio`. Change numbers in the JSON, not in the components.
+
+## Scope (current)
+
+- No login against the backend
+- No live FX
+- The pension account exists but has 0 SEK
+- `overThreshold` is precomputed in the mock (75/25 vs 60/40, threshold 5%)
+
+## Test status (#24)
+
+| What                 | How                             | Result                            |
+| -------------------- | ------------------------------- | --------------------------------- |
+| Type contracts       | `npx tsc -b` in `frontend/`     | Passed 2026-09-02                 |
+| JSON shape           | Manual review against issue #24 | Passed                            |
+| Automated unit tests | Not yet available               | Intentional — no UI logic to test |
+
+---
