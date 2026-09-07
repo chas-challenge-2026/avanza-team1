@@ -118,3 +118,8 @@ This will later be replaced with `GET /api/portfolio`. Change numbers in the JSO
 | Automated unit tests | Not yet available               | Intentional — no UI logic to test |
 
 ---
+
+## Team log
+
+Decisions, AI use, and individual contributions:
+[docs/frontend/](../docs/frontend/).
