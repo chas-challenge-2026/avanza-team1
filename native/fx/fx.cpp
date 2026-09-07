@@ -88,6 +88,7 @@ FX_Code fx_curl(const char *url, Response *response)
     if (result != CURLE_OK)
     {
         std::cout << "Error: " << curl_easy_strerror(result) << "\r\n";
+        curl_easy_cleanup(handle);
         return FX_ERR_CURL;
     }
 
