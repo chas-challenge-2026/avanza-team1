@@ -6,17 +6,18 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
 import se.comerit.avanza.service.AuthService;
-
 import jakarta.servlet.http.HttpSession;
 import java.util.Map;
 
 @Controller
 public class AuthController {
 
-    @Autowired
-    private AuthService authService;
+    private final AuthService authService;
+
+    public AuthController(AuthService authService) {
+        this.authService = authService;
+    }
 
     @GetMapping("/login")
     public String loginPage(HttpSession session, Model model) {

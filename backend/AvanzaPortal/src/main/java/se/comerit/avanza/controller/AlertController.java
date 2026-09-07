@@ -1,30 +1,23 @@
 package se.comerit.avanza.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
 import se.comerit.avanza.service.AlertService;
-
 import jakarta.servlet.http.HttpSession;
 import java.util.Map;
 
 @Controller
 public class AlertController {
 
-    @Autowired
-    private AlertService alertService;
+    private final AlertService alertService;
+
+    public AlertController(AlertService alertService) {
+        this.alertService = alertService;
+    }
 
     @GetMapping("/alerts")
     public String listAlerts(HttpSession session, Model model) {
