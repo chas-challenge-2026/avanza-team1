@@ -1,9 +1,13 @@
 # Bidrag — frontend
 
-| Datum      | Vem   | Vad                                                          | Bevis                          |
-| ---------- | ----- | ------------------------------------------------------------ | ------------------------------ |
-| 2026-09-02 | Tomac | Mockad portfölj + TypeScript-kontrakt                        | #24, PR #46                    |
-| 2026-09-03 | Tomac | README: mock, avgränsningar, teststatus (`tsc`)              | #47, `frontend/README.md`      |
-| 2026-09-03 | Tomac | Rot-README: frontend-pekare + mappträd                       | #47                            |
-| 2026-09-03 | Tomac | Risk: asset A-23, R-08 storage, R-24 mock vs API, R-25 drift | riskregistret                  |
-| 2026-09-03 | Tomac | Gemensam logg: beslut, AI, bidrag                            | den här PR:n, `docs/frontend/` |
+En rad per leverans. Kolumnen **AI** är `—` om ingen modell användes.
+Om AI användes: verktyg + vad som behölls. Fel från AI hör hemma i samma cell,
+inte i en separat logg.
+
+| Datum      | Vem   | Vad                                                          | AI                                                                                                                                                         | Bevis                      |
+| ---------- | ----- | ------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| 2026-09-02 | Tomac | Mockad portfölj + TypeScript-kontrakt                        | Grok: typ + JSON-utkast. Fel: dubbel `export const mockPortfolio`, import `./tsportfolio`. Korrigerat till en export + `as Portfolio`. `npx tsc -b` grönt. | #24, PR #46                |
+| 2026-09-03 | Tomac | README: mock, avgränsningar, teststatus (`tsc`)              | Grok: utkast. Fel: brutet kodstaket / ofullständigt mappträd. Filen skrevs om; fångades i review.                                                          | #47, `frontend/README.md`  |
+| 2026-09-03 | Tomac | Rot-README: frontend-pekare + mappträd                       | samma som raden ovan                                                                                                                                       | #47                        |
+| 2026-09-03 | Tomac | Risk: asset A-23, R-08 storage, R-24 mock vs API, R-25 drift | —                                                                                                                                                          | riskregistret              |
+| 2026-09-03 | Tomac | Gemensam logg: beslut + bidrag (AI inbakad)                  | Grok: mallförslag. Egna rader och bevis skrivna av oss.                                                                                                    | denna PR, `docs/frontend/` |
