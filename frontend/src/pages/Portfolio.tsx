@@ -3,7 +3,6 @@ import WarningBanner from '../components/Dashboard/WarningBanner';
 import AssetAllocation from '../components/Dashboard/AssetAllocation';
 import GoalAllocation from '../components/Dashboard/GoalAllocation';
 import AccountsTable from '../components/Dashboard/AccountsTable';
-import AllocationTable from '../components/Dashboard/AllocationTable';
 import NoticesEmpty from '../components/Dashboard/NoticesEmpty';
 import HoldingsTable from '../components/Dashboard/HoldingsTable';
 import './Portfolio.css';
@@ -17,7 +16,6 @@ function Portfolio() {
         <AssetAllocation />
         <GoalAllocation />
         <AccountsTable />
-        <AllocationTable />
         <NoticesEmpty />
         <HoldingsTable />
       </div>

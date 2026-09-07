@@ -5,7 +5,7 @@ interface WarningBannerProps {
 }
 
 function WarningBanner({
-  message = 'Portföljen har glidit från målat — alloker 75% mot mål 60% (gratis 5%)'
+  message = 'Portföljen har glidit från målet — aktier 75% mot mål 60% (gräns 5%)'
 }: WarningBannerProps): JSX.Element {
   return (
     <div className={styles.banner}>

@@ -11,10 +11,10 @@ function AccountsTable(): JSX.Element {
         </div>
         <div className={styles.row}>
           <span>KF</span>
-          <span>196 200 kr</span>
+          <span>186 200 kr</span>
         </div>
         <div className={styles.row}>
-          <span>Dagå</span>
+          <span>Depå</span>
           <span>100 250 kr</span>
         </div>
       </div>
