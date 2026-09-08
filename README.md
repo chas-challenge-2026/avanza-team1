@@ -20,7 +20,7 @@ Se [docs/v2-targets.md](docs/v2-targets.md) för fullständig målarkitektur och
 | React 18-frontend (SPA) | 🚧 påbörjat | Dashboard shell med mockad portföljdata, se [frontend/README.md](frontend/README.md) |
 | Native FX-modul (C++) | 🚧 påbörjat | Valutaomvandling, se `native/fx/` |
 | Native Backtest-motor | ⬜ ej påbörjat | Planerad, se [native/README.md](native/README.md) |
-| Native Risk-mått (BLAS) | ⬜ ej påbörjat | Planerad, se [native/README.md](native/README.md) |
+| Native Risk-mått (BLAS) | 🚧 påbörjat | Planerad, se [native/README.md](native/README.md) |
 
 ## Snabbstart
 
@@ -103,6 +103,14 @@ chas-avanza/
 │   ├── README-pain-points.md  ← Vad som spricker vid skala
 │   └── v2-targets.md          ← Målarkitektur för v2
 └── native/
+    └── docs/
+        └── README.md
+    └── fx/
+        └── fx.cpp
+    └── risk/
+        └── risk.c
+        └── test/
+            └── test_risk.c
     └── README.md              ← Planerade C/C++-moduler för v2
 ```
 
