@@ -42,8 +42,19 @@ a.active {
 }
 
 .navbar nav {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: var(--gap-medium);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--gap-medium);
+}
+
+.navbar-user {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.navbar-user-name {
+  font-weight: 350;
+  color: #333;
 }
