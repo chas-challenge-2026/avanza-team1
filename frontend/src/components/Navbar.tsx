@@ -1,13 +1,9 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import styles from "./Navbar.module.css";
+import { mockPortfolio } from "../types/portfolio";
 
 function Navbar() {
   const navigate = useNavigate();
-
-  // const handleLogout = () => {
-  //   navigate("/login");
-  // };
-
 
   return (
     <header className={styles.navbar}>
@@ -19,9 +15,12 @@ function Navbar() {
           <NavLink to="/holdings" className={({ isActive }) => isActive ? styles.active : ""}>Innehav</NavLink>
           <NavLink to="/alerts" className={({ isActive }) => isActive ? styles.active : ""}>Notiser</NavLink>
         </nav>
-        <button className={styles["logout-button"]} onClick={() => navigate("/login")}>
-          Logga ut
-        </button>
+        <div className="navbar-user">
+          <span className="navbar-user-name">{mockPortfolio.userName}</span>
+          <button className={styles["logout-button"]} onClick={() => navigate("/login")}>
+            Logga ut
+          </button>
+        </div>
     </header>
   );
 }

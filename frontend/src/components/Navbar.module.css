@@ -53,3 +53,14 @@
   margin: auto 0;
   height: 2rem;
 }
+
+.navbar-user {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.navbar-user-name {
+  font-weight: 350;
+  color: #333;
+}
