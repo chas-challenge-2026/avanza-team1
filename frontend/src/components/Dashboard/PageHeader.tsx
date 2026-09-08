@@ -1,23 +1,27 @@
-import styles from './PageHeader.module.css';
+import styles from "./PageHeader.module.css";
+import type { Fx } from "../../types/portfolio";
 
 interface PageHeaderProps {
   title?: string;
-  totalValue?: number;
-  exchange?: string;
+  totalValueSek: number;
+  fx: Fx;
 }
 
 function PageHeader({
-  title = 'Din portfölj',
-  totalValue = 698450,
-  exchange = 'USD/SEK 10:45'
+  title = "Din portfölj",
+  totalValueSek,
+  fx,
 }: PageHeaderProps): JSX.Element {
   return (
     <div className={styles.pageHeader}>
       <h1 className={styles.title}>{title}</h1>
       <div className={styles.value}>
-        {totalValue.toLocaleString('sv-SE')} <span>SEK</span>
+        {totalValueSek.toLocaleString("sv-SE")} <span>SEK</span>
       </div>
-      <p className={styles.subtitle}>Värde: {exchange}</p>
+      <p className={styles.subtitle}>
+        USD/SEK {fx.usdSek.toLocaleString("sv-SE")} · EUR/SEK{" "}
+        {fx.eurSek.toLocaleString("sv-SE")}
+      </p>
     </div>
   );
 }
