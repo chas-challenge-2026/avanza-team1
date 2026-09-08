@@ -31,6 +31,8 @@ int main()
     const char *url = "https://api.riksbank.se/swea/v1/Observations/Latest/sekeurpmi";
     Response response;
     FX_Code result = fx_curl(url, &response);
+    // std::cout << "Response: " << response.string << "\r\n";
+    free(response.string);
     check("Riksbank API, SEK to EUR GET request", result);
 
     std::cout << "\r\n" << tests_run - tests_failed << "/" << tests_run << "\r\n";
