@@ -11,3 +11,12 @@ export interface AuthResult {
   user: User;
   token: string;
 }
+
+// Formen på det AuthProvider delar med resten av appen via Context.
+// Ligger här (inte i authContext.ts) eftersom både AuthProvider.tsx och useAuth.ts importerar den.
+export interface AuthContextValue {
+  user: User | null;
+  isAuthenticated: boolean;
+  login: (email: string, password: string) => boolean;
+  logout: () => void;
+}
