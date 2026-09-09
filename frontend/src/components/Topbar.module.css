@@ -1,5 +1,5 @@
-.navbar {
-  max-width: var(--max-width);
+.topbar {
+  width: 100%;
   padding-inline: 2rem;
   background-color: white;
   border-bottom: 4px solid var(--green);
@@ -11,7 +11,13 @@
   gap: 3rem;
 }
 
-.navbar nav {
+.topbar img {
+  aspect-ratio: 250/80;
+  height: 40px;
+  width: auto;
+}
+
+.topbar nav {
   margin: 0 auto;
   /* padding: 1rem 2rem; */
   display: flex;
@@ -20,7 +26,7 @@
   gap: var(--gap-medium);
 }
 
-.navbar-brand h1 {
+.brand h1 {
   padding-block: 1rem;
   font-size: 1.5rem;
   font-weight: 700;
@@ -28,7 +34,7 @@
   color: #000;
 }
 
-.navbar a {
+.topbar a {
   height: 100%;
   align-content: center;
   text-decoration: none;
@@ -39,12 +45,12 @@
   transition: all 0.2s ease;
 }
 
-.navbar a:hover {
+.topbar a:hover {
   /* --green: #00a651; */
   color: var(--green);
 }
 
-.navbar a.active {
+.topbar a.active {
   color: #00a651;
   border-bottom-color: var(--green);
 }
@@ -54,13 +60,13 @@
   height: 2rem;
 }
 
-.navbar-user {
+.user {
   display: flex;
   align-items: center;
   gap: 1rem;
 }
 
-.navbar-user-name {
+.user-name {
   font-weight: 350;
   color: #333;
 }

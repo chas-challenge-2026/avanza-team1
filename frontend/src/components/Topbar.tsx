@@ -1,22 +1,22 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import styles from "./Navbar.module.css";
+import styles from "./Topbar.module.css";
 import { mockPortfolio } from "../types/portfolio";
 
-function Navbar() {
+function Topbar() {
   const navigate = useNavigate();
 
   return (
-    <header className={styles.navbar}>
-        <div className={styles["navbar-brand"]}>
-          <h1>Avanza</h1>
+    <header className={styles.topbar}>
+        <div className={styles.brand}>
+          <img src="src/assets/logo.webp" alt="Logo" className={styles.logo} />
         </div>
         <nav>
           <NavLink to="/" end className={({ isActive }) => isActive ? styles.active : ""}>Portfolio</NavLink>
           <NavLink to="/holdings" className={({ isActive }) => isActive ? styles.active : ""}>Innehav</NavLink>
           <NavLink to="/alerts" className={({ isActive }) => isActive ? styles.active : ""}>Notiser</NavLink>
         </nav>
-        <div className="navbar-user">
-          <span className="navbar-user-name">{mockPortfolio.userName}</span>
+        <div className={styles.user}>
+          <span className={styles["user-name"]}>{mockPortfolio.userName}</span>
           <button className={styles["logout-button"]} onClick={() => navigate("/login")}>
             Logga ut
           </button>
@@ -25,4 +25,4 @@ function Navbar() {
   );
 }
 
-export default Navbar;
+export default Topbar;

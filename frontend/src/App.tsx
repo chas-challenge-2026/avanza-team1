@@ -1,6 +1,6 @@
 // import { useState } from 'react'
 import { Routes, Route } from 'react-router-dom';
-import Navbar from "./components/Navbar";
+import Navbar from "./components/Topbar";
 import Portfolio from './pages/Portfolio';
 import Holdings from './pages/Holdings';
 import Alerts from './pages/Alerts';
