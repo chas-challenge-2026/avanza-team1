@@ -60,7 +60,7 @@
 }
 
 .button {
-  padding: var(--space-small) var(--space-medium);
+  padding: var(--space-xsmall) var(--space-medium);
   background-color: var(--primary-color);
   color: white;
   border: none;

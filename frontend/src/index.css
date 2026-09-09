@@ -9,7 +9,8 @@
     --space-xlarge: 2.25rem;
     --space-large: 1.5rem;
     --space-medium: 1rem;
-    --space-small: 0.5rem;
+    --space-small: 0.75rem;
+    --space-xsmall: 0.5rem;
 
     /* colors */
     --white: #ffffff;

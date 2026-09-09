@@ -4,53 +4,39 @@
 }
 
 .tableHead {
-  border-bottom: 2px solid #e0e0e0;
+  border-bottom: 2px solid var(--light-gray);
 }
-/* andra så att den här pekar mot TD elementet direkt istället för en egen klass */
-.headerCell {
-  text-align: left;
-  padding: 0.75rem;
-  font-size: 0.875rem;
+.table th {
+  padding: var(--space-small);
   font-weight: 600;
   color: #666;
 }
-/* byt namn på den här till bara right */
-.headerCellRight {
-  text-align: right;
-}
 
-.row {
-  border-bottom: 1px solid #f0f0f0;
+.table td {
+  padding: var(--space-small);
+  border-bottom: 1px solid #ddd;
 }
-/* peka mot TD elementet direkt */
-.cell {
-  padding: 0.75rem;
-  font-size: 0.875rem;
-}
-/* ta bort cell från klassnamnet i alla klasser nedanför här */
 .ticker {
   color: var(--primary-color);
   font-weight: 500;
 }
-
-.cellRight {
-  text-align: right;
-}
-
-.cellChange {
+.change {
   color: var(--primary-color);
 }
 
 .footer {
-  margin-top: 1rem;
+  margin-top: var(--space-medium);
   text-align: right;
 }
-/* ta bort detta till förmån för standard länk-beteende */
+
+.right {
+  text-align: right;
+}
+
+/* TODO: move this styling to global style for "a" links and remove this class */
 .viewLink {
-  font-size: 0.875rem;
   color: var(--primary-color);
   text-decoration: none;
-  font-weight: 500;
 }
 
 .viewLink:hover {

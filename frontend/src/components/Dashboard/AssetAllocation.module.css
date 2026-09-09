@@ -21,7 +21,7 @@
 .target {
   font-size: var(--font-size-small);
   color: var(--gray);
-  margin-bottom: var(--space-small);
+  margin-bottom: var(--space-xsmall);
 }
 
 .name {
