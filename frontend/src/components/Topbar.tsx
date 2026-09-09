@@ -9,6 +9,7 @@ function Topbar() {
     <header className={styles.topbar}>
         <div className={styles.brand}>
           <img src="src/assets/logo.webp" alt="Logo" className={styles.logo} />
+          <h1>Portföljhälsa</h1>
         </div>
         <nav>
           <NavLink to="/" end className={({ isActive }) => isActive ? styles.active : ""}>Portfolio</NavLink>
