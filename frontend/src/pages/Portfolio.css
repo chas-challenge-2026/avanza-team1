@@ -1,4 +1,4 @@
-.dashboard-grid {
+.dashboardGrid {
   display: grid;
   grid-template-columns: 1fr;  /* 📱 Mobil: 1 kolumn */
   gap: 1rem;
@@ -6,10 +6,6 @@
 
 /* Tablet */
 @media (min-width: 768px) {
-  .portfolio-page {
-    padding: 1.5rem;
-  }
-
   .dashboardGrid {
     grid-template-columns: repeat(2, 1fr);  /* 📱→ 2 kolumner */
     gap: 1.5rem;
@@ -18,11 +14,7 @@
 
 /* Desktop */
 @media (min-width: 1024px) {
-  .portfolio-page {
-    padding: 2rem;
-  }
-
-  .dashboard-grid {
+  .dashboardGrid {
     grid-template-columns: repeat(3, 1fr);  /* 🖥️ 3 kolumner */
     max-width: 1200px;
     margin: 0 auto;
@@ -50,7 +42,7 @@ td {
 
 button {
   padding: 0.5rem 1rem;
-  background-color: #00a651;
+  background-color: var(--primary-color);
   color: white;
   border: none;
   border-radius: 4px;

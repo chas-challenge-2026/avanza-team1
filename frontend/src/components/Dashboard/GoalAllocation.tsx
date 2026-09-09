@@ -57,8 +57,7 @@ function GoalAllocation({
               setEquities(Number(e.target.value));
               setSaved(false);
             }}
-          />
-          <span className={styles.unit}>%</span>
+          />%
         </div>
 
         <div className={styles.inputRow}>
@@ -77,8 +76,7 @@ function GoalAllocation({
               setFunds(Number(e.target.value));
               setSaved(false);
             }}
-          />
-          <span className={styles.unit}>%</span>
+          />%
         </div>
       </div>
 

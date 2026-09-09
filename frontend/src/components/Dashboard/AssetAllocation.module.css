@@ -11,20 +11,20 @@
 }
 
 .percentage {
+  /* edge case element - needs some fixed values */
   font-size: 2rem;
   font-weight: bold;
-  color: #333;
+  color: var(--text-color-alt);
   margin-bottom: 0.25rem;
 }
 
 .target {
-  font-size: 0.75rem;
-  color: #999;
-  margin-bottom: 0.5rem;
+  font-size: var(--font-size-small);
+  color: var(--gray);
+  margin-bottom: var(--space-small);
 }
 
 .name {
-  font-size: 0.875rem;
   font-weight: 500;
-  color: #333;
+  color: var(--text-color-alt);
 }

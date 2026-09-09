@@ -29,7 +29,7 @@
 }
 /* ta bort cell från klassnamnet i alla klasser nedanför här */
 .ticker {
-  color: #00a651;
+  color: var(--primary-color);
   font-weight: 500;
 }
 
@@ -38,7 +38,7 @@
 }
 
 .cellChange {
-  color: #00a651;
+  color: var(--primary-color);
 }
 
 .footer {
@@ -48,7 +48,7 @@
 /* ta bort detta till förmån för standard länk-beteende */
 .viewLink {
   font-size: 0.875rem;
-  color: #00a651;
+  color: var(--primary-color);
   text-decoration: none;
   font-weight: 500;
 }

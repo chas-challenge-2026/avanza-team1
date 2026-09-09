@@ -8,14 +8,14 @@ interface PanelProps {
 
 function Panel({ title, size = 'medium', children }: PanelProps) {
   return (
-    <div className={`panel panel-${size}`}>
-      <div className="panel-header">
+    <section className={`panel ${size}`}>
+      <div className="panelHeader">
         <h3>{title}</h3>
       </div>
-      <div className="panel-content">
+      <div className="panelContent">
         {children}
       </div>
-    </div>
+    </section>
   );
 }
 
