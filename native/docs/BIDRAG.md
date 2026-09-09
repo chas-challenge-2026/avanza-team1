@@ -23,3 +23,4 @@ inte i en separat logg.
 | 2026-09-08 | Henrik | La till en missad free i test_fx.cpp | - | #61 |
 | 2026-09-08 | Pär | Slutfört den första versionen av Risk-modulen, lagt till en ny funktion för att hantera EWMA i Volatilitetsberäkningarna. Ändrade om min hela dokumentation kring filerna och städade upp mycket. | AI hjälpte att snygga till kommentarerna till Doxygen | #11 #13 #14 #15 |
 | 2026-09-08 | Pär | La till fler tester i testfilen för att täcka de nya funktionerna, samt för att täcka fler eventuella fel. Snyggade till dokumentationen i filen också. | - | #55 |
+| 2026-09-09 | Pär | Skapade ett dokument för att hantera våra bidrag till projektet, utgår direkt från våra commits inledningsvis. | - | - |
