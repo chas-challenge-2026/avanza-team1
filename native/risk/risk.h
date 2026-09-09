@@ -15,11 +15,11 @@
 #define ANNUAL_TRADING_DAYS     252.0
 
 /** 
- * Annual risk-free rate used by the default Sharpe ratio calculation.
+ * Default annual risk-free rate used by the default Sharpe ratio calculation.
  * 
  * This is a configurable assumption and does not represent a guaranteed market rate. 
  */
-#define SAVINGS_INTEREST_RATE   0.03
+#define DEFAULT_RISK_FREE_RATE   0.03
 
 /**
  * @brief Status returned by risk calculation functions.
@@ -55,11 +55,12 @@ RiskStatus calculate_annual_volatility(const double prices[], size_t size, doubl
  * 
  * @param prices Historical closing prices, oldest first.
  * @param size Number of prices. Must be at least 3.
- * @param risk_free_rate Annual risk-free rate, e.g. SAVINGS_INTEREST_RATE
+ * @param risk_free_rate Annual risk-free rate, e.g. DEFAULT_RISK_FREE_RATE
  * @param result Output Sharpe ratio.
  * 
  * @return RISK_SUCCESS on success.
- * @return RISK_INVALID_INPUT if the input is invalid or volatility is zero.
+ * @return RISK_INVALID_INPUT if the input is invalid, 
+ * risk_free_rate is not finite or is <= -1.0, or volatility is zero.
  * 
  * On RISK_INVALID_INPUT, result is set to 0.0 when possible.
  */

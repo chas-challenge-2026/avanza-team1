@@ -82,30 +82,30 @@ int main()
     RiskStatus status = calculate_annual_volatility(prices, size, &result);
     check("annual volatility on known price series", status, result, 0.365810, 0.0001);
 
-    status = calculate_sharpe(prices, size, SAVINGS_INTEREST_RATE, &result);
+    status = calculate_sharpe(prices, size, DEFAULT_RISK_FREE_RATE, &result);
     check("sharpe on known price series", status, result, 2.7217, 0.001);
 
     /* Fewer than three prices should be rejected. */
     status = calculate_annual_volatility(too_few, 2, &result);
     check_invalid("volatility with < 3 prices returns invalid", status);
-    status = calculate_sharpe(too_few, 2, SAVINGS_INTEREST_RATE, &result);
+    status = calculate_sharpe(too_few, 2, DEFAULT_RISK_FREE_RATE, &result);
     check_invalid("sharpe with < 3 prices returns invalid", status);
 
     /* Three prices is the minimum input for volatility and Sharpe calculations. */
     status = calculate_annual_volatility(three_prices, 3, &result);
     check("volatility with exactly three prices", status, result, 0.001111, 1e-6);
-    status = calculate_sharpe(three_prices, 3, SAVINGS_INTEREST_RATE, &result);
+    status = calculate_sharpe(three_prices, 3, DEFAULT_RISK_FREE_RATE, &result);
     check("sharpe with exactly three prices", status, result, 2229.6214, 1e-4);
 
     /* Flat prices should produce zero volatility and reject Sharpe calculations. */
     status = calculate_annual_volatility(flat_prices, 5, &result);
     check("volatility on flat prices is 0", status, result, 0.0, 1e-12);
-    status = calculate_sharpe(flat_prices, 5, SAVINGS_INTEREST_RATE, &result);
+    status = calculate_sharpe(flat_prices, 5, DEFAULT_RISK_FREE_RATE, &result);
     check_invalid("sharpe on flat prices avoids divide-by-zero", status);
 
     /* Rising prices should produce positive volatility and a positive Sharpe Ratio. */
     RiskStatus rising_vol_status = calculate_annual_volatility(rising_prices, 6, &rising_vol);
-    RiskStatus rising_sharpe_status = calculate_sharpe(rising_prices, 6, SAVINGS_INTEREST_RATE, &rising_sharpe);
+    RiskStatus rising_sharpe_status = calculate_sharpe(rising_prices, 6, DEFAULT_RISK_FREE_RATE, &rising_sharpe);
     
     tests_run += 2;
     if (rising_vol_status == RISK_SUCCESS && rising_vol > 0.0)
@@ -190,19 +190,19 @@ int main()
 
     /* --- NULL prices --- */
     check_invalid("annual volatility with NULL prices returns invalid", calculate_annual_volatility(NULL, size, &result));
-    check_invalid("sharpe with NULL prices returns invalid", calculate_sharpe(NULL, size, SAVINGS_INTEREST_RATE, &result));
+    check_invalid("sharpe with NULL prices returns invalid", calculate_sharpe(NULL, size, DEFAULT_RISK_FREE_RATE, &result));
     check_invalid("max drawdown with NULL prices returns invalid", calculate_max_drawdown(NULL, size, &result));
     check_invalid("ewma volatility with NULL prices returns invalid", calculate_ewma_volatility(NULL, size, 0.94, &result));
     
     /* --- Size == 0 --- */
     check_invalid("annual volatility with zero prices returns invalid", calculate_annual_volatility(prices, 0, &result));
-    check_invalid("sharpe with zero prices returns invalid", calculate_sharpe(prices, 0, SAVINGS_INTEREST_RATE, &result));
+    check_invalid("sharpe with zero prices returns invalid", calculate_sharpe(prices, 0, DEFAULT_RISK_FREE_RATE, &result));
     check_invalid("max drawdown with zero prices returns invalid", calculate_max_drawdown(prices, 0, &result));
     check_invalid("ewma volatility with zero prices returns invalid", calculate_ewma_volatility(prices, 0, 0.94, &result));
 
     /* --- NULL result pointer --- */
     check_invalid("annual volatility with NULL result returns invalid", calculate_annual_volatility(prices, size, NULL));
-    check_invalid("sharpe with NULL result returns invalid", calculate_sharpe(prices, size, SAVINGS_INTEREST_RATE, NULL));
+    check_invalid("sharpe with NULL result returns invalid", calculate_sharpe(prices, size, DEFAULT_RISK_FREE_RATE, NULL));
     check_invalid("max drawdown with NULL result returns invalid", calculate_max_drawdown(prices, size, NULL));
     check_invalid("ewma volatility with NULL result returns invalid", calculate_ewma_volatility(prices, size, 0.94, NULL));
 
