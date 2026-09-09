@@ -22,11 +22,10 @@
     Controll the sizing of the component in its .module.css file, and let the parent component handle the placement of the component on the page. The component should handle its own internal responsive behavior (using @media or @container queries or flexbox/grid, whatever is appropriate).
 
 ## Naming conventions
-
-- Use kebab-case for class names, IDs and CSS variables if clear descriptions require multiple words.
-    - **Don't:** .cardTitle
-    - **Do:** .card-title
+- Use camelCase for class names, IDs and CSS variables if clear descriptions require multiple words.
+    - **Don't:** .card-title
+    - **Do:** .cardTitle
 
 - Avoid concatenating class names for specificity. Instead, use a class name that describes only that element and rely on the component structure and scoped CSS modules to manage specificity.
-    - **Don't:** .card with .card-title and .card-body children
+    - **Don't:** .card with .cardTitle and .cardBody children
     - **Do:** .card with .title and .body children

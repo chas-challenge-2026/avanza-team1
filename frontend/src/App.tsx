@@ -12,7 +12,7 @@ function App() {
       <header>
         <Navbar/>
       </header>
-      <main className="app-content">
+      <main className="pageContent">
         <Routes>
           <Route path="/" element={<Portfolio />} />
           <Route path="/holdings" element={<Holdings />} />

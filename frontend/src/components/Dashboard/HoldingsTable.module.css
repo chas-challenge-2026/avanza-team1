@@ -6,7 +6,7 @@
 .tableHead {
   border-bottom: 2px solid #e0e0e0;
 }
-
+/* andra så att den här pekar mot TD elementet direkt istället för en egen klass */
 .headerCell {
   text-align: left;
   padding: 0.75rem;
@@ -14,7 +14,7 @@
   font-weight: 600;
   color: #666;
 }
-
+/* byt namn på den här till bara right */
 .headerCellRight {
   text-align: right;
 }
@@ -22,13 +22,13 @@
 .row {
   border-bottom: 1px solid #f0f0f0;
 }
-
+/* peka mot TD elementet direkt */
 .cell {
   padding: 0.75rem;
   font-size: 0.875rem;
 }
-
-.cellTicker {
+/* ta bort cell från klassnamnet i alla klasser nedanför här */
+.ticker {
   color: #00a651;
   font-weight: 500;
 }
@@ -45,7 +45,7 @@
   margin-top: 1rem;
   text-align: right;
 }
-
+/* ta bort detta till förmån för standard länk-beteende */
 .viewLink {
   font-size: 0.875rem;
   color: #00a651;
