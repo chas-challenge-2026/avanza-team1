@@ -10,7 +10,7 @@
     padding: 1.5rem;
   }
 
-  .dashboard-grid {
+  .dashboardGrid {
     grid-template-columns: repeat(2, 1fr);  /* 📱→ 2 kolumner */
     gap: 1.5rem;
   }

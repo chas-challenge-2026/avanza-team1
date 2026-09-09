@@ -47,7 +47,7 @@ function Portfolio() {
           }
         />
       )}
-      <div className="dashboard-grid">
+      <div className="dashboardGrid">
         <AssetAllocation allocation={allocation} />
         <GoalAllocation
           targetAktierPct={allocation.targetAktierPct}
