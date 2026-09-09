@@ -83,8 +83,14 @@ function GoalAllocation({
 
       <div className={styles.summary}>
         <div className={styles.summaryText}>
-          Summa: <span className={styles.summarySum}>{sum}</span> %
-          {!isValid && " — Summan måste vara 100 %."}
+          Summa:{" "}
+          <span
+            className={styles.summarySum}
+            style={{ color: isValid ? undefined : "#c0392b" }}
+          >
+            {sum}
+          </span>{" "}
+          %{!isValid && " — Summan måste vara 100 %."}
           {saved && isValid && " — Mål sparat."}
         </div>
         <button
