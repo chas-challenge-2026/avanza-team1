@@ -1,10 +1,9 @@
 .empty {
   text-align: center;
-  color: #999;
+  color: var(--gray);
   padding: 2rem 0;
-  font-size: 0.875rem;
 }
-/* peka istället direkt på p elementet om det ens behövs någon särskild styling här */
+/* TODO: Select p element directly instead of using a separate class - if this special styling is even needed */
 .emptyText {
   margin: 0;
 }

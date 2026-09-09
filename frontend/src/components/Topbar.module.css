@@ -27,18 +27,17 @@
 }
 
 .brand h1 {
-  padding-block: 1rem;
-  font-size: 1.5rem;
+  padding-block: var(--space-medium);
+  font-size: var(--font-size-large);
   font-weight: 700;
   margin: 0;
-  color: #000;
 }
 
 .topbar a {
   height: 100%;
   align-content: center;
   text-decoration: none;
-  color: #333;
+  color: var(--text-color-alt);
   font-weight: 500;
   /* padding-bottom: 0.5rem; */
   border-bottom: 2px solid transparent;
@@ -63,10 +62,10 @@
 .user {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: var(--space-medium);
 }
 
 .user-name {
   font-weight: 350;
-  color: #333;
+  color: var(--text-color-alt);
 }
