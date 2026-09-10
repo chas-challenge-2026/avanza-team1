@@ -7,7 +7,7 @@ interface WarningBannerProps {
 function WarningBanner({ message }: WarningBannerProps): JSX.Element {
   return (
     <div className={styles.banner}>
-      <span className={styles.icon}>Warning</span>
+      <span className={styles.icon}>⚠️</span>
       <span>{message}</span>
     </div>
   );
