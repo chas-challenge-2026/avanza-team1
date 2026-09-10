@@ -24,6 +24,14 @@
 - **Kontrakt:** fältnamn i `Portfolio` förblir som i #24. Ny UI-kod använder engelska identifierare.
 - **Bevis:** issue #41
 
+## 2026-09-10 — Drift räknas i frontend mot mock + sparat mål
+
+- **Beslut:** `overThreshold` och varningstext kommer från `computeDrift` i `frontend/src/lib/drift.ts`, inte från den förberäknade flaggan i `portfolio.json`.
+- **Formel:** `|actualAktierPct - targetAktierPct| > thresholdPct` (tröskel 5 % i mocken).
+- **Varför:** MVP kräver att bannern följer det mål användaren precis sparat (#41 / localStorage).
+- **Avgränsning:** ingen backend, ingen ändring av `Allocation`-kontraktet, ingen automatisk spegling av de två målfälten.
+- **Bevis:** issue #42
+- Tomac
 ## 2026-09-10 — Mock-auth format speglar framtida REST-kontrakt
 
 - **Beslut:** `login()` i `auth.ts` returnerar `AuthResult { user: User, token: string }` istället för bara `boolean`. Mock-kontona (Anna, Erik) och lösenordet `password123` speglar `infra/seed.sql`. Token och user sparas separat i `localStorage` under `ph_token` / `ph_user`.
