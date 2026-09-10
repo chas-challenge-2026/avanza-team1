@@ -32,7 +32,6 @@ public class SessionSecurityFilter implements Filter {
         // Check session
         Object sessionUser = httpReq.getSession().getAttribute("userId");
 
-
         if (sessionUser == null) {
             httpRes.sendRedirect("/login");
             return;

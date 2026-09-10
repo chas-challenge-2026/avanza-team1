@@ -21,10 +21,6 @@ public class AlertController {
     @GetMapping("/alerts")
     public String listAlerts(HttpSession session, Model model) {
 
-        // Copy-pasted session check from every other controller
-        if (session.getAttribute("userId") == null) {
-            return "redirect:/login";
-        }
 
         Integer userId = (Integer) session.getAttribute("userId");
         model.addAttribute("userName", session.getAttribute("userName"));
@@ -41,10 +37,6 @@ public class AlertController {
     public String dismissAlert(@RequestParam Integer alertId,
                                HttpSession session) {
 
-        // Session check — manually again
-        if (session.getAttribute("userId") == null) {
-            return "redirect:/login";
-        }
 
         alertService.dismissAlert(alertId);
         return "redirect:/alerts";

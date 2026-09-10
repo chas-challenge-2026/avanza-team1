@@ -1,7 +1,5 @@
 package se.comerit.avanza.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,11 +18,6 @@ public class DashboardController {
 
     @GetMapping("/")
     public String dashboard(HttpSession session, Model model) {
-
-        // Session check — copy-pasted in every controller because there's no security filter
-        if (session.getAttribute("userId") == null) {
-            return "redirect:/login";
-        }
 
         Integer userId = (Integer) session.getAttribute("userId");
         String userName = (String) session.getAttribute("userName");
