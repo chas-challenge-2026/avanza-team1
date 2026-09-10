@@ -116,7 +116,7 @@ RiskStatus calculate_sharpe(const double prices[], size_t size, double risk_free
     double daily_volatility = calculate_daily_volatility(prices, size);
     if (daily_volatility == 0.0)
     {
-        return RISK_INVALID_INPUT;
+        return RISK_ZERO_VOLATILITY;
     }
 
     /*  Convert annual risk-free rate to an equivalent daily rate. */
@@ -191,7 +191,7 @@ RiskStatus calculate_ewma_volatility(const double prices[], size_t size, double 
         return RISK_INVALID_INPUT;
     }
 
-    if (lambda <= 0.0 || lambda >= 1.0)
+    if (!isfinite(lambda) || lambda <= 0.0 || lambda >= 1.0)
     {
         return RISK_INVALID_INPUT;
     }
@@ -210,6 +210,138 @@ RiskStatus calculate_ewma_volatility(const double prices[], size_t size, double 
     /* Annualize the EWMA volatility. */
     double daily_ewma_volatility = sqrt(variance);
     *result = daily_ewma_volatility * sqrt(ANNUAL_TRADING_DAYS);
+
+    return RISK_SUCCESS;
+}
+
+/* Testing to see if these functions will suffice with making the values fit the specified time period instead of the entire series. */
+RiskStatus calculate_rolling_volatility(const double prices[], size_t size, size_t window, double results[])
+{
+    if (results == NULL)
+    {
+        return RISK_INVALID_INPUT;
+    }
+
+    if (!valid_price_series(prices, size))
+    {
+        return RISK_INVALID_INPUT;
+    }
+
+    /* Historical volatility requires at least three prices: two daily returns are needed to calculate sample volatility. */
+    if (window < 3 || window > size)
+    {
+        return RISK_INSUFFICIENT_DATA;
+    }
+
+    size_t result_count = size - window + 1;
+    for (size_t i = 0; i < result_count; i++)
+    {
+        RiskStatus status = calculate_annual_volatility(&prices[i], window, &results[i]);
+        if (status != RISK_SUCCESS)
+        {
+            return status;
+        }
+    }
+
+    return RISK_SUCCESS;
+}
+
+RiskStatus calculate_rolling_sharpe(const double prices[], size_t size, size_t window, double risk_free_rate, double results[])
+{
+    if (results == NULL)
+    {
+        return RISK_INVALID_INPUT;
+    }
+
+    if (!valid_price_series(prices, size))
+    {
+        return RISK_INVALID_INPUT;
+    }
+
+    if (window < 3 || window > size)
+    {
+        return RISK_INSUFFICIENT_DATA;
+    }
+
+    if (!isfinite(risk_free_rate) || risk_free_rate <= -1.0)
+    {
+        return RISK_INVALID_INPUT;
+    }
+
+    size_t result_count = size - window + 1;
+    for (size_t i = 0; i < result_count; i++)
+    {
+        RiskStatus status = calculate_sharpe(&prices[i], window, risk_free_rate, &results[i]);
+        if (status != RISK_SUCCESS)
+        {
+            return status;
+        }
+    }
+
+    return RISK_SUCCESS;
+}
+
+RiskStatus calculate_rolling_max_drawdown(const double prices[], size_t size, size_t window, double results[])
+{
+    if (results == NULL)
+    {
+        return RISK_INVALID_INPUT;
+    }
+
+    if (!valid_price_series(prices, size))
+    {
+        return RISK_INVALID_INPUT;
+    }
+
+    if (window < 2 || window > size)
+    {
+        return RISK_INSUFFICIENT_DATA;
+    }
+
+    size_t result_count = size - window + 1;
+    for (size_t i = 0; i < result_count; i++)
+    {
+        RiskStatus status = calculate_max_drawdown(&prices[i], window, &results[i]);
+        if (status != RISK_SUCCESS)
+        {
+            return status;
+        }
+    }
+
+    return RISK_SUCCESS;
+}
+
+RiskStatus calculate_rolling_ewma_volatility(const double prices[], size_t size, size_t window, double lambda, double results[])
+{
+    if (results == NULL)
+    {
+        return RISK_INVALID_INPUT;
+    }
+
+    if (!valid_price_series(prices, size))
+    {
+        return RISK_INVALID_INPUT;
+    }
+
+    if (window < 2 || window > size)
+    {
+        return RISK_INSUFFICIENT_DATA;
+    }
+
+    if (!isfinite(lambda) || lambda <= 0.0 || lambda >= 1.0)
+    {
+        return RISK_INVALID_INPUT;
+    }
+
+    size_t result_count = size - window + 1;
+    for (size_t i = 0; i < result_count; i++)
+    {
+        RiskStatus status = calculate_ewma_volatility(&prices[i], window, lambda, &results[i]);
+        if (status != RISK_SUCCESS)
+        {
+            return status;
+        }
+    }
 
     return RISK_SUCCESS;
 }

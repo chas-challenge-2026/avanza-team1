@@ -1,20 +1,18 @@
 .description {
-  color: #666;
-  font-size: 0.875rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: var(--space-large);
 }
 
 .inputsContainer {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-  margin-bottom: 1.5rem;
+  gap: var(--space-large);
+  margin-bottom: var(--space-large);
 }
 
 .inputRow {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: var(--space-medium);
 }
 
 .icon {
@@ -27,15 +25,13 @@
 }
 
 .labelTitle {
-  font-size: 0.875rem;
   font-weight: 500;
-  color: #333;
   margin-bottom: 0.25rem;
 }
 
 .labelSubtitle {
-  font-size: 0.75rem;
-  color: #999;
+  font-size: var(--font-size-small);
+  color: var(--gray);
 }
 
 .input {
@@ -43,46 +39,46 @@
   padding: 0.5rem;
   border: 1px solid #ddd;
   border-radius: 4px;
-  font-size: 0.875rem;
-}
-
-.unit {
-  font-size: 0.875rem;
-  color: #666;
 }
 
 .summary {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-bottom: 1.5rem;
+  padding-bottom: var(--space-large);
   border-bottom: 1px solid #f0f0f0;
-  margin-bottom: 1.5rem;
+  margin-bottom: var(--space-large);
 }
 
 .summaryText {
-  font-size: 0.875rem;
   font-weight: 600;
-  color: #333;
+  color: var(--text-color-alt);
 }
 
 .summarySum {
-  color: #00a651;
+  color: var(--primary-color);
 }
 
 .button {
-  padding: 0.5rem 1rem;
-  background-color: #00a651;
+  padding: var(--space-xsmall) var(--space-medium);
+  background-color: var(--primary-color);
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   font-weight: 500;
-  font-size: 0.875rem;
+  font-size: var(--font-size-normal);
 }
 
 .button:hover {
   background-color: #008a42;
+}
+
+.button:disabled {
+  background-color: #b8b8b8;
+  color: var(--light-gray);
+  cursor: not-allowed;
+  opacity: 0.7;
 }
 
 .infoBox {

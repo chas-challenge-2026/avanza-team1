@@ -1,7 +1,9 @@
 # Native Module (C/C++)
 
 ## What it provides
-* 
+* Risk Assessment Engine
+* FX-Pipeline
+* Backtest Engine
 
 ### Risk Assessment Engine
 * It calculates basic risk metrics (volatility, Sharpe ratio, and max drawdown) from a historical series of daily closing prices. All functions treat prices[0] as the earliest price and prices[size - 1] as the most recent. None of them modify the input array.
@@ -26,7 +28,8 @@
 * Doxygen?
 
 ## Testing
-* 
+* (WIP) Risk Assessment Engine has extensive assertion tests that run on expected values made through demo-runs of the functions. It also checks boundary issues and edge cases to make sure that it provides the correct information. Still a Work in progress.
+
 
 ## Collaborators
 - [Henrik Westerlund](https://github.com/Henrik-Westerlund)
