@@ -1,29 +1,28 @@
 .container {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 2rem;
+  gap: var(--space-large);
 }
 
 .column {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: var(--space-xsmall);
 }
 
 .columnTitle {
-  font-size: 0.875rem;
+  font-size: var(--font-size-normal);
   font-weight: 600;
-  color: #333;
-  margin-bottom: 1rem;
+  /* color: #333; */
+  margin-bottom: var(--space-medium);
 }
 
 .row {
   display: flex;
   justify-content: space-between;
-  font-size: 0.875rem;
 }
 
 .value {
   font-weight: 600;
-  color: #00a651;
+  color: var(--primary-color);
 }
