@@ -5,20 +5,28 @@ import Navbar from "./components/Navbar";
 import Portfolio from './pages/Portfolio';
 import Holdings from './pages/Holdings';
 import Alerts from './pages/Alerts';
+import Login from './pages/Login';
+import { ProtectedRoute } from './components/ProtectedRoute';
+import { useAuth } from './auth/useAuth';
 import './App.css';
 
 function App() {
+  const { isAuthenticated } = useAuth();
+
   return (
     <>
       <header>
-        <Navbar/>
+        {/* Navbar döljs på /login - man ska inte se nav-länkar eller en "Logga ut"-knapp innan man är inloggad */}
+        {isAuthenticated && <Navbar/>}
       </header>
       <main className="app-content">
         <Routes>
-        <Route path="/" element={<Portfolio />} />
-        <Route path="/holdings" element={<Holdings />} />
-        <Route path="/alerts" element={<Alerts />} />
-        <Route path="/login" element={null} />
+          <Route path="/login" element={<Login />} />
+          <Route element={<ProtectedRoute />}>
+            <Route path="/" element={<Portfolio />} />
+            <Route path="/holdings" element={<Holdings />} />
+            <Route path="/alerts" element={<Alerts />} />
+          </Route>
         </Routes>
       </main>
       <footer>
