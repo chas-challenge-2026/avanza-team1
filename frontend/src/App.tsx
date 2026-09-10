@@ -1,7 +1,6 @@
 // import { useState } from 'react'
 import { Routes, Route } from 'react-router-dom';
-import './App.css';
-import Navbar from "./components/Navbar";
+import Topbar from "./components/Topbar";
 import Portfolio from './pages/Portfolio';
 import Holdings from './pages/Holdings';
 import Alerts from './pages/Alerts';
@@ -16,10 +15,10 @@ function App() {
   return (
     <>
       <header>
-        {/* Navbar döljs på /login - man ska inte se nav-länkar eller en "Logga ut"-knapp innan man är inloggad */}
-        {isAuthenticated && <Navbar/>}
+        {/* Topbar döljs på /login - man ska inte se nav-länkar eller en "Logga ut"-knapp innan man är inloggad */}
+        {isAuthenticated && <Topbar/>}
       </header>
-      <main className="app-content">
+      <main className="pageContent">
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route element={<ProtectedRoute />}>
@@ -29,9 +28,6 @@ function App() {
           </Route>
         </Routes>
       </main>
-      <footer>
-        {/* Place footer component here */}
-      </footer>
     </>
   )
 }

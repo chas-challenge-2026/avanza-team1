@@ -4,53 +4,39 @@
 }
 
 .tableHead {
-  border-bottom: 2px solid #e0e0e0;
+  border-bottom: 2px solid var(--light-gray);
 }
-
-.headerCell {
-  text-align: left;
-  padding: 0.75rem;
-  font-size: 0.875rem;
+.table th {
+  padding: var(--space-small);
   font-weight: 600;
   color: #666;
 }
 
-.headerCellRight {
-  text-align: right;
+.table td {
+  padding: var(--space-small);
+  border-bottom: 1px solid #ddd;
 }
-
-.row {
-  border-bottom: 1px solid #f0f0f0;
-}
-
-.cell {
-  padding: 0.75rem;
-  font-size: 0.875rem;
-}
-
-.cellTicker {
-  color: #00a651;
+.ticker {
+  color: var(--primary-color);
   font-weight: 500;
 }
-
-.cellRight {
-  text-align: right;
-}
-
-.cellChange {
-  color: #00a651;
+.change {
+  color: var(--primary-color);
 }
 
 .footer {
-  margin-top: 1rem;
+  margin-top: var(--space-medium);
   text-align: right;
 }
 
+.right {
+  text-align: right;
+}
+
+/* TODO: move this styling to global style for "a" links and remove this class */
 .viewLink {
-  font-size: 0.875rem;
-  color: #00a651;
+  color: var(--primary-color);
   text-decoration: none;
-  font-weight: 500;
 }
 
 .viewLink:hover {

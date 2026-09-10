@@ -1,18 +1,18 @@
 .pageHeader {
-  margin-bottom: 1.5rem;
+  margin-bottom: var(--space-large);
 }
 
 .title {
-  font-size: 1.5rem;
+  font-size: var(--font-size-xlarge);
   font-weight: 600;
-  color: #333;
-  margin-bottom: 0.5rem;
+  color: var(--text-color-alt);
+  margin-bottom: var(--space-xsmall);
 }
 
 .value {
   font-size: 2.5rem;
   font-weight: bold;
-  color: #333;
+  color: var(--text-color-alt);
   margin-bottom: 0.5rem;
 }
 
@@ -22,7 +22,6 @@
 }
 
 .subtitle {
-  color: #666;
-  font-size: 0.875rem;
+  color: var(--gray);
   margin: 0;
 }
