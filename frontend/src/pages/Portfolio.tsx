@@ -53,7 +53,7 @@ function Portfolio() {
   }
 
   return (
-    <div className="portfolio-page">
+    <>
       <PageHeader
         totalValueSek={mockPortfolio.totalValueSek}
         fx={mockPortfolio.fx}
@@ -73,7 +73,7 @@ function Portfolio() {
         <NoticesEmpty alerts={driftAlerts(allocation)} />
         <HoldingsTable holdings={mockPortfolio.holdings} />
       </div>
-    </div>
+    </>
   );
 }
 

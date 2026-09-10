@@ -1,55 +1,203 @@
 #ifndef RISK_H
 #define RISK_H
 
-/*  A work in progress (WIP) risk-engine:
-    It calculates basic risk metrics (volatility, Sharpe ratio, and max drawdown)
-    from a historical series of daily closing prices. 
-    All functions treat prices[0] as the earliest price and prices[size - 1] as the most recent.
-    None of them modify the input array. */
+#include <stddef.h>
 
-/*  Amount of days the trading is open per year, used to annualize daily figures */
+/**
+ * @file risk.h
+ * @brief Functions for calculating historical portfolio risk metrics.
+ * 
+ * Price arrays are expected to contain historical prices in chronological order,
+ * with the oldest price first. Functions do not modify the input array.
+ */
+
+/**  Number of trading days assumed in annual calculations. */
 #define ANNUAL_TRADING_DAYS     252.0
 
-/*  Assumed annual risk-free rate (like a standard savings account),
-    used as the "safe" return when computing Sharpe ratio. */
-#define SAVINGS_INTEREST_RATE   0.03
+/** 
+ * Default annual risk-free rate used by the default Sharpe ratio calculation.
+ * 
+ * This is a configurable assumption and does not represent a guaranteed market rate. 
+ */
+#define DEFAULT_RISK_FREE_RATE   0.03
 
+/**
+ * @brief Status returned by risk calculation functions.
+ */
+typedef enum
+{
+    RISK_SUCCESS = 0,
+    RISK_INVALID_INPUT,
+    RISK_INSUFFICIENT_DATA,
+    RISK_ZERO_VOLATILITY,
+} RiskStatus;
 
-/*  Calculates the annual volatility of the price series:
-    the standard deviation of daily returns, scaled up to a yearly figure.
-    Higher value mean the price swings around more from day to day.
+/**
+ * @brief Calculate annualized historical volatility.
+ * 
+ * Uses the sample standard deviation of daily returns and annualizes it
+ * using the square-root-of-time rule.
+ * 
+ * @param prices Historical closing prices, oldest first.
+ * @param size Number of prices. Must be at least 3.
+ * @param result Output value as a decimal fraction (e.g. 0.35 == 35%).
+ * 
+ * @return RISK_SUCCESS on success.
+ * @return RISK_INVALID_INPUT if the input is invalid or result is NULL.
+ * 
+ * On RISK_INVALID_INPUT, result is set to 0.0 when possible.
+ */
+RiskStatus calculate_annual_volatility(const double prices[], size_t size, double *result);
 
-    prices  - array of historical closing prices, oldest first
-    size    - number of prices in the array: must be at least 3, since volatility
-              needs at least 2 daily returns to have any spread to measure.
-          
-    Returns the annualized volatility as a fraction (e.g. 0.35 == 35%).
-    Returns 0.0 if fewer than 3 prices are given. */
-double calculate_annual_volatility(const double prices[], int size);
+/**
+ * @brief Calculate the annualized Sharpe ratio.
+ * 
+ * Compares the average return against the risk-free rate and adjusts
+ * the result for the volatility of the returns.
+ * 
+ * @param prices Historical closing prices, oldest first.
+ * @param size Number of prices. Must be at least 3.
+ * @param risk_free_rate Annual risk-free rate, e.g. DEFAULT_RISK_FREE_RATE
+ * @param result Output Sharpe ratio.
+ * 
+ * @return RISK_SUCCESS on success.
+ * @return RISK_INVALID_INPUT if the input is invalid, result is NULL, 
+ * risk_free_rate is not finite or risk_free_rate is <= -1.0.
+ * @return RISK_ZERO_VOLATILITY if the return volatility is zero. 
+ * 
+ * On RISK_INVALID_INPUT, result is set to 0.0 when possible.
+ */
+RiskStatus calculate_sharpe(const double prices[], size_t size, double risk_free_rate, double *result);
 
-/*  Calculates the annualized Sharpe Ratio:
-    How much excess return the price series earned per unit of volatility, above a risk-free baseline.
-    Higher is better; a Sharpe ratio above 1 is generally considered good, above 2 is very good.
+/**
+ * @brief Calculate the maximum drawdown.
+ * 
+ * Finds the largest peak-to-trough decline in the price series.
+ * 
+ * @param prices Historical closing prices, oldest first.
+ * @param size Number of prices. Must be at least 2.
+ * @param result Output drawdown as a positive decimal fraction (e.g. 0.05 == 5%).
+ * 
+ * @return RISK_SUCCESS on success.
+ * @return RISK_INVALID_INPUT if the input is invalid or result is NULL.
+ * 
+ * A valid result of 0.0 means that no drawdown occurred.
+ * On RISK_INVALID_INPUT, result is set to 0.0 when possible.
+ */
+RiskStatus calculate_max_drawdown(const double prices[], size_t size, double *result);
 
-    prices          - array of historical closing prices, oldest first
-    size            - number of prices in the array: must be at least 3 (see calculated_annual_volatility)
-    risk_free_rate  - the annual "safe" rate to compare against, e.g. SAVINGS_INTEREST_RATE
+/**
+ * @brief Calculate annualized EWMA volatility.
+ * 
+ * Applies exponentially decreasing weights to squared daily returns,
+ * giving more influence to recent observations.
+ * 
+ * @param prices Historical closing prices, oldest first.
+ * @param size Number of prices. Must be at least 2.
+ * @param lambda EWMA decay factor in the range (0, 1). Higher values give more weight to older observations.
+ * @param result Output annualized EWMA volatility as a decimal fraction.
+ * 
+ * @return RISK_SUCCESS on success.
+ * @return RISK_INVALID_INPUT if the input is invalid or lambda is invalid.
+ * 
+ * On RISK_INVALID_INPUT, result is set to 0.0 when possible.
+*/
+RiskStatus calculate_ewma_volatility(const double prices[], size_t size, double lambda, double *result);
 
-    Returns 0.0 if fewer than 3 prices are given, or if volatility is exactly 0.0 (flat prices), to avoid dividing by zero. */
-double calculate_sharpe(const double prices[], int size, double risk_free_rate);
+/**
+ * @brief Calculate rolling annualized historical volatility.
+ * 
+ * Calculates historical volatility for every consecutive window of the specified size.
+ * 
+ * For each position, the function passes one window of prices to calculate_annual_volatility().
+ * 
+ * The first result corresponds to prices[0 ... window - 1].
+ * The next result corresponds to prices[1 ... window].
+ * 
+ * The caller must provide an output array containing at least (size - window + 1) elements.
+ * 
+ * @param prices Historical closing prices, oldest first.
+ * @param size Number of prices.
+ * @param window Number of prices included in each calculation.
+ * @param results Output array containing rolling volatility values.
+ * 
+ * @return RISK_SUCCESS on success.
+ * @return RISK_INVALID_INPUT if an input is invalid.
+ * @return RISK_INSUFFICIENT_DATA if window is too large or too small.
+ */
+RiskStatus calculate_rolling_volatility(const double prices[], size_t size, size_t window, double results[]);
 
-/*  Calculates the maximum drawdown:
-    the single largest peak-to-trough decline anywhere in the price series. This measures the worst loss
-    an investor holding from a high point would have experienced, which is a different kind of risk than day-to-day volatility.
+/**
+ * @brief Calculate rolling annualized Sharpe ratio.
+ * 
+ * Calculates the annualized Sharpe ratio for every consecutive window of the specified size.
+ * 
+ * For each position, the function passes one window of prices to calculate_sharpe().
+ * 
+ * The first result corresponds to prices[0 ... window - 1].
+ * The next result corresponds to prices[1 ... window].
+ * 
+ * The caller must provide an output array containing at least (size - window + 1) elements.
+ * 
+ * @param prices Historical closing prices, oldest first.
+ * @param size Number of prices.
+ * @param window Number of prices included in each calculation.
+ * @param risk_free_rate Annual risk-free rate, e.g. DEFAULT_RISK_FREE_RATE.
+ * @param results Output array containing rolling Sharpe ratio values.
+ * 
+ * @return RISK_SUCCESS on success.
+ * @return RISK_INVALID_INPUT if an input is invalid.
+ * @return RISK_INSUFFICIENT_DATA if window is too large or too small.
+ * @return RISK_ZERO_VOLATILITY if a window has zero return volatility.
+ */
+RiskStatus calculate_rolling_sharpe(const double prices[], size_t size, size_t window, double risk_free_rate, double results[]);
 
-    prices  - array of historical closing prices, oldest first
-    size    - number of prices in the array: must be at least 2, since a drawdown needs a peak and a later,
-            lower price to compare it to
-            
-    Returns the max drawdown as a positive fraction (e.g. 0.05 == a 5% drop from peak).
-    Returns 0.0 if fewer than 2 prices are given, or if prices never fall below a prior high. */
-double calculate_max_drawdown(const double prices[], int size);
+/**
+ * @brief Calculate rolling maximum drawdown.
+ * 
+ * Calculates the maximum drawdown for every consecutive window of the specified size.
+ * 
+ * For each position, the function passes one window of prices to calculate_max_drawdown().
+ * 
+ * The first result corresponds to prices[0 ... window - 1].
+ * The next result corresponds to prices[1 ... window].
+ * 
+ * The caller must provide an output array containing at least (size - window + 1) elements.
+ * 
+ * @param prices Historical closing prices, oldest first.
+ * @param size Number of prices.
+ * @param window Number of prices included in each calculation.
+ * @param results Output array containing rolling maximum drawdown values.
+ * 
+ * @return RISK_SUCCESS on success.
+ * @return RISK_INVALID_INPUT if an input is invalid.
+ * @return RISK_INSUFFICIENT_DATA if window is too large or too small.
+ */
+RiskStatus calculate_rolling_max_drawdown(const double prices[], size_t size, size_t window, double results[]);
 
+/**
+ * @brief Calculate rolling annualized EWMA volatility.
+ * 
+ * Calculates annualized EWMA volatility for every consecutive window of the specified size.
+ * 
+ * For each position, the function passes one window of prices to calculate_ewma_volatility().
+ * 
+ * The first result corresponds to prices[0 ... window - 1].
+ * The next result corresponds to prices[1 ... window].
+ * 
+ * The caller must provide an output array containing at least (size - window + 1) elements.
+ * 
+ * @param prices Historical closing prices, oldest first.
+ * @param size Number of prices.
+ * @param window Number of prices included in each calculation.
+ * @param lambda EWMA decay factor in the range (0, 1).
+ * @param results Output array containing rolling EWMA volatility values.
+ * 
+ * @return RISK_SUCCESS on success.
+ * @return RISK_INVALID_INPUT if an input is invalid.
+ * @return RISK_INSUFFICIENT_DATA if window is too large or too small.
+ */
+RiskStatus calculate_rolling_ewma_volatility(const double prices[], size_t size, size_t window, double lambda, double results[]);
 
 
 #endif

@@ -21,17 +21,15 @@ function HoldingsTable({ holdings }: HoldingsTableProps): JSX.Element {
       <table className={styles.table}>
         <thead className={styles.tableHead}>
           <tr>
-            <th className={styles.headerCell}>Ticker</th>
-            <th className={styles.headerCell}>Namn</th>
-            <th className={styles.headerCell}>Konto</th>
-            <th className={`${styles.headerCell} ${styles.headerCellRight}`}>
-              Antal
-            </th>
-            <th className={styles.headerCell}>Valuta</th>
-            <th className={`${styles.headerCell} ${styles.headerCellRight}`}>
+            <th>Ticker</th>
+            <th>Namn</th>
+            <th>Konto</th>
+            <th className={styles.right}>Antal</th>
+            <th>Valuta</th>
+            <th className={styles.right}>
               Värde SEK
             </th>
-            <th className={`${styles.headerCell} ${styles.headerCellRight}`}>
+            <th className={styles.right}>
               Ändring
             </th>
           </tr>
@@ -40,22 +38,21 @@ function HoldingsTable({ holdings }: HoldingsTableProps): JSX.Element {
           {holdings.map((holding) => (
             <tr
               key={`${holding.ticker}-${holding.account}`}
-              className={styles.row}
             >
-              <td className={`${styles.cell} ${styles.cellTicker}`}>
+              <td className={styles.ticker}>
                 {holding.ticker}
               </td>
-              <td className={styles.cell}>{holding.name}</td>
-              <td className={styles.cell}>{holding.account}</td>
-              <td className={`${styles.cell} ${styles.cellRight}`}>
+              <td>{holding.name}</td>
+              <td>{holding.account}</td>
+              <td className={styles.right}>
                 {holding.quantity}
               </td>
-              <td className={styles.cell}>{holding.currency}</td>
-              <td className={`${styles.cell} ${styles.cellRight}`}>
+              <td>{holding.currency}</td>
+              <td className={styles.right}>
                 {formatSek(holding.valueSek)}
               </td>
               <td
-                className={`${styles.cell} ${styles.cellRight} ${styles.cellChange}`}
+                className={`${styles.right} ${styles.change}`}
               >
                 {formatReturnPct(holding.returnPct)}
               </td>

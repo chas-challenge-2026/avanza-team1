@@ -31,7 +31,8 @@ function GoalAllocation({
     onTargetSaved(equities, funds);
     setSaved(true);
   }
-
+// TODO: Ändra description så det står "i din portfölj" i den. Ändra label till att bara innehålla orden "aktier" respektive "fonder" 
+// TODO: ta bort label subtitle .
   return (
     <Panel title="Målallokering" size="large">
       <p className={styles.description}>
@@ -56,8 +57,7 @@ function GoalAllocation({
               setEquities(Number(e.target.value));
               setSaved(false);
             }}
-          />
-          <span className={styles.unit}>%</span>
+          />%
         </div>
 
         <div className={styles.inputRow}>
@@ -76,8 +76,7 @@ function GoalAllocation({
               setFunds(Number(e.target.value));
               setSaved(false);
             }}
-          />
-          <span className={styles.unit}>%</span>
+          />%
         </div>
       </div>
 
