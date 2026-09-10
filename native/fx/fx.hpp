@@ -41,7 +41,7 @@ FX_Code fx_convert(FX_Data *fx_data, const char *curr1, const char *curr2);
 /*  Parses the JSON data in buffer and stores the date and exchange rate in fx_data */
 FX_Code fx_parse_string(FX_Data *fx_data, const char *buffer);
 
-/*  Helper function for Curl GET request */
+/*  Helper function for Curl GET request, must free response.string after use */
 FX_Code fx_curl(const char *url, Response *response);
 
 
