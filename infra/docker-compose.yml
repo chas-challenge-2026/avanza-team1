@@ -21,7 +21,7 @@ services:
       POSTGRES_PASSWORD: avanza123
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./seed.sql:/docker-entrypoint-initdb.d/seed.sql
+
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U avanza"]
       interval: 5s
