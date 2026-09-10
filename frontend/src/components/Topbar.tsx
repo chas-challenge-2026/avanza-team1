@@ -1,9 +1,16 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import styles from "./Topbar.module.css";
 import { mockPortfolio } from "../types/portfolio";
+import { useAuth } from "../auth/useAuth";
 
 function Topbar() {
   const navigate = useNavigate();
+  const { logout } = useAuth();
+
+  function handleLogout(): void {
+    logout(); // rensar token + user - utan detta är man fortfarande "inloggad" efter redirecten
+    navigate("/login");
+  }
 
   return (
     <header className={styles.topbar}>
@@ -18,7 +25,7 @@ function Topbar() {
         </nav>
         <div className={styles.user}>
           <span className={styles["user-name"]}>{mockPortfolio.userName}</span>
-          <button className={styles["logout-button"]} onClick={() => navigate("/login")}>
+          <button className={styles["logout-button"]} onClick={handleLogout}>
             Logga ut
           </button>
         </div>
