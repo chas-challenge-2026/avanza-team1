@@ -24,12 +24,12 @@ public class AuthService {
             return null;
         }
 
-        // Build query with string concat — quick and easy!
-        // TODO: use PreparedStatement instead of string concatenation
-        String sql = "SELECT id, name, email FROM users WHERE email = '" + email
-                + "' AND password_md5 = '" + md5 + "'";
+        // SAFE: parametrized SQL query
+        // Parametrized SQL: '?' = placeholders that only accept safe text values.
+        // jdbcTemplate fills the placeholders securely, preventing SQL injection.
+        String sql = "SELECT id, name, email FROM users WHERE email = ? AND password_md5 = ?";
+        List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql, email, md5);
 
-        List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql);
 
         if (rows.isEmpty()) {
             return null;
@@ -37,6 +37,7 @@ public class AuthService {
 
         return rows.get(0);
     }
+
 
     // MD5 helper — lives here because there's nowhere else to put it
     private String md5Hash(String input) {
