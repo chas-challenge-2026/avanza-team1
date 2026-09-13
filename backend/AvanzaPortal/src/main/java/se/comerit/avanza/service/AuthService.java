@@ -24,7 +24,7 @@ public class AuthService {
             return null;
         }
 
-        // SAFE: parametrized SQL query
+        // Fix SQL‑injektion: parametrized SQL query
         // Parametrized SQL: '?' = placeholders that only accept safe text values.
         // jdbcTemplate fills the placeholders securely, preventing SQL injection.
         String sql = "SELECT id, name, email FROM users WHERE email = ? AND password_md5 = ?";
