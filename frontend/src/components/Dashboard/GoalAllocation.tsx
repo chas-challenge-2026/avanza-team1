@@ -54,7 +54,10 @@ function GoalAllocation({
             className={styles.input}
             value={equities}
             onChange={(e) => {
+              if (Number(e.target.value) < 0) e.target.value = '0';
+              if (Number(e.target.value) > 100) e.target.value = '100';
               setEquities(Number(e.target.value));
+              setFunds(100 - Number(e.target.value));
               setSaved(false);
             }}
           />%
@@ -73,7 +76,10 @@ function GoalAllocation({
             className={styles.input}
             value={funds}
             onChange={(e) => {
+              if (Number(e.target.value) < 0) e.target.value = '0';
+              if (Number(e.target.value) > 100) e.target.value = '100';
               setFunds(Number(e.target.value));
+              setEquities(100 - Number(e.target.value));
               setSaved(false);
             }}
           />%
@@ -82,7 +88,7 @@ function GoalAllocation({
 
       <div className={styles.summary}>
         <div className={styles.summaryText}>
-          Summa:{" "}
+          {/* Summa:{" "}
           <span
             className={styles.summarySum}
             style={{ color: isValid ? undefined : "#c0392b" }}
@@ -90,15 +96,16 @@ function GoalAllocation({
             {sum}
           </span>{" "}
           %{!isValid && " — Summan måste vara 100 %."}
-          {saved && isValid && " — Mål sparat."}
+          {saved && isValid && " — Mål sparat."} */}
+          {/* {saved && "Mål sparat"} */}
         </div>
         <button
           className={styles.button}
           type="button"
-          disabled={!isValid}
+          disabled={saved}
           onClick={handleSave}
         >
-          Spara mål ✓
+          { saved ? "Mål sparat" : "Spara mål" }
         </button>
       </div>
 
