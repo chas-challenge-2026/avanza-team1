@@ -107,7 +107,7 @@ This will later be replaced with `GET /api/portfolio`. Change numbers in the JSO
 - No login against the backend
 - No live FX
 - The pension account exists but has 0 SEK
-- `overThreshold` is precomputed in the mock (75/25 vs 60/40, threshold 5%)
+- Drift is computed in the UI (`src/lib/drift.ts`): `|actual − target| > thresholdPct` (5% in the mock). The JSON flag is not the source of truth for the banner.
 
 ## Test status (#24)
 
