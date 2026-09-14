@@ -54,6 +54,8 @@ function GoalAllocation({
             className={styles.input}
             value={equities}
             onChange={(e) => {
+              if (Number(e.target.value) < 0) e.target.value = '0';
+              if (Number(e.target.value) > 100) e.target.value = '100';
               setEquities(Number(e.target.value));
               setSaved(false);
             }}
@@ -73,6 +75,8 @@ function GoalAllocation({
             className={styles.input}
             value={funds}
             onChange={(e) => {
+              if (Number(e.target.value) < 0) e.target.value = '0';
+              if (Number(e.target.value) > 100) e.target.value = '100';
               setFunds(Number(e.target.value));
               setSaved(false);
             }}
