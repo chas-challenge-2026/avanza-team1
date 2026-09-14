@@ -88,7 +88,7 @@ function GoalAllocation({
 
       <div className={styles.summary}>
         <div className={styles.summaryText}>
-          Summa:{" "}
+          {/* Summa:{" "}
           <span
             className={styles.summarySum}
             style={{ color: isValid ? undefined : "#c0392b" }}
@@ -96,15 +96,16 @@ function GoalAllocation({
             {sum}
           </span>{" "}
           %{!isValid && " — Summan måste vara 100 %."}
-          {saved && isValid && " — Mål sparat."}
+          {saved && isValid && " — Mål sparat."} */}
+          {/* {saved && "Mål sparat"} */}
         </div>
         <button
           className={styles.button}
           type="button"
-          disabled={!isValid}
+          disabled={saved}
           onClick={handleSave}
         >
-          Spara mål ✓
+          { saved ? "Mål sparat" : "Spara mål" }
         </button>
       </div>
 
