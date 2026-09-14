@@ -52,7 +52,11 @@ public class HoldingController {
     public String deleteHolding(@RequestParam Integer holdingId,
                                 HttpSession session) {
 
-        holdingService.deleteHolding(holdingId);
+
+        Integer userId = (Integer) session.getAttribute("userId");
+
+        // Skicka userId till service för IDOR‑kontroll
+        holdingService.deleteHolding(holdingId, userId);
 
         return "redirect:/holdings";
     }
