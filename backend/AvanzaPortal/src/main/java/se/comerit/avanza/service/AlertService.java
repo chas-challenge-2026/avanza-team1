@@ -110,11 +110,23 @@ public class AlertService {
         return result;
     }
 
-    public void dismissAlert(Integer alertId) {
+    // IDOR — Notiser (Insecure Direct Object Reference)
+    // Problem: UPDATE alerts SET dismissed = true WHERE id = ?
+    // Ingen kontroll att alerten tillhör inloggad användare.
+    // Fix: Lägg till AND user_id = ? för att säkerställa ägarskap.
 
-        // No ownership check here either — any user can dismiss any alert by ID
-        // Consistent with the IDOR pattern in HoldingController
-        String sql = "UPDATE alerts SET dismissed = true WHERE id = " + alertId;
-        jdbcTemplate.execute(sql);
+    public void dismissAlert(Integer alertId, Integer sessionUserId) {
+
+        String sql = """
+        UPDATE alerts
+        SET dismissed = true
+        WHERE id = ?
+        AND user_id = ?
+    """;
+
+        // Endast ägaren kan dismissa sin alert.
+        // Fel användare → inget händer (IDOR blockeras).
+        jdbcTemplate.update(sql, alertId, sessionUserId);
     }
+
 }

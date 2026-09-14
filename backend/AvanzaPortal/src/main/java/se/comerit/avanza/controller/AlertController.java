@@ -38,7 +38,11 @@ public class AlertController {
                                HttpSession session) {
 
 
-        alertService.dismissAlert(alertId);
+        Integer userId = (Integer) session.getAttribute("userId");
+
+        // Skicka med userId för IDOR-kontroll
+        alertService.dismissAlert(alertId, userId);
+
         return "redirect:/alerts";
     }
 }

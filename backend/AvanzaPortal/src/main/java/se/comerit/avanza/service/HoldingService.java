@@ -75,13 +75,25 @@ public class HoldingService {
     }
 
 
-    public void deleteHolding(Integer holdingId) {
+    // IDOR — Innehav (Insecure Direct Object Reference)
+    // Problem: DELETE FROM holdings WHERE id = ? utan att verifiera att innehavet tillhör inloggad användare.
+    // Valfri inloggad användare kan ta bort andras innehav.
+    // Fix: Lägg till AND account_id IN (SELECT id FROM accounts WHERE user_id = ?).
 
-        // IDOR VULNERABILITY: No ownership check — any logged-in user can delete any holding
-        // We just delete by holdingId directly without verifying it belongs to this user
-        // TODO: add WHERE account_id IN (SELECT id FROM accounts WHERE user_id = ?) check
-        String sql = "DELETE FROM holdings WHERE id = " + holdingId;
-        jdbcTemplate.execute(sql);
+    public void deleteHolding(Integer holdingId, Integer sessionUserId) {
+
+        String sql = """
+        DELETE FROM holdings
+        WHERE id = ?
+        AND account_id IN (
+            SELECT id FROM accounts WHERE user_id = ?
+        )
+    """;
+
+        // Endast ägaren kan radera sin holding.
+        // Fel användare → inget händer (IDOR blockeras).
+        jdbcTemplate.update(sql, holdingId, sessionUserId);
     }
+
 
 }
