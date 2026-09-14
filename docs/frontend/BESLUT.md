@@ -33,7 +33,6 @@
 - **Bevis:** issue #42
 - Tomac
 
-
 ## 2026-09-10 — Mock-auth format speglar framtida REST-kontrakt
 
 - **Beslut:** `login()` i `auth.ts` returnerar `AuthResult { user: User, token: string }` istället för bara `boolean`. Mock-kontona (Anna, Erik) och lösenordet `password123` speglar `infra/seed.sql`. Token och user sparas separat i `localStorage` under `ph_token` / `ph_user`.
