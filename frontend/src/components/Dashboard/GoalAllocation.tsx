@@ -57,6 +57,7 @@ function GoalAllocation({
               if (Number(e.target.value) < 0) e.target.value = '0';
               if (Number(e.target.value) > 100) e.target.value = '100';
               setEquities(Number(e.target.value));
+              setFunds(100 - Number(e.target.value));
               setSaved(false);
             }}
           />%
@@ -78,6 +79,7 @@ function GoalAllocation({
               if (Number(e.target.value) < 0) e.target.value = '0';
               if (Number(e.target.value) > 100) e.target.value = '100';
               setFunds(Number(e.target.value));
+              setEquities(100 - Number(e.target.value));
               setSaved(false);
             }}
           />%
