@@ -32,6 +32,8 @@
 - **Avgränsning:** ingen backend, ingen ändring av `Allocation`-kontraktet, ingen automatisk spegling av de två målfälten.
 - **Bevis:** issue #42
 - Tomac
+
+
 ## 2026-09-10 — Mock-auth format speglar framtida REST-kontrakt
 
 - **Beslut:** `login()` i `auth.ts` returnerar `AuthResult { user: User, token: string }` istället för bara `boolean`. Mock-kontona (Anna, Erik) och lösenordet `password123` speglar `infra/seed.sql`. Token och user sparas separat i `localStorage` under `ph_token` / `ph_user`.
@@ -39,4 +41,13 @@
 - **Avgränsning:** Ingen riktig JWT-verifiering (mock only, enligt issue #40). Ingen koppling till `/api`-API:et ännu — det finns inte än.
 - **Kontrakt:** `User { id: string, name: string, email: string }` i `types/auth.ts`. Obs: riktiga `User`-entityn i backend har `id: Long` (numeriskt) — kan behöva bli `number` när riktigt API kopplas in.
 - **Bevis:** issue #40, `frontend/src/auth/`
+- Zaida
+
+## 2026-09-14 — Vitest + RTL som teststack för frontend
+
+- **Beslut:** Vitest + React Testing Library + jsdom sätts upp i #87. Ett smoke-test verifierar att en komponent kan renderas och att DOM-assertions fungerar. Kommando: `npm run test`.
+- **Varför:** Projektet är redan ESM (`"type": "module"` i package.json) och kör Vite. Vitest återanvänder `vite.config.ts` och samma esbuild-transform som appen redan bygger med, så ESM hanteras utan extra steg. Jest bygger på CommonJS-antaganden och hade krävt separat transform + specialhantering av `import.meta` för samma resultat.
+- **Avgränsning:** Ingen E2E (Playwright/Cypress) i #87 — täcker bara unit/component-nivå. Ingen täckningsgrad krävs, inga feature-specifika tester — de hör till separata issues (enligt #87:s scope).
+- **Konsekvens:** Testrunnern blir kopplad till Vite som bundler. Byter teamet bort Vite senare måste testuppsättningen migreras samtidigt (Vitest är inte bundler-agnostisk som Jest).
+- **Bevis:** issue #87
 - Zaida
