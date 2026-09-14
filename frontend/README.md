@@ -100,8 +100,10 @@ When the frontend calls the backend API, start the backend infrastructure separa
 
 ## Mock portfolio data
 
-The UI reads `src/data/portfolio.json` via `import { mockPortfolio } from "./types/portfolio"`.
-This will later be replaced with `GET /api/portfolio`. Change numbers in the JSON, not in the components.
+The UI reads the portfolio through `src/api/portfolioApi.ts`.
+The default adapter returns `src/data/portfolio.json`.
+Switching `VITE_USE_MOCK=false` later uses `GET /api/portfolio` instead.
+Change numbers in the JSON, not in the components.
 
 ## Scope (current)
 
