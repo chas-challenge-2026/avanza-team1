@@ -23,3 +23,30 @@
 - **Avgränsning:** ingen backend, ingen drift-beräkning (#42).
 - **Kontrakt:** fältnamn i `Portfolio` förblir som i #24. Ny UI-kod använder engelska identifierare.
 - **Bevis:** issue #41
+
+## 2026-09-10 — Drift räknas i frontend mot mock + sparat mål
+
+- **Beslut:** `overThreshold` och varningstext kommer från `computeDrift` i `frontend/src/lib/drift.ts`, inte från den förberäknade flaggan i `portfolio.json`.
+- **Formel:** `|actualAktierPct - targetAktierPct| > thresholdPct` (tröskel 5 % i mocken).
+- **Varför:** MVP kräver att bannern följer det mål användaren precis sparat (#41 / localStorage).
+- **Avgränsning:** ingen backend, ingen ändring av `Allocation`-kontraktet, ingen automatisk spegling av de två målfälten.
+- **Bevis:** issue #42
+- Tomac
+
+## 2026-09-10 — Mock-auth format speglar framtida REST-kontrakt
+
+- **Beslut:** `login()` i `auth.ts` returnerar `AuthResult { user: User, token: string }` istället för bara `boolean`. Mock-kontona (Anna, Erik) och lösenordet `password123` speglar `infra/seed.sql`. Token och user sparas separat i `localStorage` under `ph_token` / `ph_user`.
+- **Varför:** `SessionSecurityFilter.java` (branch `Add/security-filter`) undantar `/api/*` explicit från backendens sessionsbaserade auth ("open-ended for other teams") — det riktiga REST-API:et frontend ska prata med blir alltså troligen token-baserat, inte session-baserat. Genom att forma mocken efter detta redan nu blir bytet till riktig backend en mindre omskrivning, samma princip som #24: "typen är kontraktet mot Java".
+- **Avgränsning:** Ingen riktig JWT-verifiering (mock only, enligt issue #40). Ingen koppling till `/api`-API:et ännu — det finns inte än.
+- **Kontrakt:** `User { id: string, name: string, email: string }` i `types/auth.ts`. Obs: riktiga `User`-entityn i backend har `id: Long` (numeriskt) — kan behöva bli `number` när riktigt API kopplas in.
+- **Bevis:** issue #40, `frontend/src/auth/`
+- Zaida
+
+## 2026-09-14 — Portfolio-UI via `portfolioApi` (mock default)
+
+- **Beslut:** UI hämtar Portfolio via `portfolioApi`. Default är mock-adapter. Http-adapter finns som skal. `VITE_USE_MOCK=false` byter senare.
+- **Varför:** Sidan ska inte veta att datan är JSON. Samma kontrakt som Java (`GET /api/portfolio`).
+- **Avgränsning:** ingen riktig fetch, ingen JWT-verify, ingen PUT för mål. Topbar-namn kommer från `useAuth()`, inte portföljen.
+- **Kontrakt:** `GET /api/portfolio` — UI pratar mot `portfolioApi`, inte mot mockens filformat.
+- **Bevis:** issue #43
+- Tomac

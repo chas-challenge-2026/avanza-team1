@@ -99,15 +99,17 @@ When the frontend calls the backend API, start the backend infrastructure separa
 
 ## Mock portfolio data
 
-The UI reads `src/data/portfolio.json` via `import { mockPortfolio } from "./types/portfolio"`.
-This will later be replaced with `GET /api/portfolio`. Change numbers in the JSON, not in the components.
+The UI reads the portfolio through `src/api/portfolioApi.ts`.
+The default adapter returns `src/data/portfolio.json`.
+Switching `VITE_USE_MOCK=false` later uses `GET /api/portfolio` instead.
+Change numbers in the JSON, not in the components.
 
 ## Scope (current)
 
 - No login against the backend
 - No live FX
 - The pension account exists but has 0 SEK
-- `overThreshold` is precomputed in the mock (75/25 vs 60/40, threshold 5%)
+- Drift is computed in the UI (`src/lib/drift.ts`): `|actual − target| > thresholdPct` (5% in the mock). The JSON flag is not the source of truth for the banner.
 
 ## Test status (#24)
 
