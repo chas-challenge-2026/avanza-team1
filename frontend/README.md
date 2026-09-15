@@ -94,6 +94,7 @@ When the frontend calls the backend API, start the backend infrastructure separa
 | `npm run build`   | Type-check and build the production bundle |
 | `npm run preview` | Serve the production bundle locally        |
 | `npm run lint`    | Run ESLint                                 |
+| `npm run test`    | Run unit/component tests with Vitest       |
 
 ---
 
@@ -117,7 +118,7 @@ Change numbers in the JSON, not in the components.
 | -------------------- | ------------------------------- | --------------------------------- |
 | Type contracts       | `npx tsc -b` in `frontend/`     | Passed 2026-09-02                 |
 | JSON shape           | Manual review against issue #24 | Passed                            |
-| Automated unit tests | Not yet available               | Intentional — no UI logic to test |
+| Automated unit tests | `npm run test` (Vitest + RTL), see #87 | Smoke test passing |
 
 ---
 
