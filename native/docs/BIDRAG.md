@@ -28,3 +28,6 @@ inte i en separat logg.
 | 2026-09-09 | Pär | Uppdaterade BIDRAG.md och mergade in de senaste uppdateringarna från develop då det hänt lite där. | - | - |
 | 2026-09-09 | Pär | Uppdaterade variabelnamn, städade upp några kommentarer och uppdaterade Natives README. | - | #65 #74 |
 | 2026-09-10 | Pär | Konstruerat helt nya funktioner för att kunna räkna ut de rullande värdena över specifika tidsserier, men behåller de gamla funktionerna för att använda inne i de nya funktionerna. | - | #75 #77 #78 |
+| 2026-09-10 | Henrik | Småfixat genom att lägga till en anteckning kring användandet av free på en funktion. Lagt till fler tester till FX-tests | - | #61 |
+| 2026-09-16 | Henrik | Lagt till intervaller till Riksbanks API:et. Behöver fortfarande parsa JSON-datan ordentligt. La till ett test för intervall och fixade till en felaktig API-sträng. | - | #98 |
+| 2026-09-16 | Pär | Städade upp lite i risk.c och tog bort en del hjälpfunktioner och la i en separat helpers.c/h så att det blir lite mer städat. | - | #73 |
