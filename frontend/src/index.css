@@ -2,78 +2,52 @@
 :root {
     /* global variables */
 
+    /* sizes */
+    --max-width: 1200px;
+
     /* spacing */
-    --gap-large: 1.5rem;
-    --gap-medium: 1rem;
-    --gap-small: 0.5rem;
+    --space-xlarge: 2.25rem;
+    --space-large: 1.5rem;
+    --space-medium: 1rem;
+    --space-small: 0.75rem;
+    --space-xsmall: 0.5rem;
 
     /* colors */
     --white: #ffffff;
     --off-white: #f4f6f9;
     --light-gray: #f0f0f0;
-    --black: #000000;
-    --dark-gray: #222222;
-
-    --primary-color: #00c281;
+    --gray: #808080;
+    --dark-gray: #333333;
+    --black: #202020;
+    
+    --primary-color: rgb(3, 168, 80);
+    --green: #00a651;
 
     --background: var(--off-white);
     --background-alt: var(--light-gray);
 
     --text-color: var(--black);
     --text-color-alt: var(--dark-gray);
+
+    /* font sizes */
+    --font-size-small: 0.75rem;
+    --font-size-normal: 0.875rem;
+    --font-size-emphasis: 1rem;
+    --font-size-large: 1.25rem;
+    --font-size-xlarge: 1.5rem;
 }   
+
 * {
     /* resets */
     box-sizing: border-box;
-
 }
 body {
     margin: 0;
     padding: 0;
-    height: 100dvh;
-
+    min-height: 100dvh;
+    
     background-color: var(--background);
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: var(--font-size-normal);
+    color: var(--text-color);
 }
-
-/* below are v1 styles, some properties have been updated  */
-/* TODO: Place remaining properties in the appropriate places according to STYLING.md as components are built */
-
-/* .navbar-default {
-    background-color: #ffffff;
-    border-color: #00c281;
-}
-
-.navbar-default .navbar-brand,
-.navbar-default .navbar-nav>li>a,
-.navbar-default .navbar-text {
-    color: #222222 !important;
-}
-
-.navbar-default .navbar-nav>li>a:hover {
-    color: #00a36c !important;
-    background-color: transparent;
-}
-
-.panel-heading {
-    font-weight: 600;
-}
-
-.table th {
-    background-color: #f0f0f0;
-}
-
-.label-info {
-    background-color: #17a2b8;
-}
-
-/* Make drift warnings more visible
-tr.danger td {
-    color: #721c24;
-}
-
-tr.success td {
-    color: #155724;
-} 
-
-*/

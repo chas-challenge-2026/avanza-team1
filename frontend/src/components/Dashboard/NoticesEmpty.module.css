@@ -1,0 +1,9 @@
+.empty {
+  text-align: center;
+  color: var(--gray);
+  padding: 2rem 0;
+}
+/* TODO: Select p element directly instead of using a separate class - if this special styling is even needed */
+.emptyText {
+  margin: 0;
+}

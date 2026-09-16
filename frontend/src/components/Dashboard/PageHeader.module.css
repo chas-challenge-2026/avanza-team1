@@ -1,0 +1,27 @@
+.pageHeader {
+  margin-bottom: var(--space-large);
+}
+
+.title {
+  font-size: var(--font-size-xlarge);
+  font-weight: 600;
+  color: var(--text-color-alt);
+  margin-bottom: var(--space-xsmall);
+}
+
+.value {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: var(--text-color-alt);
+  margin-bottom: 0.5rem;
+}
+
+.value span {
+  font-size: 1rem;
+  font-weight: normal;
+}
+
+.subtitle {
+  color: var(--gray);
+  margin: 0;
+}

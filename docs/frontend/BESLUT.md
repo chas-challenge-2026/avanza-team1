@@ -1,0 +1,63 @@
+# Beslut — frontend
+
+## 2026-09-02 — Mock före Java-API
+
+- **Beslut:** UI läser `src/data/portfolio.json` via typen `Portfolio` och `mockPortfolio` tills `GET /api/portfolio` finns.
+- **Varför:** Backend är inte redo. MVP-översikten ska kunna byggas ändå.
+- **Avgränsning:** ingen fetch, ingen login, inga formulär i #24.
+- **Konsekvens:** typen är kontraktet mot Java. Risk R-24 i registret.
+- **Bevis:** issue #24, PR #46
+- Tomac
+
+## 2026-09-03 — Rot-README pekar ut frontend, casetexten får stå kvar
+
+- **Beslut:** Inte skriva om hela rot-README. Lägga startkommando + `frontend/` i trädet. V1-casedelen (kända buggar, docker) lämnas.
+- **Varför:** En produkt-README för hela MVP:n blir inaktuell innan flödet går att klicka.
+- **Bevis:** issue #47
+- Tomac
+
+## 2026-09-09 — Målallokering mot mock + localStorage
+
+- **Beslut:** Mål (targetAktierPct / targetStabiltPct) redigeras i UI och sparas i `localStorage` under `ph_target_allocation`. Actual kommer kvar från mocken.
+- **Varför:** MVP kräver att användaren sätter 60/40 innan Java har POST.
+- **Avgränsning:** ingen backend, ingen drift-beräkning (#42).
+- **Kontrakt:** fältnamn i `Portfolio` förblir som i #24. Ny UI-kod använder engelska identifierare.
+- **Bevis:** issue #41
+
+## 2026-09-10 — Drift räknas i frontend mot mock + sparat mål
+
+- **Beslut:** `overThreshold` och varningstext kommer från `computeDrift` i `frontend/src/lib/drift.ts`, inte från den förberäknade flaggan i `portfolio.json`.
+- **Formel:** `|actualAktierPct - targetAktierPct| > thresholdPct` (tröskel 5 % i mocken).
+- **Varför:** MVP kräver att bannern följer det mål användaren precis sparat (#41 / localStorage).
+- **Avgränsning:** ingen backend, ingen ändring av `Allocation`-kontraktet, ingen automatisk spegling av de två målfälten.
+- **Bevis:** issue #42
+- Tomac
+
+## 2026-09-10 — Mock-auth format speglar framtida REST-kontrakt
+
+- **Beslut:** `login()` i `auth.ts` returnerar `AuthResult { user: User, token: string }` istället för bara `boolean`. Mock-kontona (Anna, Erik) och lösenordet `password123` speglar `infra/seed.sql`. Token och user sparas separat i `localStorage` under `ph_token` / `ph_user`.
+- **Varför:** `SessionSecurityFilter.java` (branch `Add/security-filter`) undantar `/api/*` explicit från backendens sessionsbaserade auth ("open-ended for other teams") — det riktiga REST-API:et frontend ska prata med blir alltså troligen token-baserat, inte session-baserat. Genom att forma mocken efter detta redan nu blir bytet till riktig backend en mindre omskrivning, samma princip som #24: "typen är kontraktet mot Java".
+- **Avgränsning:** Ingen riktig JWT-verifiering (mock only, enligt issue #40). Ingen koppling till `/api`-API:et ännu — det finns inte än.
+- **Kontrakt:** `User { id: string, name: string, email: string }` i `types/auth.ts`. Obs: riktiga `User`-entityn i backend har `id: Long` (numeriskt) — kan behöva bli `number` när riktigt API kopplas in.
+- **Bevis:** issue #40, `frontend/src/auth/`
+- Zaida
+
+## 2026-09-14 — Vitest + RTL som teststack för frontend
+
+- **Beslut:** Vitest + React Testing Library + jsdom sätts upp i #87. Ett smoke-test verifierar att en komponent kan renderas och att DOM-assertions fungerar. Kommando: `npm run test`.
+- **Varför:** Projektet är redan ESM (`"type": "module"` i package.json) och kör Vite. Vitest återanvänder `vite.config.ts` och samma esbuild-transform som appen redan bygger med, så ESM hanteras utan extra steg. Jest bygger på CommonJS-antaganden och hade krävt separat transform + specialhantering av `import.meta` för samma resultat.
+- **Avgränsning:** Ingen E2E (Playwright/Cypress) i #87 — täcker bara unit/component-nivå. Ingen täckningsgrad krävs, inga feature-specifika tester — de hör till separata issues (enligt #87:s scope).
+- **Konsekvens:** Testrunnern blir kopplad till Vite som bundler. Byter teamet bort Vite senare måste testuppsättningen migreras samtidigt (Vitest är inte bundler-agnostisk som Jest).
+- **Bevis:** issue #87
+- Zaida
+
+## 2026-09-14 — Portfolio-UI via `portfolioApi` (mock default)
+
+- **Beslut:** UI hämtar Portfolio via `portfolioApi`. Default är mock-adapter. Http-adapter finns som skal. `VITE_USE_MOCK=false` byter senare.
+- **Varför:** Sidan ska inte veta att datan är JSON. Samma kontrakt som Java (`GET /api/portfolio`).
+- **Avgränsning:** ingen riktig fetch, ingen JWT-verify, ingen PUT för mål. Topbar-namn kommer från `useAuth()`, inte portföljen.
+- **Kontrakt:** `GET /api/portfolio` — UI pratar mot `portfolioApi`, inte mot mockens filformat.
+- **Bevis:** issue #43
+- Tomac
+
+

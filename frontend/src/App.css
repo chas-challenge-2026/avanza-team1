@@ -1,18 +1,31 @@
-/* Mobile-first, responsive, matches issue 25 design */
-.app-content {
+.pageContent {
   background-color: #f5f5f5;
   min-height: calc(100vh - 80px);
+  height: 100%;
   padding: 1rem;
 }
 
-.page {
-  background-color: white;
-  padding: 1.5rem;
-  border-radius: 8px;
+.table th {
+  background-color: #f0f0f0;
 }
 
+.labelInfo {
+  background-color: #17a2b8;
+}
+
+/* Make drift warnings more visible */
+tr.danger td {
+  color: #721c24;
+}
+
+tr.success td {
+  color: #155724;
+}
+
+/* Media queries */
+
 @media (min-width: 768px) {
-  .app-content {
+  .pageContent {
     padding: 2rem;
     max-width: 1200px;
     margin: 0 auto;
