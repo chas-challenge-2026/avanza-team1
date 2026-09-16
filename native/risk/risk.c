@@ -1,40 +1,8 @@
 #include "risk.h"
+#include "helpers/helpers.h"
 
 #include <math.h>
 #include <stdbool.h>
-
-/* Helper to calculate the average return. */
-static double calculate_average_return(const double prices[], size_t size)
-{
-    double sum = 0.0;
-    for (size_t i = 1; i < size; i++)
-    {
-        /*  Simple daily return. */
-        double daily_return = (prices[i] - prices[i - 1]) / prices[i - 1];
-        sum += daily_return;
-    }
-
-    return sum / (size - 1);
-}
-
-/* Validates that all prices are positive and finite. */
-static bool valid_price_series(const double prices[], size_t size)
-{
-    if (prices == NULL || size == 0)
-    {
-        return false;
-    }
-
-    for (size_t i = 0; i < size; i++)
-    {
-        if (!isfinite(prices[i]) || prices[i] <= 0.0)
-        {
-            return false;
-        }
-    }
-
-    return true;
-}
 
 /*  Calculate sample standard deviation of daily returns. */
 static double calculate_daily_volatility(const double prices[], size_t size)
