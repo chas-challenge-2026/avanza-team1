@@ -16,8 +16,15 @@ typedef enum
     FX_ERR_INVALID_CURRENCY,    /*  Currency signature not 3 letters */
     FX_ERR_CURL,                /*  Curl error */
     FX_ERR_NULLPTR,             /*  Invalid pointer to FX_Struct */
-    FX_ERR_JSON                 /*  Error when parsing JSON */
+    FX_ERR_JSON,                /*  Error when parsing JSON */
+    FX_ERR_INVALID_DATE         /*  Dates must be in YYYY-MM-DD format */
 } FX_Code;
+
+typedef enum
+{
+    FX_LATEST,
+    FX_INTERVAL
+} FX_Interval;
 
 /*  Struct for Curl callback function */
 typedef struct
@@ -35,8 +42,9 @@ typedef struct
 /*  Callback function for Curl GET request */
 size_t write_data(char *buffer, size_t size, size_t nmemb, void *user_data);
 
-/*  Accepts an FX_Data struct to store date and exchange rate between two currencies (curr1, curr2) */
-FX_Code fx_convert(FX_Data *fx_data, const char *curr1, const char *curr2);
+/*  Accepts an FX_Data struct to store date and exchange rate between two currencies (curr1, curr2), 
+    interval indicates whether to get latest or an interval between start_date and end_date */
+FX_Code fx_convert(FX_Data *fx_data, const char *curr1, const char *curr2, FX_Interval interval, const char *start_date, const char *end_date);
 
 /*  Parses the JSON data in buffer and stores the date and exchange rate in fx_data */
 FX_Code fx_parse_string(FX_Data *fx_data, const char *buffer);

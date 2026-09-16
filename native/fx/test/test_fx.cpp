@@ -12,7 +12,7 @@
 static int tests_run = 0;
 static int tests_failed = 0;
 
-/*  Checks that the FX_Code enum is FX_OK, otherwise fail */
+/*  Checks that the FX_Code enum is the expected result, otherwise fail */
 static void check(const char *test_name, FX_Code result, FX_Code expected_result)
 {
     tests_run++;
@@ -73,8 +73,12 @@ int main()
     
     /*  Tests the major function */
     FX_Data fx_data_convert;
-    result = fx_convert(&fx_data_convert, curr1, curr2);
+    result = fx_convert(&fx_data_convert, curr1, curr2, FX_LATEST, NULL, NULL);
     check("FX convert", result, FX_OK);
+
+    FX_Data fx_data_convert_interval;
+    result = fx_convert(&fx_data_convert_interval, curr1, curr2, FX_INTERVAL, "2020-01-01", "2025-01-01");
+    check("FX convert interval", result, FX_OK);
         
     /*  Only tests that the GET request receives a response, does not check if the response contains valid data */
     const char *url = "https://api.riksbank.se/swea/v1/Observations/Latest/sekeurpmi";
@@ -101,6 +105,14 @@ int main()
     FX_Data fx_data_parse_broken;
     check_fx_parse_string("Parse broken JSON string", &fx_data_parse_broken, json_str_broken, "", 0.0, FX_ERR_JSON);
 
+    // const char *start_date = "2015-01-01";
+    // const char *end_date = "2020-01-01";
+    const char *url_interval = "https://api.riksbank.se/swea/v1/Observations/sekeurpmi/2015-01-01/2020-01-01";
+    Response response_interval;
+    result = fx_curl(url_interval, &response_interval);
+    check("Riksbank interval", result, FX_OK);
+    std::cout << "response_interval.string: " << response_interval.string << "\r\n";
+    free(response_interval.string);
 
 
     std::cout << "\r\n" << tests_run - tests_failed << "/" << tests_run << "\r\n";
