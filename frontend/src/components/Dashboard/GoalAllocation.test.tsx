@@ -36,4 +36,48 @@ describe('GoalAllocation', () => {
 
     expect(onTargetSaved).not.toHaveBeenCalled()
   })
+
+  it('shows "Spara mål" and is enabled before saving', () => {
+    render(
+      <GoalAllocation
+        targetAktierPct={60}
+        targetStabiltPct={40}
+        onTargetSaved={vi.fn()}
+      />
+    )
+
+    const button = screen.getByRole('button', { name: 'Spara mål' })
+    expect(button).toBeEnabled()
+  })
+
+  it('shows "Mål sparat" and is disabled after saving', () => {
+    render(
+      <GoalAllocation
+        targetAktierPct={60}
+        targetStabiltPct={40}
+        onTargetSaved={vi.fn()}
+      />
+    )
+
+    fireEvent.click(screen.getByRole('button', { name: 'Spara mål' }))
+
+    const button = screen.getByRole('button', { name: 'Mål sparat' })
+    expect(button).toBeDisabled()
+  })
+
+  it('re-enables "Spara mål" after editing a field again', () => {
+    render(
+      <GoalAllocation
+        targetAktierPct={60}
+        targetStabiltPct={40}
+        onTargetSaved={vi.fn()}
+      />
+    )
+
+    fireEvent.click(screen.getByRole('button', { name: 'Spara mål' }))
+    fireEvent.change(screen.getByDisplayValue('60'), { target: { value: '70' } })
+
+    const button = screen.getByRole('button', { name: 'Spara mål' })
+    expect(button).toBeEnabled()
+  })
 })
