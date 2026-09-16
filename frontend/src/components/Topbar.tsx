@@ -15,7 +15,7 @@ function Topbar() {
     <header className={styles.topbar}>
       <div className={styles.brand}>
         <img src="src/assets/logo.webp" alt="Logo" className={styles.logo} />
-        <h1>Portföljhälsa</h1>
+        <h1>PORTFÖLJHÄLSA</h1>
       </div>
       <nav>
         <NavLink
@@ -39,8 +39,8 @@ function Topbar() {
         </NavLink>
       </nav>
       <div className={styles.user}>
-        <span className={styles["user-name"]}>{user?.name ?? ""}</span>
-        <button className={styles["logout-button"]} onClick={handleLogout}>
+        <span className={styles.userName}>{user?.name ?? ""}</span>
+        <button className={styles.logoutButton} onClick={handleLogout}>
           Logga ut
         </button>
       </div>

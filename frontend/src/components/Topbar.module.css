@@ -1,27 +1,30 @@
 .topbar {
   width: 100%;
   height: 80px;
-  padding-inline: 2rem;
   background-color: white;
   border-bottom: 4px solid var(--primary-color);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: auto auto auto;
+  grid-template-areas: "brand nav user";
   align-items: center;
-  gap: 3rem;
 }
 
 /* ▼▼▼ branding ▼▼▼ */
+.brand {
+  grid-area: brand;
+  padding-left: var(--space-large);
+  display: flex;
+  flex-direction: column;
+}
 .topbar img {
   margin: auto 0;
   aspect-ratio: 250/80;
   height: 40px;
-  width: auto;
+  width: 125px;
 }
 .topbar h1 {
-  /* padding-block: var(--space-medium); */
-  font-size: var(--font-size-large);
+  font-size: var(--font-size-normal);
   font-weight: 700;
   letter-spacing: 0.01rem;
   margin: 0;
@@ -30,26 +33,29 @@
 
 /* ▼▼▼ navigation ▼▼▼ */
 .topbar nav {
+  grid-area: nav;
   align-self: stretch;
   display: flex;
   flex-direction: row;
+  justify-content: stretch;
   align-items: center;
-  gap: var(--space-xlarge);
 }
 
 .topbar a {
   height: 100%;
+  flex-grow: 1;
   align-content: center;
+  text-align: center;
   text-decoration: none;
   color: var(--text-color-alt);
   font-size: var(--font-size-emphasis);
   letter-spacing: 0.01rem;
+  border-top: 2px solid transparent;
   border-bottom: 2px solid transparent;
   transition: all 0.2s ease;
 }
 
 .topbar a:hover {
-  /* --green: #00a651; */
   color: var(--primary-color);
 }
 
@@ -60,19 +66,43 @@
 /* ▲▲▲ navigation ▲▲▲ */
 
 /* ▼▼▼ user areas ▼▼▼ */
-.logout-button {
-  margin: auto 0;
-  height: 2rem;
-}
-
 .user {
+  grid-area: user;
+  padding-right: var(--space-large);
+  justify-self: end;
   display: flex;
   align-items: center;
   gap: var(--space-medium);
 }
-
-.user-name {
-  font-weight: 350;
+.userName {
+  font-size: var(--font-size-emphasis);
+  font-weight: 600;
   color: var(--text-color-alt);
+  min-width: fit-content;
+}
+.logoutButton {
+  margin: auto 0;
+  height: 2rem;
+  min-width: fit-content;
 }
 /* ▲▲▲ user areas ▲▲▲ */
+
+
+@media (max-width: 768px) {
+  .topbar {
+    grid-template-areas: "brand user user" 
+                         "brand nav  nav";
+  }
+  .brand {
+    padding-left: var(--space-medium);
+  }
+  .topbar nav {
+    width: minmax(fit-content, calc(fit-content * 1.5));
+    justify-content: end;
+  }
+  .user {
+    padding-right: var(--space-medium);
+    justify-content: end;
+  }
+
+}
