@@ -1,15 +1,10 @@
 package se.comerit.avanza.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import se.comerit.avanza.service.PortfolioService;
-import jakarta.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -22,16 +17,10 @@ public class DashboardController {
     }
 
     @GetMapping("/")
-    public String dashboard(HttpSession session, Model model) {
+    public String dashboard(HttpServletRequest request, Model model) {
 
-        // Session check — copy-pasted in every controller because there's no security filter
-        if (session.getAttribute("userId") == null) {
-            return "redirect:/login";
-        }
+        Long userId = (Long) request.getAttribute("userId");
 
-        Integer userId = (Integer) session.getAttribute("userId");
-        String userName = (String) session.getAttribute("userName");
-        model.addAttribute("userName", userName);
         // Flyttad logik — nu i service
         Map<String, Object> data = portfolioService.buildDashboardData(userId);
 

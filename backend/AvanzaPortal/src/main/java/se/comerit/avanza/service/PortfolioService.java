@@ -25,7 +25,7 @@ public class PortfolioService {
     private static final double DRIFT_THRESHOLD = 0.05;
 
 
-    public Map<String, Object> buildDashboardData(Integer userId) {
+    public Map<String, Object> buildDashboardData(Long userId) {
 
         // ---- Query 1: Get all accounts for user ----
         String accountSql = "SELECT id, account_type, account_name, currency FROM accounts WHERE user_id = " + userId;
