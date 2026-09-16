@@ -50,7 +50,7 @@ FX_Code fx_convert(FX_Data *fx_data, const char *curr1, const char *curr2, FX_In
 
     if (interval == FX_INTERVAL)
     {
-        snprintf(url, URL_LEN, "https://api.riksbank.se/swea/v1/Observations/Latest/%s%spmi/%s/%s", curr1, curr2, start_date, end_date);
+        snprintf(url, URL_LEN, "https://api.riksbank.se/swea/v1/Observations/%s%spmi/%s/%s", curr1, curr2, start_date, end_date);
     }
     else
     {

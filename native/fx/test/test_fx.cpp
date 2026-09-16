@@ -75,6 +75,10 @@ int main()
     FX_Data fx_data_convert;
     result = fx_convert(&fx_data_convert, curr1, curr2, FX_LATEST, NULL, NULL);
     check("FX convert", result, FX_OK);
+
+    FX_Data fx_data_convert_interval;
+    result = fx_convert(&fx_data_convert_interval, curr1, curr2, FX_INTERVAL, "2020-01-01", "2025-01-01");
+    check("FX convert interval", result, FX_OK);
         
     /*  Only tests that the GET request receives a response, does not check if the response contains valid data */
     const char *url = "https://api.riksbank.se/swea/v1/Observations/Latest/sekeurpmi";
@@ -107,7 +111,7 @@ int main()
     Response response_interval;
     result = fx_curl(url_interval, &response_interval);
     check("Riksbank interval", result, FX_OK);
-    // std::cout << "response_interval.string: " << response_interval.string << "\r\n";
+    std::cout << "response_interval.string: " << response_interval.string << "\r\n";
     free(response_interval.string);
 
 
