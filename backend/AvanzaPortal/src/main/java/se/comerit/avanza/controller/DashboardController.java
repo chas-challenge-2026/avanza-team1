@@ -1,10 +1,10 @@
 package se.comerit.avanza.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import se.comerit.avanza.service.PortfolioService;
-import jakarta.servlet.http.HttpSession;
 import java.util.Map;
 
 @Controller
@@ -17,11 +17,10 @@ public class DashboardController {
     }
 
     @GetMapping("/")
-    public String dashboard(HttpSession session, Model model) {
+    public String dashboard(HttpServletRequest request, Model model) {
 
-        Integer userId = (Integer) session.getAttribute("userId");
-        String userName = (String) session.getAttribute("userName");
-        model.addAttribute("userName", userName);
+        Long userId = (Long) request.getAttribute("userId");
+
         // Flyttad logik — nu i service
         Map<String, Object> data = portfolioService.buildDashboardData(userId);
 

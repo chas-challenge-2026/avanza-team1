@@ -1,12 +1,12 @@
 package se.comerit.avanza.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import se.comerit.avanza.service.AlertService;
-import jakarta.servlet.http.HttpSession;
 import java.util.Map;
 
 @Controller
@@ -19,11 +19,10 @@ public class AlertController {
     }
 
     @GetMapping("/alerts")
-    public String listAlerts(HttpSession session, Model model) {
+    public String listAlerts(HttpServletRequest request, Model model) {
 
 
-        Integer userId = (Integer) session.getAttribute("userId");
-        model.addAttribute("userName", session.getAttribute("userName"));
+        Long userId = (Long) request.getAttribute("userId");
 
         Map<String, Object> alerts = alertService.getAlerts(userId);
 
@@ -35,10 +34,10 @@ public class AlertController {
 
     @PostMapping("/alerts/dismiss")
     public String dismissAlert(@RequestParam Integer alertId,
-                               HttpSession session) {
+                               HttpServletRequest request) {
 
 
-        Integer userId = (Integer) session.getAttribute("userId");
+        Long userId = (Long) request.getAttribute("userId");
 
         // Skicka med userId för IDOR-kontroll
         alertService.dismissAlert(alertId, userId);

@@ -19,7 +19,7 @@ public class AlertService {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    public Map<String, Object> getAlerts(Integer userId) {
+    public Map<String, Object> getAlerts(Long userId) {
 
         // Fetch stored alerts from DB
         String alertSql = "SELECT id, alert_type, message, dismissed, created_at " +
@@ -115,7 +115,7 @@ public class AlertService {
     // Ingen kontroll att alerten tillhör inloggad användare.
     // Fix: Lägg till AND user_id = ? för att säkerställa ägarskap.
 
-    public void dismissAlert(Integer alertId, Integer sessionUserId) {
+    public void dismissAlert(Integer alertId, Long sessionUserId) {
 
         String sql = """
         UPDATE alerts
