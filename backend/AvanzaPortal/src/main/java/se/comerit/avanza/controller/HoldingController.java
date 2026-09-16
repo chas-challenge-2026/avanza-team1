@@ -1,11 +1,11 @@
 package se.comerit.avanza.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import jakarta.servlet.http.HttpSession;
 import se.comerit.avanza.service.HoldingService;
 import java.util.Map;
 
@@ -19,11 +19,10 @@ public class HoldingController {
     }
 
     @GetMapping("/holdings")
-    public String listHoldings(HttpSession session, Model model) {
+    public String listHoldings(HttpServletRequest request, Model model) {
 
 
-        Integer userId = (Integer) session.getAttribute("userId");
-        model.addAttribute("userName", session.getAttribute("userName"));
+        Long userId = (Long) request.getAttribute("userId");
 
         //  Flyttad logik — nu i service
         Map<String, Object> data = holdingService.buildHoldingData(userId);
@@ -40,9 +39,9 @@ public class HoldingController {
                              @RequestParam String quantity,
                              @RequestParam String avgBuyPrice,
                              @RequestParam(defaultValue = "SEK") String currency,
-                             HttpSession session,
+                             HttpServletRequest request,
                              Model model) {
-
+        Long userId = (Long) request.getAttribute("userId");
         holdingService.addHolding(accountId, ticker, instrumentName, quantity, avgBuyPrice, currency);
 
         return "redirect:/holdings";
@@ -50,10 +49,10 @@ public class HoldingController {
 
     @PostMapping("/holdings/delete")
     public String deleteHolding(@RequestParam Integer holdingId,
-                                HttpSession session) {
+                                HttpServletRequest request) {
 
 
-        Integer userId = (Integer) session.getAttribute("userId");
+        Long userId = (Long) request.getAttribute("userId");
 
         // Skicka userId till service för IDOR‑kontroll
         holdingService.deleteHolding(holdingId, userId);

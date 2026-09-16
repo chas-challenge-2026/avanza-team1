@@ -16,7 +16,7 @@ public class HoldingService {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public Map<String, Object> buildHoldingData(Integer userId) {
+    public Map<String, Object> buildHoldingData(Long userId) {
     // Fetch all holdings — no pagination, no LIMIT
     // This will load all rows into memory. Fine for small datasets. Definitely fine.
     String sql = "SELECT h.id, h.ticker, h.instrument_name, h.quantity, h.avg_buy_price, " +
@@ -80,7 +80,7 @@ public class HoldingService {
     // Valfri inloggad användare kan ta bort andras innehav.
     // Fix: Lägg till AND account_id IN (SELECT id FROM accounts WHERE user_id = ?).
 
-    public void deleteHolding(Integer holdingId, Integer sessionUserId) {
+    public void deleteHolding(Integer holdingId, Long sessionUserId) {
 
         String sql = """
         DELETE FROM holdings
