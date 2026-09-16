@@ -5,7 +5,7 @@
 #if defined(_MSC_VER) || defined(__MINGW32__)
     #define EXPORT __declspec(dllexport)
 
-/* GCC or Clang (Linux, macOS, BSD, etc.)
+/* GCC or Clang (Linux, macOS, BSD, etc.) */
 #elif defined(__GNUC__) || defined(__clang__)
     #define EXPORT __attribute__((visibility("default")))
 
