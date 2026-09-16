@@ -28,7 +28,7 @@ size_t write_data(char *buffer, size_t size, size_t nmemb, void *user_data)
     return real_size;
 }
 
-FX_Code fx_convert(FX_Data *fx_data, const char *curr1, const char *curr2)
+FX_Code fx_convert(FX_Data *fx_data, const char *curr1, const char *curr2, FX_Interval interval, const char *start_date, const char *end_date)
 {
     if (fx_data == NULL)
     {
@@ -41,10 +41,22 @@ FX_Code fx_convert(FX_Data *fx_data, const char *curr1, const char *curr2)
         return FX_ERR_INVALID_CURRENCY;
     }
 
+    if (interval == FX_INTERVAL && (strlen(start_date) != 10 || strlen(end_date) != 10))
+    {
+        return FX_ERR_INVALID_DATE;
+    }
+ 
     char url[URL_LEN];
 
-    snprintf(url, URL_LEN, "https://api.riksbank.se/swea/v1/Observations/Latest/%s%spmi", curr1, curr2);
-
+    if (interval == FX_INTERVAL)
+    {
+        snprintf(url, URL_LEN, "https://api.riksbank.se/swea/v1/Observations/Latest/%s%spmi/%s/%s", curr1, curr2, start_date, end_date);
+    }
+    else
+    {
+        snprintf(url, URL_LEN, "https://api.riksbank.se/swea/v1/Observations/Latest/%s%spmi", curr1, curr2);
+    }
+    
     /*  response.string gets allocated on the heap in fx_curl, remember to free after parsing */
     Response response;
     FX_Code result = fx_curl(url, &response);
