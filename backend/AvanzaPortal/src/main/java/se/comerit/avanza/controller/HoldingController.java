@@ -1,17 +1,12 @@
 package se.comerit.avanza.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import jakarta.servlet.http.HttpSession;
 import se.comerit.avanza.service.HoldingService;
-
-import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -24,16 +19,10 @@ public class HoldingController {
     }
 
     @GetMapping("/holdings")
-    public String listHoldings(HttpSession session, Model model) {
+    public String listHoldings(HttpServletRequest request, Model model) {
 
-        // Same session check copy-pasted from DashboardController
-        // TODO: make an interceptor or filter for this in v2
-        if (session.getAttribute("userId") == null) {
-            return "redirect:/login";
-        }
 
-        Integer userId = (Integer) session.getAttribute("userId");
-        model.addAttribute("userName", session.getAttribute("userName"));
+        Long userId = (Long) request.getAttribute("userId");
 
         //  Flyttad logik — nu i service
         Map<String, Object> data = holdingService.buildHoldingData(userId);
@@ -50,13 +39,9 @@ public class HoldingController {
                              @RequestParam String quantity,
                              @RequestParam String avgBuyPrice,
                              @RequestParam(defaultValue = "SEK") String currency,
-                             HttpSession session,
+                             HttpServletRequest request,
                              Model model) {
-
-        // Session check — again, manually, every time
-        if (session.getAttribute("userId") == null) {
-            return "redirect:/login";
-        }
+        Long userId = (Long) request.getAttribute("userId");
         holdingService.addHolding(accountId, ticker, instrumentName, quantity, avgBuyPrice, currency);
 
         return "redirect:/holdings";
@@ -64,14 +49,13 @@ public class HoldingController {
 
     @PostMapping("/holdings/delete")
     public String deleteHolding(@RequestParam Integer holdingId,
-                                HttpSession session) {
+                                HttpServletRequest request) {
 
-        // Session check
-        if (session.getAttribute("userId") == null) {
-            return "redirect:/login";
-        }
 
-        holdingService.deleteHolding(holdingId);
+        Long userId = (Long) request.getAttribute("userId");
+
+        // Skicka userId till service för IDOR‑kontroll
+        holdingService.deleteHolding(holdingId, userId);
 
         return "redirect:/holdings";
     }

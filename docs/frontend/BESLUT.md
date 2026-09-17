@@ -42,6 +42,15 @@
 - **Bevis:** issue #40, `frontend/src/auth/`
 - Zaida
 
+## 2026-09-14 — Vitest + RTL som teststack för frontend
+
+- **Beslut:** Vitest + React Testing Library + jsdom sätts upp i #87. Ett smoke-test verifierar att en komponent kan renderas och att DOM-assertions fungerar. Kommando: `npm run test`.
+- **Varför:** Projektet är redan ESM (`"type": "module"` i package.json) och kör Vite. Vitest återanvänder `vite.config.ts` och samma esbuild-transform som appen redan bygger med, så ESM hanteras utan extra steg. Jest bygger på CommonJS-antaganden och hade krävt separat transform + specialhantering av `import.meta` för samma resultat.
+- **Avgränsning:** Ingen E2E (Playwright/Cypress) i #87 — täcker bara unit/component-nivå. Ingen täckningsgrad krävs, inga feature-specifika tester — de hör till separata issues (enligt #87:s scope).
+- **Konsekvens:** Testrunnern blir kopplad till Vite som bundler. Byter teamet bort Vite senare måste testuppsättningen migreras samtidigt (Vitest är inte bundler-agnostisk som Jest).
+- **Bevis:** issue #87
+- Zaida
+
 ## 2026-09-14 — Portfolio-UI via `portfolioApi` (mock default)
 
 - **Beslut:** UI hämtar Portfolio via `portfolioApi`. Default är mock-adapter. Http-adapter finns som skal. `VITE_USE_MOCK=false` byter senare.
@@ -49,4 +58,22 @@
 - **Avgränsning:** ingen riktig fetch, ingen JWT-verify, ingen PUT för mål. Topbar-namn kommer från `useAuth()`, inte portföljen.
 - **Kontrakt:** `GET /api/portfolio` — UI pratar mot `portfolioApi`, inte mot mockens filformat.
 - **Bevis:** issue #43
+- Tomac
+
+## 2026-09-16 — Portföljläsning via `usePortfolio`
+
+- **Beslut:** UI läser portföljen bara genom `usePortfolio()`. Hooken anropar `portfolioApi.getPortfolio()` via TanStack Query (`queryKey: ["portfolio"]`). Sidan pratar inte med `portfolioApi`, `useQuery` eller `portfolio.json`.
+- **Varför:** Samma läsväg oavsett mock eller Java. Komponenterna ska inte skrivas om när HTTP slås på.
+- **Avgränsning:** ingen `saveAllocation` (#83). Ingen riktig fetch. Drift och sparat mål stannar i sidan (`localStorage` + `computeDrift`).
+- **Kontrakt:** samma `Portfolio`-typ som #24 / #43. Ingen ny dataform.
+- **Bevis:** issue #82, PR #109
+- Tomac
+
+## 2026-09-17 — Målallokering sparas via `saveAllocation`
+
+- **Beslut:** UI sparar mål genom `useSaveAllocation()` → `portfolioApi.saveAllocation()`. Mock-adaptern skriver `localStorage` (`ph_target_allocation`). HTTP-adaptern är stubbe (`PUT /api/allocation`).
+- **Varför:** Spara-knappen ska inte äga persistence. Samma strömbrytare som läsning (`VITE_USE_MOCK`).
+- **Avgränsning:** ingen riktig fetch. Fältnamn oförändrade (`targetAktierPct` / `targetStabiltPct`). Formulärets 100 %-länkning orörd (#81).
+- **Kontrakt:** `StoredTarget` från #41. Query-nyckel `["portfolio"]` ogiltigförklaras efter lyckat spar.
+- **Bevis:** issue #83
 - Tomac
