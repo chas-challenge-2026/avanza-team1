@@ -1,41 +1,28 @@
 package se.comerit.avanza.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
 import se.comerit.avanza.service.AlertService;
-
-import javax.servlet.http.HttpSession;
 import java.util.Map;
 
 @Controller
 public class AlertController {
 
-    @Autowired
-    private AlertService alertService;
+    private final AlertService alertService;
+
+    public AlertController(AlertService alertService) {
+        this.alertService = alertService;
+    }
 
     @GetMapping("/alerts")
-    public String listAlerts(HttpSession session, Model model) {
+    public String listAlerts(HttpServletRequest request, Model model) {
 
-        // Copy-pasted session check from every other controller
-        if (session.getAttribute("userId") == null) {
-            return "redirect:/login";
-        }
 
-        Integer userId = (Integer) session.getAttribute("userId");
-        model.addAttribute("userName", session.getAttribute("userName"));
+        Long userId = (Long) request.getAttribute("userId");
 
         Map<String, Object> alerts = alertService.getAlerts(userId);
 
@@ -47,14 +34,14 @@ public class AlertController {
 
     @PostMapping("/alerts/dismiss")
     public String dismissAlert(@RequestParam Integer alertId,
-                               HttpSession session) {
+                               HttpServletRequest request) {
 
-        // Session check — manually again
-        if (session.getAttribute("userId") == null) {
-            return "redirect:/login";
-        }
 
-        alertService.dismissAlert(alertId);
+        Long userId = (Long) request.getAttribute("userId");
+
+        // Skicka med userId för IDOR-kontroll
+        alertService.dismissAlert(alertId, userId);
+
         return "redirect:/alerts";
     }
 }
