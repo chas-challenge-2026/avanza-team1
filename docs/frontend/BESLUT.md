@@ -60,4 +60,11 @@
 - **Bevis:** issue #43
 - Tomac
 
+## 2026-09-16 — Portföljläsning via `usePortfolio`
 
+- **Beslut:** UI läser portföljen bara genom `usePortfolio()`. Hooken anropar `portfolioApi.getPortfolio()` via TanStack Query (`queryKey: ["portfolio"]`). Sidan pratar inte med `portfolioApi`, `useQuery` eller `portfolio.json`.
+- **Varför:** Samma läsväg oavsett mock eller Java. Komponenterna ska inte skrivas om när HTTP slås på.
+- **Avgränsning:** ingen `saveAllocation` (#83). Ingen riktig fetch. Drift och sparat mål stannar i sidan (`localStorage` + `computeDrift`).
+- **Kontrakt:** samma `Portfolio`-typ som #24 / #43. Ingen ny dataform.
+- **Bevis:** issue #82, PR #109
+- Tomac
