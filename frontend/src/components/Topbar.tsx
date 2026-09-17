@@ -15,7 +15,7 @@ function Topbar() {
   return (
     <header className={styles.topbar}>
       <div className={styles.brand}>
-        <img src="logo" alt="Logo" className={styles.logo} />
+        <img src={logo} alt="Logo" className={styles.logo} />
         <h1>PORTFÖLJHÄLSA</h1>
       </div>
       <nav>
