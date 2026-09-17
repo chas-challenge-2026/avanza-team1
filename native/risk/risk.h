@@ -3,6 +3,10 @@
 
 #include <stddef.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif // __cplusplus
+
 /**
  * @file risk.h
  * @brief Functions for calculating historical portfolio risk metrics.
@@ -11,7 +15,7 @@
  * with the oldest price first. Functions do not modify the input array.
  */
 
-/**  Number of trading days assumed in annual calculations. */
+/** Number of trading days assumed in annual calculations. */
 #define ANNUAL_TRADING_DAYS     252.0
 
 /** 
@@ -199,5 +203,8 @@ RiskStatus calculate_rolling_max_drawdown(const double prices[], size_t size, si
  */
 RiskStatus calculate_rolling_ewma_volatility(const double prices[], size_t size, size_t window, double lambda, double results[]);
 
+#ifdef __cplusplus
+}
+#endif // __cplusplus
 
 #endif

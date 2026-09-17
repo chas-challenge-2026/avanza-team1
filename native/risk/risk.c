@@ -4,7 +4,7 @@
 #include <math.h>
 #include <stdbool.h>
 
-/*  Calculate sample standard deviation of daily returns. */
+/* Calculate sample standard deviation of daily returns. */
 static double calculate_daily_volatility(const double prices[], size_t size)
 {
     if (size < 3)
@@ -22,7 +22,7 @@ static double calculate_daily_volatility(const double prices[], size_t size)
     }
     
     size_t return_count = size - 1;
-    /*  Use sample variance (N - 1) for the observed return sample. */
+    /* Use sample variance (N - 1) for the observed return sample. */
     double variance = squared_sum / (return_count - 1);
 
     return sqrt(variance);
@@ -49,13 +49,12 @@ RiskStatus calculate_annual_volatility(const double prices[], size_t size, doubl
 
     double daily_volatility = calculate_daily_volatility(prices, size);
 
-    /*  Annualize daily volatility. */        
+    /* Annualize daily volatility. */        
     *result = daily_volatility * sqrt(ANNUAL_TRADING_DAYS);
 
     return RISK_SUCCESS;
 }
 
-/*  Calculates the annualized Sharpe ratio. See risk.h for the full contract (arguments, return value, edge cases). */
 RiskStatus calculate_sharpe(const double prices[], size_t size, double risk_free_rate, double *result)
 {
     if (result == NULL)
@@ -87,13 +86,13 @@ RiskStatus calculate_sharpe(const double prices[], size_t size, double risk_free
         return RISK_ZERO_VOLATILITY;
     }
 
-    /*  Convert annual risk-free rate to an equivalent daily rate. */
+    /* Convert annual risk-free rate to an equivalent daily rate. */
     double daily_risk_free_rate = pow(1.0 + risk_free_rate, 1.0 / ANNUAL_TRADING_DAYS) - 1.0;
 
-    /*  Calculate excess return per unit of daily risk. */
+    /* Calculate excess return per unit of daily risk. */
     double daily_sharpe = (average_return - daily_risk_free_rate) / daily_volatility;
 
-    /*  Annualize the Sharpe ratio. */
+    /* Annualize the Sharpe ratio. */
     *result = daily_sharpe * sqrt(ANNUAL_TRADING_DAYS);
 
     return RISK_SUCCESS;
@@ -118,7 +117,7 @@ RiskStatus calculate_max_drawdown(const double prices[], size_t size, double *re
         return RISK_INVALID_INPUT;
     }
 
-    /*  Track the highest price seen so far. */
+    /* Track the highest price seen so far. */
     double peak = prices[0];
     double max_drawdown = 0.0;
 
@@ -126,7 +125,7 @@ RiskStatus calculate_max_drawdown(const double prices[], size_t size, double *re
     {
         if (prices[i] > peak)
         {
-            /*  Drawdown is measured from the running peak. */
+            /* Drawdown is measured from the running peak. */
             peak = prices[i];
         }
 
@@ -182,7 +181,7 @@ RiskStatus calculate_ewma_volatility(const double prices[], size_t size, double 
     return RISK_SUCCESS;
 }
 
-/* Testing to see if these functions will suffice with making the values fit the specified time period instead of the entire series. */
+
 RiskStatus calculate_rolling_volatility(const double prices[], size_t size, size_t window, double results[])
 {
     if (results == NULL)
