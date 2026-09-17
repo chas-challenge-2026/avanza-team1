@@ -1,7 +1,7 @@
 #include "backtest.hpp"
 #include "../risk/risk.h"
 
-BacktestResult *run_backtest(const double *prices, int instruments, int days, const char *strategy)
+NativeBridgeModule *run_backtest(const double *prices, int instruments, int days, const char *strategy)
 {
     (void)strategy;
 
@@ -13,19 +13,24 @@ BacktestResult *run_backtest(const double *prices, int instruments, int days, co
         years = 1;
     }
     
-    BacktestResult *result = new BacktestResult{};
-    result->total_return = 15000;
-    result->annualized_return = result->total_return / years;
-    //result->max_drawdown = 0.13;
-    //result->sharpe_ratio = 1.29;
-    
-    calculate_max_drawdown(prices, size, &result->max_drawdown);
-    calculate_sharpe(prices, size, risk_free_rate, &result->sharpe_ratio);
+    NativeBridgeModule *result = (NativeBridgeModule*)malloc(sizeof(NativeBridgeModule));
+    if (result != nullptr)
+    {
+        result->total_return = 15000;
+        result->annualized_return = result->total_return / years;
+        // result->max_drawdown = 0.13;
+        // result->sharpe_ratio = 1.29;
+        calculate_max_drawdown(prices, size, &result->max_drawdown);
+        calculate_sharpe(prices, size, risk_free_rate, &result->sharpe_ratio);
+    }    
 
     return result;
 }
 
-void free_backtest_result(BacktestResult *result)
+void free_backtest_result(NativeBridgeModule *result)
 {
-    delete result;
+    if (result != nullptr)
+    {
+        free(result);
+    }
 }

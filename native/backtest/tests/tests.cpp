@@ -35,7 +35,7 @@ int main()
     int days = sizeof(prices) / sizeof(prices[0]);
     int instruments = 1;
 
-    BacktestResult *result = run_backtest(prices, instruments, days, "BUY_MORE");
+    NativeBridgeModule *result = run_backtest(prices, instruments, days, "BUY_MORE");
 
     std::cout << std::fixed << std::setprecision(2);
     std::cout << "Total Return: " << result->total_return << "\r\nAnnualized return: " << result->annualized_return << "\r\nMax Drawdown: " << result->max_drawdown * 100 << "%" << "\r\nSharpe Ratio: " << result->sharpe_ratio << "\r\n"; 

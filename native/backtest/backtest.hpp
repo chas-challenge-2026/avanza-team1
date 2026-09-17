@@ -1,6 +1,21 @@
 #pragma once
 
-#include <cstddef>
+#include <cstdlib>
+
+/* Checks compiler on different OS systems so not to cause bad errors */
+/* Microsoft Visual Studio or MinGW (Windows) */
+#if defined(_MSC_VER) || defined(__MINGW32__)
+    #define EXPORT __declspec(dllexport)
+
+/* GCC or Clang (Linux, macOS, BSD, etc.) */
+#elif defined(__GNUC__) || defined(__clang__)
+    #define EXPORT __attribute__((visibility("default")))
+
+/* Fallback for unknown compilers */
+#else
+    #define EXPORT
+    #pragma warning Unknown dynamic link export semantics.
+#endif
 
 typedef struct
 {
@@ -8,11 +23,11 @@ typedef struct
     double annualized_return;
     double max_drawdown;
     double sharpe_ratio;
-} BacktestResult;
+} NativeBridgeModule;
 
 extern "C" 
 {
-    BacktestResult *run_backtest(const double *prices, int instruments, int days, const char *strategy);
+    EXPORT NativeBridgeModule *run_backtest(const double *prices, int instruments, int days, const char *strategy);
     
-    void free_backtest_result(BacktestResult *result);
+    EXPORT void free_backtest_result(NativeBridgeModule *result);
 }
