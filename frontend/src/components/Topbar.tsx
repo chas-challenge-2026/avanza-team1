@@ -1,6 +1,7 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import styles from "./Topbar.module.css";
 import { useAuth } from "../auth/useAuth";
+import styles from "./Topbar.module.css";
+import logo from "../assets/logo.webp";
 
 function Topbar() {
   const navigate = useNavigate();
@@ -14,7 +15,7 @@ function Topbar() {
   return (
     <header className={styles.topbar}>
       <div className={styles.brand}>
-        <img src="src/assets/logo.webp" alt="Logo" className={styles.logo} />
+        <img src="logo" alt="Logo" className={styles.logo} />
         <h1>PORTFÖLJHÄLSA</h1>
       </div>
       <nav>
