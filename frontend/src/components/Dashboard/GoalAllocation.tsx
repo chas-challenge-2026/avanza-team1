@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Panel from "../Panel";
 import styles from "./GoalAllocation.module.css";
-import { saveStoredTarget } from "../../lib/targetAllocation";
+import { useSaveAllocation } from "../../hooks/useSaveAllocation";
 
 interface GoalAllocationProps {
   targetAktierPct: number;
@@ -18,21 +18,27 @@ function GoalAllocation({
   const [funds, setFunds] = useState(targetStabiltPct);
   const [saved, setSaved] = useState(false);
 
+  const { saveAllocation, isPending, isError } = useSaveAllocation();
+
   const sum = equities + funds;
   const isValid = sum === 100;
 
-  function handleSave() {
+  async function handleSave() {
     if (!isValid) return;
 
-    saveStoredTarget({
-      targetAktierPct: equities,
-      targetStabiltPct: funds,
-    });
-    onTargetSaved(equities, funds);
-    setSaved(true);
+    try {
+      await saveAllocation({
+        targetAktierPct: equities,
+        targetStabiltPct: funds,
+      });
+      onTargetSaved(equities, funds);
+      setSaved(true);
+    } catch {
+      // isError becomes true through hook
+    }
   }
-// TODO: Ändra description så det står "i din portfölj" i den. Ändra label till att bara innehålla orden "aktier" respektive "fonder" 
-// TODO: ta bort label subtitle .
+  // TODO: Ändra description så det står "i din portfölj" i den. Ändra label till att bara innehålla orden "aktier" respektive "fonder"
+  // TODO: ta bort label subtitle .
   return (
     <Panel title="Målallokering" size="large">
       <p className={styles.description}>
@@ -54,13 +60,14 @@ function GoalAllocation({
             className={styles.input}
             value={equities}
             onChange={(e) => {
-              if (Number(e.target.value) < 0) e.target.value = '0';
-              if (Number(e.target.value) > 100) e.target.value = '100';
+              if (Number(e.target.value) < 0) e.target.value = "0";
+              if (Number(e.target.value) > 100) e.target.value = "100";
               setEquities(Number(e.target.value));
               setFunds(100 - Number(e.target.value));
               setSaved(false);
             }}
-          />%
+          />
+          %
         </div>
 
         <div className={styles.inputRow}>
@@ -76,13 +83,14 @@ function GoalAllocation({
             className={styles.input}
             value={funds}
             onChange={(e) => {
-              if (Number(e.target.value) < 0) e.target.value = '0';
-              if (Number(e.target.value) > 100) e.target.value = '100';
+              if (Number(e.target.value) < 0) e.target.value = "0";
+              if (Number(e.target.value) > 100) e.target.value = "100";
               setFunds(Number(e.target.value));
               setEquities(100 - Number(e.target.value));
               setSaved(false);
             }}
-          />%
+          />
+          %
         </div>
       </div>
 
@@ -102,11 +110,12 @@ function GoalAllocation({
         <button
           className={styles.button}
           type="button"
-          disabled={saved}
+          disabled={saved || isPending}
           onClick={handleSave}
         >
-          { saved ? "Mål sparat" : "Spara mål" }
+          {saved ? "Mål sparat" : "Spara mål"}
         </button>
+        {isError && <p>Kunde inte spara målet.</p>}
       </div>
 
       <div className={styles.infoBox}>

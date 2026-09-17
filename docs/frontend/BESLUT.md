@@ -68,3 +68,12 @@
 - **Kontrakt:** samma `Portfolio`-typ som #24 / #43. Ingen ny dataform.
 - **Bevis:** issue #82, PR #109
 - Tomac
+
+## 2026-09-17 — Målallokering sparas via `saveAllocation`
+
+- **Beslut:** UI sparar mål genom `useSaveAllocation()` → `portfolioApi.saveAllocation()`. Mock-adaptern skriver `localStorage` (`ph_target_allocation`). HTTP-adaptern är stubbe (`PUT /api/allocation`).
+- **Varför:** Spara-knappen ska inte äga persistence. Samma strömbrytare som läsning (`VITE_USE_MOCK`).
+- **Avgränsning:** ingen riktig fetch. Fältnamn oförändrade (`targetAktierPct` / `targetStabiltPct`). Formulärets 100 %-länkning orörd (#81).
+- **Kontrakt:** `StoredTarget` från #41. Query-nyckel `["portfolio"]` ogiltigförklaras efter lyckat spar.
+- **Bevis:** issue #83
+- Tomac
