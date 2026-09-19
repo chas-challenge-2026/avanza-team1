@@ -1,6 +1,7 @@
 package se.comerit.avanza.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,12 +20,16 @@ public class AlertController {
     }
 
     @GetMapping("/alerts")
-    public String listAlerts(HttpServletRequest request, Model model) {
+    public String listAlerts(Model model) {
 
+        // Read userId from SecurityContext (v2)
+        String userId = (String) SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getPrincipal();
 
-        Long userId = (Long) request.getAttribute("userId");
+        Long uid = Long.valueOf(userId);
 
-        Map<String, Object> alerts = alertService.getAlerts(userId);
+        Map<String, Object> alerts = alertService.getAlerts(uid);
 
         model.addAttribute("storedAlerts", alerts.get("storedAlerts"));
         model.addAttribute("liveAlerts", alerts.get("liveAlerts"));
@@ -33,15 +38,33 @@ public class AlertController {
     }
 
     @PostMapping("/alerts/dismiss")
-    public String dismissAlert(@RequestParam Integer alertId,
-                               HttpServletRequest request) {
+    public String dismissAlert(@RequestParam Integer alertId) {
 
 
-        Long userId = (Long) request.getAttribute("userId");
+        // Read userId from SecurityContext (v2)
+        String userId = (String) SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getPrincipal();
 
-        // Skicka med userId för IDOR-kontroll
-        alertService.dismissAlert(alertId, userId);
+        Long uid = Long.valueOf(userId);
+
+        // Pass userId for IDOR protection
+        alertService.dismissAlert(alertId, uid);
 
         return "redirect:/alerts";
     }
+    @GetMapping("/api/alerts")
+    public ResponseEntity<?> apiAlerts() {
+
+        String userId = (String) SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getPrincipal();
+
+        Long uid = Long.valueOf(userId);
+
+        Map<String, Object> alerts = alertService.getAlerts(uid);
+
+        return ResponseEntity.ok(alerts);
+    }
+
 }
