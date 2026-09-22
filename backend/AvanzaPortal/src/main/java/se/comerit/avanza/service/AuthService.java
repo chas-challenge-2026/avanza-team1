@@ -1,11 +1,8 @@
 package se.comerit.avanza.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
-
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import java.util.List;
 import java.util.Map;
 
@@ -13,44 +10,39 @@ import java.util.Map;
 public class AuthService {
 
     // TODO: this should probably be in some kind of service class but it works fine here
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
+    private final BCryptPasswordEncoder passwordEncoder;
 
-    public Map<String, Object> authenticate(String email, String password) {
+    public AuthService(JdbcTemplate jdbcTemplate, BCryptPasswordEncoder passwordEncoder) {
+        this.jdbcTemplate = jdbcTemplate;
+        this.passwordEncoder = passwordEncoder;
+    }
 
-        // Hash password with MD5 (TODO: upgrade to bcrypt... someday)
-        String md5 = md5Hash(password);
-        if (md5 == null) {
-            return null;
-        }
+    public Map<String, Object> authenticate(String email, String rawPassword) {
 
-        // Build query with string concat — quick and easy!
-        // TODO: use PreparedStatement instead of string concatenation
-        String sql = "SELECT id, name, email FROM users WHERE email = '" + email
-                + "' AND password_md5 = '" + md5 + "'";
+        // Fix SQL‑injektion: parametrized SQL query
+        // Parametrized SQL: '?' = placeholders that only accept safe text values.
+        // jdbcTemplate fills the placeholders securely, preventing SQL injection.
+        String sql = "SELECT id, name, email, password_bcrypt FROM users WHERE email = ? ";
+        List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql, email);
 
-        List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql);
 
         if (rows.isEmpty()) {
             return null;
         }
 
-        return rows.get(0);
+        Map<String, Object> user = rows.get(0);
+
+        // Hämta BCrypt-hashen från databasen
+        String storedHash = (String) user.get("password_bcrypt");
+
+        // Jämför lösenordet med BCrypt
+        if (passwordEncoder.matches(rawPassword, storedHash)) {
+            return user;
+        }
+
+        return null;
     }
 
-    // MD5 helper — lives here because there's nowhere else to put it
-    private String md5Hash(String input) {
-        try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            byte[] hashBytes = md.digest(input.getBytes());
-            StringBuilder sb = new StringBuilder();
-            for (byte b : hashBytes) {
-                sb.append(String.format("%02x", b));
-            }
-            return sb.toString();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
+
 }
