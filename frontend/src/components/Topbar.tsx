@@ -2,6 +2,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../auth/useAuth";
 import styles from "./Topbar.module.css";
 import logo from "../assets/logo.webp";
+import HamburgerMenu from "./Dashboard/HamburgerMenu";
 
 function Topbar() {
   const navigate = useNavigate();
@@ -18,7 +19,7 @@ function Topbar() {
         <img src={logo} alt="Logo" className={styles.logo} />
         <h1>PORTFÖLJHÄLSA</h1>
       </div>
-      <nav>
+      <nav className={styles.desktopNav}>
         <NavLink
           to="/"
           end
@@ -41,9 +42,12 @@ function Topbar() {
       </nav>
       <div className={styles.user}>
         <span className={styles.userName}>{user?.name ?? ""}</span>
-        <button className={styles.logoutButton} onClick={handleLogout}>
+        <button className={`${styles.logoutButton} ${styles.desktopLogout}`} onClick={handleLogout}>
           Logga ut
         </button>
+        <div className={styles.hamburgerContainer}>
+          <HamburgerMenu />
+        </div>
       </div>
     </header>
   );

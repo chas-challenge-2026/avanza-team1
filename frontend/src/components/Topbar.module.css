@@ -32,7 +32,7 @@
 /* ▲▲▲ branding ▲▲▲ */
 
 /* ▼▼▼ navigation ▼▼▼ */
-.topbar nav {
+.desktopNav {
   grid-area: nav;
   align-self: stretch;
   display: flex;
@@ -41,7 +41,7 @@
   align-items: center;
 }
 
-.topbar a {
+.desktopNav a {
   height: 100%;
   flex-grow: 1;
   align-content: center;
@@ -55,11 +55,11 @@
   transition: all 0.2s ease;
 }
 
-.topbar a:hover {
+.desktopNav a:hover {
   color: var(--primary-color);
 }
 
-.topbar a.active {
+.desktopNav a.active {
   color: var(--primary-color);
   border-bottom-color: var(--primary-color);
 }
@@ -87,22 +87,33 @@
 }
 /* ▲▲▲ user areas ▲▲▲ */
 
+.hamburgerContainer {
+  display: none;
+}
 
 @media (max-width: 768px) {
   .topbar {
-    grid-template-areas: "brand user user" 
-                         "brand nav  nav";
+    grid-template-columns: auto auto;
+    grid-template-areas: "brand user" "nav nav"; 
+                         /* "brand nav  nav"; */
   }
   .brand {
     padding-left: var(--space-medium);
   }
-  .topbar nav {
+  /* .topbar nav {
     width: minmax(fit-content, calc(fit-content * 1.5));
     justify-content: end;
-  }
+  } */
   .user {
     padding-right: var(--space-medium);
     justify-content: end;
   }
+  .desktopNav,
+  .desktopLogout {
+    display: none;
+  }
 
+  .hamburgerContainer {
+    display: inline;
+  }
 }
