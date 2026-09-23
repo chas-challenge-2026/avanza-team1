@@ -14,10 +14,8 @@ function App() {
 
   return (
     <>
-      <header>
-        {/* Topbar döljs på /login - man ska inte se nav-länkar eller en "Logga ut"-knapp innan man är inloggad */}
-        {isAuthenticated && <Topbar/>}
-      </header>
+      {/* Topbar döljs på /login - man ska inte se nav-länkar eller en "Logga ut"-knapp innan man är inloggad */}
+      {isAuthenticated && <Topbar/>}
       <main className="pageContent">
         <Routes>
           <Route path="/login" element={<Login />} />
