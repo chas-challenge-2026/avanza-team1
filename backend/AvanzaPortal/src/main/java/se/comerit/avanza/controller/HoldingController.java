@@ -1,6 +1,8 @@
 package se.comerit.avanza.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,13 +21,18 @@ public class HoldingController {
     }
 
     @GetMapping("/holdings")
-    public String listHoldings(HttpServletRequest request, Model model) {
+    public String listHoldings(Model model) {
 
 
-        Long userId = (Long) request.getAttribute("userId");
+        // Read userId from SecurityContext (v2)
+        String userId = (String) SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getPrincipal();
 
-        //  Flyttad logik — nu i service
-        Map<String, Object> data = holdingService.buildHoldingData(userId);
+        Long uid = Long.valueOf(userId);
+
+        // Logic moved to service layer
+        Map<String, Object> data = holdingService.buildHoldingData(uid);
 
         model.addAttribute("holdings", data.get("holdings"));
         model.addAttribute("accounts",data.get("accounts"));
@@ -39,24 +46,51 @@ public class HoldingController {
                              @RequestParam String quantity,
                              @RequestParam String avgBuyPrice,
                              @RequestParam(defaultValue = "SEK") String currency,
-                             HttpServletRequest request,
                              Model model) {
-        Long userId = (Long) request.getAttribute("userId");
+
+        // Read userId from SecurityContext (v2)
+        String userId = (String) SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getPrincipal();
+
+        Long uid = Long.valueOf(userId);
+
+        // Add holding (userId not needed here yet, but available if needed later)
         holdingService.addHolding(accountId, ticker, instrumentName, quantity, avgBuyPrice, currency);
 
         return "redirect:/holdings";
     }
 
     @PostMapping("/holdings/delete")
-    public String deleteHolding(@RequestParam Integer holdingId,
-                                HttpServletRequest request) {
+    public String deleteHolding(@RequestParam Integer holdingId) {
 
 
-        Long userId = (Long) request.getAttribute("userId");
+        // Read userId from SecurityContext (v2)
+        String userId = (String) SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getPrincipal();
 
-        // Skicka userId till service för IDOR‑kontroll
-        holdingService.deleteHolding(holdingId, userId);
+        Long uid = Long.valueOf(userId);
+
+        // Pass userId for IDOR protection
+        holdingService.deleteHolding(holdingId, uid);
 
         return "redirect:/holdings";
     }
+    @GetMapping("/api/holdings")
+    public ResponseEntity<?> apiHoldings() {
+
+        // Read userId from JWT (SecurityContext)
+        String userId = (String) SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getPrincipal();
+
+        Long uid = Long.valueOf(userId);
+
+        // Fetch holdings for logged-in user
+        Map<String, Object> data = holdingService.buildHoldingData(uid);
+
+        return ResponseEntity.ok(data);
+    }
+
 }
