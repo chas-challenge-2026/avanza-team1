@@ -2,6 +2,8 @@
 #define fx_hpp
 
 #include <cstddef>
+#include <map>
+#include <string>
 
 /*  This module handles value conversions by calling Sveriges Riksbank's API 
     using Libcurl and using Jansson to parse the JSON data.
@@ -42,15 +44,18 @@ typedef struct
 /*  Callback function for Curl GET request */
 size_t write_data(char *buffer, size_t size, size_t nmemb, void *user_data);
 
-/*  Accepts an FX_Data struct to store date and exchange rate between two currencies (curr1, curr2), 
-    interval indicates whether to get latest or an interval between start_date and end_date */
-FX_Code fx_convert(FX_Data *fx_data, const char *curr1, const char *curr2, FX_Interval interval, const char *start_date, const char *end_date);
+/*  Accepts an FX_Data struct to store date and exchange rate between SEK and another currency */
+FX_Code fx_convert_current(FX_Data *fx_data, const char *curr);
 
 /*  Parses the JSON data in buffer and stores the date and exchange rate in fx_data */
 FX_Code fx_parse_string(FX_Data *fx_data, const char *buffer);
 
 /*  Helper function for Curl GET request, must free response.string after use */
 FX_Code fx_curl(const char *url, Response *response);
+
+/*  Takes a JSON string with the format of [{"date":"YYYY-MM-DD", "value":0.00}] 
+    and stores them as key value pairs in fx_map */
+FX_Code fx_parse_string_interval(const char *buffer, std::map<std::string, double> fx_map);
 
 
 #endif // fx_hpp

@@ -3,6 +3,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <cstring>
+#include <map>
 #include <jansson.h>
 #include <curl/curl.h>
 
@@ -28,34 +29,23 @@ size_t write_data(char *buffer, size_t size, size_t nmemb, void *user_data)
     return real_size;
 }
 
-FX_Code fx_convert(FX_Data *fx_data, const char *curr1, const char *curr2, FX_Interval interval, const char *start_date, const char *end_date)
+FX_Code fx_convert_current(FX_Data *fx_data, const char *curr)
 {
     if (fx_data == NULL)
     {
         return FX_ERR_NULLPTR;
     }
 
-    /*  Expect currencies to be 3 letters (examples: SEK, GBP, EUR, USD) */
-    if ((strlen(curr1) != 3) || (strlen(curr2) != 3))
+    /*  Expect currency to be 3 letters (examples: GBP, EUR, USD) */
+    if ((strlen(curr) != 3))
     {
         return FX_ERR_INVALID_CURRENCY;
-    }
-
-    if (interval == FX_INTERVAL && (strlen(start_date) != 10 || strlen(end_date) != 10))
-    {
-        return FX_ERR_INVALID_DATE;
     }
  
     char url[URL_LEN];
 
-    if (interval == FX_INTERVAL)
-    {
-        snprintf(url, URL_LEN, "https://api.riksbank.se/swea/v1/Observations/%s%spmi/%s/%s", curr1, curr2, start_date, end_date);
-    }
-    else
-    {
-        snprintf(url, URL_LEN, "https://api.riksbank.se/swea/v1/Observations/Latest/%s%spmi", curr1, curr2);
-    }
+    snprintf(url, URL_LEN, "https://api.riksbank.se/swea/v1/Observations/Latest/SEK%spmi", curr);
+    
     
     /*  response.string gets allocated on the heap in fx_curl, remember to free after parsing */
     Response response;
@@ -138,6 +128,72 @@ FX_Code fx_parse_string(FX_Data *fx_data, const char *buffer)
 
     double value = json_real_value(json_value);
     fx_data->rate = value;   
+
+    json_decref(json);
+    
+    return FX_OK;
+}
+
+FX_Code fx_parse_string_interval(const char *buffer, std::map<std::string, double> fx_map)
+{
+    json_error_t json_error;
+    json_t *json = json_loads(buffer, 0, &json_error);
+    if (!json)
+    {
+        std::cout << "Error on line " << json_error.line << ": " << json_error.text << "\r\n";
+        return FX_ERR_JSON;
+    }
+
+    // std::cout << "Size: " << json_object_size(json);
+    
+    size_t i;
+    const char *key;
+    json_t *value, *object;
+    size_t arr_size = json_array_size(json);
+    
+    for (i = 0; i < arr_size; i++)
+    {
+        object = json_array_get(json, i);
+
+        std::string date;
+        double fx_rate;
+
+        json_object_foreach(object, key, value)
+        {
+            switch (json_typeof(value))
+            {
+                case JSON_STRING:
+                    date = json_string_value(value);
+                    break;
+                case JSON_REAL:
+                    fx_rate = json_real_value(value);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        fx_map.insert({date, fx_rate});
+    }
+
+    /* Example of how to loop through the map */
+    // std::cout << "\r\nTrying to print the map:\r\n";
+    // for (auto& p : fx_map)
+    // {
+    //     std::cout << p.first << " " << p.second << "\r\n";
+    // }
+
+    /* Example of finding the value of a certain day */
+    // std::cout << "\r\nTrying to find key \"2025-04-02\":\r\n";
+    // auto it = fx_map.find("2025-04-02");
+    // if (it != fx_map.end())
+    // {
+    //     std::cout << it->first << " " << it->second << "\r\n";
+    // }
+    // else
+    // {
+    //     std::cout << "Key not found!\r\n";
+    // }
 
     json_decref(json);
 
