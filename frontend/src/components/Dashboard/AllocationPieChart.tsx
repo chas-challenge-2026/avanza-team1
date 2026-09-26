@@ -1,3 +1,4 @@
+import { useId } from "react";
 import styles from "./AllocationPieChart.module.css";
 
 interface AllocationPieChartProps {
@@ -7,6 +8,8 @@ interface AllocationPieChartProps {
 
 interface Sector {
   color: string;
+  edgeColor: string;
+  gradientId: string;
   name: string;
   value: number;
 }
@@ -48,16 +51,21 @@ function AllocationPieChart({
   aktierPct,
   stabiltPct,
 }: AllocationPieChartProps): JSX.Element {
+  const chartId = useId().replace(/:/g, "");
   const sectors: Sector[] = [
     {
       name: "Aktier",
       value: Math.max(0, aktierPct),
       color: "var(--primary-color)",
+      edgeColor: "var(--primary-color-dark)",
+      gradientId: `${chartId}-aktierGradient`,
     },
     {
       name: "Stabilt",
       value: Math.max(0, stabiltPct),
-      color: "var(--dark-gray)",
+      color: "var(--primary-color-dark)",
+      edgeColor: "var(--dark-gray)",
+      gradientId: `${chartId}-stabiltGradient`,
     },
   ];
   const total = sectors.reduce((sum, sector) => sum + sector.value, 0);
@@ -78,6 +86,32 @@ function AllocationPieChart({
         <desc id="allocationChartDescription">
           Aktier: {formatPercentage(aktierPct)}. Stabilt: {formatPercentage(stabiltPct)}.
         </desc>
+        <defs>
+          {sectors.map((sector) => (
+            <radialGradient
+              id={sector.gradientId}
+              key={sector.gradientId}
+              cx={center}
+              cy={center}
+              gradientUnits="userSpaceOnUse"
+              r={radius}
+            >
+              <stop offset="0%" stopColor={sector.color} />
+              {/* <stop offset="70%" stopColor={sector.color} /> */}
+              <stop offset="100%" stopColor={sector.edgeColor} />
+            </radialGradient>
+          ))}
+          <radialGradient
+            id={`${chartId}-edgeShadow`}
+            cx={center}
+            cy={center}
+            gradientUnits="userSpaceOnUse"
+            r={radius}
+          >
+            <stop offset="90%" stopColor="transparent" />
+            <stop offset="100%" stopColor="rgba(0, 0, 0, 0.28)" />
+          </radialGradient>
+        </defs>
         {total === 0 ? (
           <circle
             className={styles.emptySector}
@@ -95,7 +129,7 @@ function AllocationPieChart({
 
             return (
               <g key={sector.name}>
-                {path && <path d={path} fill={sector.color} />}
+                {path && <path d={path} fill={`url(#${sector.gradientId})`} />}
                 {!showExternalLabels && sector.value > 0 && (
                   <text
                     className={styles.label}
@@ -109,6 +143,15 @@ function AllocationPieChart({
               </g>
             );
           })
+        )}
+        {total > 0 && (
+          <circle
+            className={styles.edgeShadow}
+            cx={center}
+            cy={center}
+            fill={`url(#${chartId}-edgeShadow)`}
+            r={radius}
+          />
         )}
       </svg>
 

@@ -24,6 +24,10 @@
   fill: var(--light-gray);
 }
 
+.edgeShadow {
+  pointer-events: none;
+}
+
 .legend {
   display: flex;
   flex-wrap: wrap;

@@ -20,7 +20,8 @@
     --dark-gray: #333333;
     --black: #202020;
     
-    --primary-color: rgb(3, 168, 80);
+    --primary-color: hsl(148, 96%, 34%);
+    --primary-color-dark: hsl(148, 96%, 20%);
     --green: #00a651;
 
     --background: var(--off-white);
