@@ -1,0 +1,47 @@
+.chart {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: clamp(300px, 100%, 500px);
+}
+
+.svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.label {
+  fill: var(--white);
+  font-size: var(--font-size-xlarge);
+  font-weight: 700;
+  dominant-baseline: middle;
+  pointer-events: none;
+}
+
+.emptySector {
+  fill: var(--light-gray);
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-small) var(--space-large);
+  margin-top: var(--space-medium);
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xsmall);
+  color: var(--text-color-alt);
+  font-size: var(--font-size-emphasis);
+}
+
+.indicator {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 50%;
+}
