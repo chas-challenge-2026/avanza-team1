@@ -14,10 +14,13 @@
 
 .label {
   fill: var(--white);
-  font-size: var(--font-size-xlarge);
   font-weight: 700;
   dominant-baseline: middle;
   pointer-events: none;
+}
+
+.labelName {
+  font-weight: 500;
 }
 
 .emptySector {
