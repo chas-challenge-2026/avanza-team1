@@ -13,13 +13,13 @@
 }
 
 /* Desktop */
-@media (min-width: 1024px) {
+/* @media (min-width: 1024px) {
   .dashboardGrid {
-    grid-template-columns: repeat(3, 1fr);  /* 🖥️ 3 kolumner */
+    grid-template-columns: repeat(3, 1fr);  /* 🖥️ 3 kolumner 
     max-width: 1200px;
     margin: 0 auto;
   }
-}
+} */
 
 table {
   width: 100%;
