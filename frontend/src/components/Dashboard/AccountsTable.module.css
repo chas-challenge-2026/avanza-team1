@@ -11,10 +11,11 @@
 }
 
 .columnTitle {
-  font-size: var(--font-size-normal);
+  font-size: var(--font-size-large);
   font-weight: 600;
   /* color: #333; */
   margin-bottom: var(--space-medium);
+  border-bottom: 1px solid var(--gray);
 }
 
 .row {

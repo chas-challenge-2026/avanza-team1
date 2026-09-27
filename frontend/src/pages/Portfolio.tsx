@@ -64,12 +64,12 @@ function Portfolio() {
       {drift.overThreshold && <WarningBanner message={drift.message} />}
       <div className="dashboardGrid">
         <AssetAllocation allocation={allocation} />
+        <AccountsTable accounts={portfolio.accounts} allocation={allocation} holdings={portfolio.holdings} />
         <GoalAllocation
           targetAktierPct={allocation.targetAktierPct}
           targetStabiltPct={allocation.targetStabiltPct}
           onTargetSaved={handleTargetSaved}
         />
-        <AccountsTable accounts={portfolio.accounts} allocation={allocation} />
         <NoticesEmpty alerts={driftAlerts(allocation)} />
         <HoldingsTable holdings={portfolio.holdings} />
       </div>
