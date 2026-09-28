@@ -2,50 +2,46 @@
 #include "../risk/risk.h"
 
 #include <cmath>
-#include <cstring>
-#include <iostream>
+#include <cstdlib>
+#include <vector>
 
 BacktestResult *run_backtest(const double *prices, int instruments, int days, const char *strategy)
 {
-    (void)strategy;    
+    // Will be implemented and further tested when we have the basic functionality in place.
+    (void)strategy;
 
-    if (prices == nullptr || days < 2 || instruments < 1)
+    if (prices == nullptr || days < 3 || instruments < 1)
+    {
+        return nullptr;
+    }
+
+    double risk_free_rate = 0.03;
+
+    BacktestResult *result = static_cast<BacktestResult*>(malloc(sizeof(BacktestResult)));
+    if (result == nullptr)
     {
         return nullptr;
     }
 
     size_t size = static_cast<size_t>(days) * static_cast<size_t>(instruments);
-    double risk_free_rate = 0.03;
-    double growth = prices[size - 1] / prices[0];
-    double years = static_cast<double>(days) / 252.0;
-    
-    BacktestResult *result = static_cast<BacktestResult*>(malloc(sizeof(BacktestResult)));
-    if (result != nullptr)
+    double years = static_cast<double>(days - 1) / 252.0;
+    double growth_factor = prices[size - 1] / prices[0];
+
+    result->total_return = growth_factor - 1.0;
+    result->annualized_return = std::pow(growth_factor, 1.0 / years) - 1.0;
+
+    RiskStatus status = calculate_max_drawdown(prices, size, &result->max_drawdown);
+    if (status != RISK_SUCCESS)
     {
-        result->total_return = growth - 1.0;
-        
-        if (years < 1)
-        {
-            result->annualized_return = 0.0; // TODO: Needs to be fixed so that it matches the output set by Java and Frontend.
-        }
-        else
-        {
-            result->annualized_return = pow(growth, 1.0 / years) - 1.0;
-        }
+        free(result);
+        return nullptr;
+    }
 
-        RiskStatus status = calculate_max_drawdown(prices, size, &result->max_drawdown);
-        if (status != RISK_SUCCESS)
-        {
-            free(result);
-            return nullptr;
-        }
-
-        status = calculate_sharpe(prices, size, risk_free_rate, &result->sharpe_ratio);
-        if (status != RISK_SUCCESS)
-        {
-            free(result);
-            return nullptr;
-        }
+    status = calculate_sharpe(prices, size, risk_free_rate, &result->sharpe_ratio);
+    if (status != RISK_SUCCESS)
+    {
+        free(result);
+        return nullptr;
     }
 
     return result;
