@@ -19,7 +19,8 @@ typedef enum
     FX_ERR_CURL,                /*  Curl error */
     FX_ERR_NULLPTR,             /*  Invalid pointer to FX_Struct */
     FX_ERR_JSON,                /*  Error when parsing JSON */
-    FX_ERR_INVALID_DATE         /*  Dates must be in YYYY-MM-DD format */
+    FX_ERR_INVALID_DATE,        /*  Dates must be in YYYY-MM-DD format */
+    FX_ERR
 } FX_Code;
 
 typedef enum
@@ -47,6 +48,8 @@ size_t write_data(char *buffer, size_t size, size_t nmemb, void *user_data);
 /*  Accepts an FX_Data struct to store date and exchange rate between SEK and another currency */
 FX_Code fx_convert_current(FX_Data *fx_data, const char *curr);
 
+FX_Code fx_convert_series(double *prices, int instruments, int instrument_target, int days, const char *curr);
+
 /*  Parses the JSON data in buffer and stores the date and exchange rate in fx_data */
 FX_Code fx_parse_string(FX_Data *fx_data, const char *buffer);
 
@@ -55,7 +58,7 @@ FX_Code fx_curl(const char *url, Response *response);
 
 /*  Takes a JSON string with the format of [{"date":"YYYY-MM-DD", "value":0.00}] 
     and stores them as key value pairs in fx_map */
-FX_Code fx_parse_string_interval(const char *buffer, std::map<std::string, double> fx_map);
+FX_Code fx_parse_string_interval(const char *buffer, std::map<std::string, double> *fx_map);
 
 
 #endif // fx_hpp

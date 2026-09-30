@@ -3,6 +3,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <cstring>
+#include <ctime>
 #include <map>
 #include <jansson.h>
 #include <curl/curl.h>
@@ -134,7 +135,7 @@ FX_Code fx_parse_string(FX_Data *fx_data, const char *buffer)
     return FX_OK;
 }
 
-FX_Code fx_parse_string_interval(const char *buffer, std::map<std::string, double> fx_map)
+FX_Code fx_parse_string_interval(const char *buffer, std::map<std::string, double> *fx_map)
 {
     json_error_t json_error;
     json_t *json = json_loads(buffer, 0, &json_error);
@@ -173,7 +174,7 @@ FX_Code fx_parse_string_interval(const char *buffer, std::map<std::string, doubl
             }
         }
 
-        fx_map.insert({date, fx_rate});
+        fx_map->insert({date, fx_rate});
     }
 
     /* Example of how to loop through the map */
@@ -196,6 +197,121 @@ FX_Code fx_parse_string_interval(const char *buffer, std::map<std::string, doubl
     // }
 
     json_decref(json);
+
+    return FX_OK;
+}
+
+/* 
+Instrument 2 (index 20-29) is USD, needs to be converted into SEK
+
+int instruments = 5;
+int days = 10
+int instrument_target = 2;
+double prices[] = {311.43, 301.25, 295.55, 263.76, 265.72, 262.64, 260.21, 261.33, 264.69, 263.57, 
+                        266.37, 267.20, 263.37, 265.34, 262.64, 264.32, 260.49, 261.52, 258.82, 256.58, 
+                        26.13, 25.77, 25.95, 25.56, 25.45, 25.78, 25.49, 25.11, 25.23, 25.05, 
+                        248.24, 246.58, 243.64, 245.03, 252.59, 247.16, 249.71, 252.92, 250.04, 253.04, 
+                        251.71, 254.69, 253.93, 256.26, 259.44, 258.30, 261.04, 261.89, 264.70, 267.90};
+
+// FX_Code convert_series(double *prices, size_t id_start, size_t id_stop, const char *curr)
+
+
+*/
+
+
+FX_Code fx_convert_series(double *prices, int instruments, int instrument_target, int days, const char *curr)
+{
+    /*  Expect currency to be 3 letters (examples: GBP, EUR, USD) */
+    if ((strlen(curr) != 3))
+    {
+        return FX_ERR_INVALID_CURRENCY;
+    }
+
+    if (days < 1 || instruments < 1 || instruments > sizeof(prices) / sizeof(double) || instrument_target < 0 || instrument_target > instruments - 1)
+    {
+        return FX_ERR;
+    }
+
+    if (prices == nullptr)
+    {
+        return FX_ERR_NULLPTR;
+    }
+    
+    /*  days + ((days / 5) * 2) = total days including weekends
+        Adds 31 days of extra data to safely account for non-weekend non-bank days */
+    int total_days = days + ((days / 5) * 2) + 31;
+
+    /*  Calculates what start date to feed into API call. */
+    time_t current_timestamp = time(NULL);
+    struct tm end_time_tm = *localtime(&current_timestamp);
+    time_t target_timestamp = time(NULL) - (3600 * 24 * total_days);
+    struct tm start_time_tm = *localtime(&target_timestamp);
+
+    char start_date[11], end_date[11];
+    strftime(start_date, sizeof(char) * 11, "%Y-%m-%d", &start_time_tm);
+    strftime(end_date, sizeof(char) * 11, "%Y-%m-%d", &end_time_tm);
+
+    std::cout << "start date: " << start_date << "\r\nend date: " << end_date << "\r\n";
+
+        
+    
+        char url[URL_LEN];
+
+        snprintf(url, URL_LEN, "https://api.riksbank.se/swea/v1/Observations/sek%spmi/%s/%s", curr, start_date, end_date);
+        
+        
+        /*  response.string gets allocated on the heap in fx_curl, remember to free after parsing */
+        Response response;
+        FX_Code result = fx_curl(url, &response);
+        if (result != FX_OK)
+        {
+            free(response.string);
+            return result;
+        }
+
+        std::cout << "response.string: " << response.string << "\r\n";
+
+        std::map<std::string, double> fx_map;
+        result = fx_parse_string_interval(response.string, &fx_map);
+        if (result != FX_OK)
+        {
+            free(response.string);
+            return result;
+        }
+
+
+
+        free(response.string);
+
+    size_t total_len = instruments * days;
+    size_t start_id = days * instrument_target;
+    size_t end_id = start_id + days;
+    size_t map_id = fx_map.size() - days + 1;
+    auto it = fx_map.begin();
+
+    std::advance(it, map_id - 1);
+
+    std::cout << "total_len: " << total_len << "\r\n";
+    std::cout << "start_id: " << start_id << "\r\n";
+    std::cout << "end_id: " << end_id << "\r\n";
+
+    for (size_t i = start_id; i < end_id; i++)
+    {
+        std::cout << "prices[" << i << "]\r\n\tBefore: "<< prices[i];
+
+        /*  Rounds the result to 2 decimal points. */
+        prices[i] *= it->second;
+        double temp = (int)(prices[i] * 100 + .5);
+        std::cout << "\r\n\ttemp: " << temp;
+        prices[i] = (double)temp / 100;
+
+        std::cout << "\r\n\tAfter: "<< prices[i] << "\r\n";
+
+        std::cout << "\tmap_id: " << map_id << "\r\n";
+        std::cout << "\tfx_map first: " << it->first << "\r\n";
+        std::cout << "\tfx_map second: " << it->second << "\r\n";
+        it++;
+    }
 
     return FX_OK;
 }
