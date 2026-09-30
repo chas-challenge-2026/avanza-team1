@@ -23,19 +23,26 @@ public class Holding {
 
     private String currency;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "asset_category")
+    private AssetCategory assetCategory;
+
     // Empty constructor required by JPA
     public Holding() {}
 
     // Custom constructor for manual creation
-    public Holding(Account account, String ticker, String instrumentName,
-                   Double quantity, Double avgBuyPrice, String currency) {
+
+    public Holding(Long id, Account account, String ticker, String instrumentName, Double quantity, Double avgBuyPrice, String currency, AssetCategory assetCategory) {
+        this.id = id;
         this.account = account;
         this.ticker = ticker;
         this.instrumentName = instrumentName;
         this.quantity = quantity;
         this.avgBuyPrice = avgBuyPrice;
         this.currency = currency;
+        this.assetCategory = assetCategory;
     }
+
 
     // Getters & setters
 
@@ -93,5 +100,13 @@ public class Holding {
 
     public void setCurrency(String currency) {
         this.currency = currency;
+    }
+
+    public AssetCategory getAssetCategory() {
+        return assetCategory;
+    }
+
+    public void setAssetCategory(AssetCategory assetCategory) {
+        this.assetCategory = assetCategory;
     }
 }
