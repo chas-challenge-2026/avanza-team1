@@ -75,6 +75,13 @@
             <version>5.19.0</version>
         </dependency>
 
+        <!-- Spring Security dependency: enables SecurityFilterChain and modern security architecture in v2 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
+
     </dependencies>
     <build>
         <plugins>
