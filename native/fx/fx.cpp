@@ -71,8 +71,6 @@ FX_Code fx_convert_current(FX_Data *fx_data, const char *curr)
 
 FX_Code fx_curl(const char *url, Response *response)
 {
-    // std::cout << "url: " << url << "\r\n";
-
     CURL *handle = curl_easy_init();
     CURLcode result;
     if (handle == NULL)
@@ -144,8 +142,6 @@ FX_Code fx_parse_string_interval(const char *buffer, std::map<std::string, doubl
         std::cout << "Error on line " << json_error.line << ": " << json_error.text << "\r\n";
         return FX_ERR_JSON;
     }
-
-    // std::cout << "Size: " << json_object_size(json);
     
     size_t i;
     const char *key;
@@ -177,46 +173,10 @@ FX_Code fx_parse_string_interval(const char *buffer, std::map<std::string, doubl
         fx_map->insert({date, fx_rate});
     }
 
-    /* Example of how to loop through the map */
-    // std::cout << "\r\nTrying to print the map:\r\n";
-    // for (auto& p : fx_map)
-    // {
-    //     std::cout << p.first << " " << p.second << "\r\n";
-    // }
-
-    /* Example of finding the value of a certain day */
-    // std::cout << "\r\nTrying to find key \"2025-04-02\":\r\n";
-    // auto it = fx_map.find("2025-04-02");
-    // if (it != fx_map.end())
-    // {
-    //     std::cout << it->first << " " << it->second << "\r\n";
-    // }
-    // else
-    // {
-    //     std::cout << "Key not found!\r\n";
-    // }
-
     json_decref(json);
 
     return FX_OK;
 }
-
-/* 
-Instrument 2 (index 20-29) is USD, needs to be converted into SEK
-
-int instruments = 5;
-int days = 10
-int instrument_target = 2;
-double prices[] = {311.43, 301.25, 295.55, 263.76, 265.72, 262.64, 260.21, 261.33, 264.69, 263.57, 
-                        266.37, 267.20, 263.37, 265.34, 262.64, 264.32, 260.49, 261.52, 258.82, 256.58, 
-                        26.13, 25.77, 25.95, 25.56, 25.45, 25.78, 25.49, 25.11, 25.23, 25.05, 
-                        248.24, 246.58, 243.64, 245.03, 252.59, 247.16, 249.71, 252.92, 250.04, 253.04, 
-                        251.71, 254.69, 253.93, 256.26, 259.44, 258.30, 261.04, 261.89, 264.70, 267.90};
-
-// FX_Code convert_series(double *prices, size_t id_start, size_t id_stop, const char *curr)
-
-
-*/
 
 
 FX_Code fx_convert_series(double *prices, int instruments, int instrument_target, int days, const char *curr)
