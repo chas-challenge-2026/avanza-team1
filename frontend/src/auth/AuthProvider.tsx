@@ -8,8 +8,8 @@ function AuthProvider({ children }: { children: ReactNode }): JSX.Element {
   // Det gör att en redan inloggad user (token finns i localStorage) förblir inloggad efter en sidladdning.
   const [user, setUser] = useState<User | null>(() => getCurrentUser());
 
-  function login(email: string, password: string): boolean {
-    const result = loginRequest(email, password); // anropar mock-auth i auth.ts
+  async function login(email: string, password: string): Promise<boolean> {
+    const result = await loginRequest(email, password); // anropar mock-auth i auth.ts
     if (result === null) {
       return false; // fel credentials - komponenten som anropar visar felmeddelande
     }

@@ -11,9 +11,9 @@ function Login(): JSX.Element {
   const navigate = useNavigate();
   const passwordInputRef = useRef<HTMLInputElement>(null);
 
-  function handleSubmit(event: FormEvent): void {
+  async function handleSubmit(event: FormEvent): Promise<void> {
     event.preventDefault();
-    const success = login(email, password);
+    const success = await login(email, password);
 
     if (success) {
       navigate('/');
