@@ -1,15 +1,32 @@
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import GoalAllocation from './GoalAllocation'
+
+const createTestQueryClient = () => new QueryClient({
+  defaultOptions: {
+    queries: { retry: false },
+    mutations: { retry: false },
+  },
+})
+
+const renderWithQueryClient = (component: React.ReactElement) => {
+  const testQueryClient = createTestQueryClient()
+  return render(
+    <QueryClientProvider client={testQueryClient}>
+      {component}
+    </QueryClientProvider>
+  )
+}
 
 beforeEach(() => {
   localStorage.clear()
 })
 
 describe('GoalAllocation', () => {
-  it('saves when the initial sum is valid (100%)', () => {
+  it('saves when the initial sum is valid (100%)', async () => {
     const onTargetSaved = vi.fn()
-    render(
+    renderWithQueryClient(
       <GoalAllocation
         targetAktierPct={60}
         targetStabiltPct={40}
@@ -19,12 +36,14 @@ describe('GoalAllocation', () => {
 
     fireEvent.click(screen.getByRole('button', { name: /spara/i }))
 
-    expect(onTargetSaved).toHaveBeenCalledWith(60, 40)
+    await waitFor(() => {
+      expect(onTargetSaved).toHaveBeenCalledWith(60, 40)
+    })
   })
 
-  it('does not save when the initial sum is invalid (not 100%)', () => {
+  it('does not save when the initial sum is invalid (not 100%)', async () => {
     const onTargetSaved = vi.fn()
-    render(
+    renderWithQueryClient(
       <GoalAllocation
         targetAktierPct={70}
         targetStabiltPct={50}
@@ -34,11 +53,13 @@ describe('GoalAllocation', () => {
 
     fireEvent.click(screen.getByRole('button', { name: /spara/i }))
 
-    expect(onTargetSaved).not.toHaveBeenCalled()
+    await waitFor(() => {
+      expect(onTargetSaved).not.toHaveBeenCalled()
+    })
   })
 
   it('shows "Spara mål" and is enabled before saving', () => {
-    render(
+    renderWithQueryClient(
       <GoalAllocation
         targetAktierPct={60}
         targetStabiltPct={40}
@@ -50,8 +71,8 @@ describe('GoalAllocation', () => {
     expect(button).toBeEnabled()
   })
 
-  it('shows "Mål sparat" and is disabled after saving', () => {
-    render(
+  it('shows "Mål sparat" and is disabled after saving', async () => {
+    renderWithQueryClient(
       <GoalAllocation
         targetAktierPct={60}
         targetStabiltPct={40}
@@ -61,12 +82,14 @@ describe('GoalAllocation', () => {
 
     fireEvent.click(screen.getByRole('button', { name: 'Spara mål' }))
 
-    const button = screen.getByRole('button', { name: 'Mål sparat' })
-    expect(button).toBeDisabled()
+    await waitFor(() => {
+      const button = screen.getByRole('button', { name: 'Mål sparat' })
+      expect(button).toBeDisabled()
+    })
   })
 
-  it('re-enables "Spara mål" after editing a field again', () => {
-    render(
+  it('re-enables "Spara mål" after editing a field again', async () => {
+    renderWithQueryClient(
       <GoalAllocation
         targetAktierPct={60}
         targetStabiltPct={40}
@@ -77,7 +100,9 @@ describe('GoalAllocation', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Spara mål' }))
     fireEvent.change(screen.getByDisplayValue('60'), { target: { value: '70' } })
 
-    const button = screen.getByRole('button', { name: 'Spara mål' })
-    expect(button).toBeEnabled()
+    await waitFor(() => {
+      const button = screen.getByRole('button', { name: 'Spara mål' })
+      expect(button).toBeEnabled()
+    })
   })
 })
