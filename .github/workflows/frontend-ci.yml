@@ -10,6 +10,9 @@ on:
 jobs:
   ci:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
     steps:
       - uses: actions/checkout@v4
       - name: Setup Node.js
@@ -17,10 +20,10 @@ jobs:
         with:
           node-version: '18'
       - name: Install dependencies
-        run: cd frontend && npm install
+        run: npm install
       - name: Run lint
-        run: cd frontend && npm run lint
+        run: npm run lint
       - name: Run tests
-        run: cd frontend && npm run test
+        run: npm run test
       - name: Run build
-        run: cd frontend && npm run build
+        run: npm run build
