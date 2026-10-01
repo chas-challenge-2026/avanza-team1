@@ -227,7 +227,7 @@ FX_Code fx_convert_series(double *prices, int instruments, int instrument_target
         return FX_ERR_INVALID_CURRENCY;
     }
 
-    if (days < 1 || instruments < 1 || instruments > sizeof(prices) / sizeof(double) || instrument_target < 0 || instrument_target > instruments - 1)
+    if (days < 1 || instruments < 1 || instrument_target < 0 || instrument_target > instruments - 1)
     {
         return FX_ERR;
     }
@@ -250,40 +250,31 @@ FX_Code fx_convert_series(double *prices, int instruments, int instrument_target
     char start_date[11], end_date[11];
     strftime(start_date, sizeof(char) * 11, "%Y-%m-%d", &start_time_tm);
     strftime(end_date, sizeof(char) * 11, "%Y-%m-%d", &end_time_tm);
-
-    std::cout << "start date: " << start_date << "\r\nend date: " << end_date << "\r\n";
-
-        
     
-        char url[URL_LEN];
+    char url[URL_LEN];
 
-        snprintf(url, URL_LEN, "https://api.riksbank.se/swea/v1/Observations/sek%spmi/%s/%s", curr, start_date, end_date);
-        
-        
-        /*  response.string gets allocated on the heap in fx_curl, remember to free after parsing */
-        Response response;
-        FX_Code result = fx_curl(url, &response);
-        if (result != FX_OK)
-        {
-            free(response.string);
-            return result;
-        }
-
-        std::cout << "response.string: " << response.string << "\r\n";
-
-        std::map<std::string, double> fx_map;
-        result = fx_parse_string_interval(response.string, &fx_map);
-        if (result != FX_OK)
-        {
-            free(response.string);
-            return result;
-        }
-
-
-
+    snprintf(url, URL_LEN, "https://api.riksbank.se/swea/v1/Observations/sek%spmi/%s/%s", curr, start_date, end_date);
+    
+    
+    /*  response.string gets allocated on the heap in fx_curl, remember to free after parsing */
+    Response response;
+    FX_Code result = fx_curl(url, &response);
+    if (result != FX_OK)
+    {
         free(response.string);
+        return result;
+    }
 
-    size_t total_len = instruments * days;
+    std::map<std::string, double> fx_map;
+    result = fx_parse_string_interval(response.string, &fx_map);
+    if (result != FX_OK)
+    {
+        free(response.string);
+        return result;
+    }
+
+    free(response.string);
+
     size_t start_id = days * instrument_target;
     size_t end_id = start_id + days;
     size_t map_id = fx_map.size() - days + 1;
@@ -291,25 +282,14 @@ FX_Code fx_convert_series(double *prices, int instruments, int instrument_target
 
     std::advance(it, map_id - 1);
 
-    std::cout << "total_len: " << total_len << "\r\n";
-    std::cout << "start_id: " << start_id << "\r\n";
-    std::cout << "end_id: " << end_id << "\r\n";
-
     for (size_t i = start_id; i < end_id; i++)
     {
-        std::cout << "prices[" << i << "]\r\n\tBefore: "<< prices[i];
 
         /*  Rounds the result to 2 decimal points. */
         prices[i] *= it->second;
         double temp = (int)(prices[i] * 100 + .5);
-        std::cout << "\r\n\ttemp: " << temp;
         prices[i] = (double)temp / 100;
 
-        std::cout << "\r\n\tAfter: "<< prices[i] << "\r\n";
-
-        std::cout << "\tmap_id: " << map_id << "\r\n";
-        std::cout << "\tfx_map first: " << it->first << "\r\n";
-        std::cout << "\tfx_map second: " << it->second << "\r\n";
         it++;
     }
 
