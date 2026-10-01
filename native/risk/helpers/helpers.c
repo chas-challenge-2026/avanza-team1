@@ -2,7 +2,12 @@
 
 #include <math.h>
 
-/* Validates that all prices are positive and finite. */
+/**
+ * @brief Validate a price series.
+ * 
+ * A valid price series must be non-NULL, contain at least one price,
+ * and consist entirely of finite, positive values.
+ */
 bool valid_price_series(const double prices[], size_t size)
 {
     if (prices == NULL || size == 0)
@@ -21,7 +26,7 @@ bool valid_price_series(const double prices[], size_t size)
     return true;
 }
 
-/* WIP: Calculates simple returns from a price series. Unused as of now, but could be useful with the backtest engine in the future. */
+
 RiskStatus calculate_returns(const double prices[], size_t size, double returns[])
 {
     if (returns == NULL || !valid_price_series(prices, size))
@@ -42,7 +47,7 @@ RiskStatus calculate_returns(const double prices[], size_t size, double returns[
     return RISK_SUCCESS;
 }
 
-/* Calculates return statistics for mean and variance based on the Welford algorithm. Gives better numerical stability, but not effective for rolling functions. */
+
 RiskStatus calculate_return_statistics(const double prices[], size_t size, double *mean, double *variance)
 {
     if (mean == NULL || variance == NULL || !valid_price_series(prices, size))
@@ -78,6 +83,11 @@ RiskStatus calculate_return_statistics(const double prices[], size_t size, doubl
     return RISK_SUCCESS;
 }
 
+/**
+ * @brief Add a return value to rolling statistics.
+ * 
+ * Updates the running sum, sum of squares and observation count.
+ */
 void rolling_statistics_add(RollingStatistics *stats, double value)
 {
     stats->sum += value;
@@ -85,6 +95,11 @@ void rolling_statistics_add(RollingStatistics *stats, double value)
     stats->count++;
 }
 
+/**
+ * @brief Remove a return value from rolling statistics.
+ * 
+ * Updates the running sum, sum of squares and observation count.
+ */
 void rolling_statistics_remove(RollingStatistics *stats, double value)
 {
     stats->sum -= value;
@@ -92,11 +107,19 @@ void rolling_statistics_remove(RollingStatistics *stats, double value)
     stats->count--;
 }
 
+/**
+ * @brief Calculate the mean of the current rolling statistics.
+ */
 double rolling_statistics_mean(const RollingStatistics *stats)
 {
     return stats->sum / (double)stats->count;
 }
 
+/**
+ * @brief Calculate the sample variance of the current rolling statistics.
+ * 
+ * Returns zero when numerical rounding produces a small negative variance.
+ */
 double rolling_statistics_variance(const RollingStatistics *stats)
 {
     double variance = (stats->sum_squared - (stats->sum * stats->sum) / (double)stats->count) / (double)(stats->count - 1);
