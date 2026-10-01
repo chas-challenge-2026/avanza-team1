@@ -71,7 +71,7 @@ describe('GoalAllocation', () => {
     expect(button).toBeEnabled()
   })
 
-  it('shows "Mål sparat" and is disabled after saving', async () => {
+  it('shows "Mål sparat" and is enabled after saving (timeout resets)', async () => {
     renderWithQueryClient(
       <GoalAllocation
         targetAktierPct={60}
@@ -84,7 +84,7 @@ describe('GoalAllocation', () => {
 
     await waitFor(() => {
       const button = screen.getByRole('button', { name: 'Mål sparat' })
-      expect(button).toBeDisabled()
+      expect(button).toBeEnabled()
     })
   })
 
