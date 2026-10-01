@@ -31,3 +31,4 @@ inte i en separat logg.
 | 2026-09-10 | Henrik | Småfixat genom att lägga till en anteckning kring användandet av free på en funktion. Lagt till fler tester till FX-tests | - | #61 |
 | 2026-09-16 | Henrik | Lagt till intervaller till Riksbanks API:et. Behöver fortfarande parsa JSON-datan ordentligt. La till ett test för intervall och fixade till en felaktig API-sträng. | - | #98 |
 | 2026-09-16 | Pär | Städade upp lite i risk.c och tog bort en del hjälpfunktioner och la i en separat helpers.c/h så att det blir lite mer städat. | - | #73 |
+| 2026-09-31 | Henrik | Gjort klart intervall-konversion så gott det går innan brygga mellan native och backend är på plats. | - | #98 |
