@@ -17,15 +17,53 @@ const MOCK_USERS: MockAccount[] = [
   { email: 'erik@example.com', password: 'password123', user: { id: '2', name: 'Erik Johansson', email: 'erik@example.com' } },
 ];
 
-export function login(email: string, password: string): AuthResult | null {
-  // && kräver att BÅDA fält matchar - annars skulle fel lösenord med rätt email också logga in.
-  const account = MOCK_USERS.find(a => a.email === email && a.password === password);
-  if (!account) return null; // null signalerar "fel credentials" till anroparen (AC: visa felmeddelande)
+export async function login(email: string, password: string): Promise<AuthResult | null> {
+  try {
+    // STEG 1: fetch till backend
+    const response = await fetch('http://localhost:8082/api/auth/login',{
+      method: 'POST',
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+      body: new URLSearchParams({ email, password }).toString()
+      })
 
-  const token = 'mock-token';
-  localStorage.setItem(TOKEN_KEY, token); // AC: token ska persistas i localStorage
-  localStorage.setItem(USER_KEY, JSON.stringify(account.user)); // sparas separat från token så vi vet VEM som är inloggad efter en sidladdning
-  return { user: account.user, token };
+    // STEG 2: Om response.ok
+    if (!response.ok) {
+      return null;
+    }
+
+    // STEG 3: Extrahera token från JSON
+    const data = await response.json()
+    const token = data.token
+
+    if (!token) {
+      return null; // Backend svarade utan token
+    }
+
+    const payload = token.split('.')[1]  // ta mitten-delen
+    const decoded = JSON.parse(atob(payload))  // dekoda base64
+    const userId = decoded.sub  // "sub" = userId
+
+    const user: User = {
+      id: userId,
+      name: email.split('@')[0],  // anna@example.com → anna
+      email: email
+    }
+
+    localStorage.setItem(TOKEN_KEY, token);
+    localStorage.setItem(USER_KEY, JSON.stringify(user));
+
+    return { user, token };
+
+  } catch {
+    // Fallback till MOCK_USERS om backend är nere
+    const account = MOCK_USERS.find(a => a.email === email && a.password === password);
+    if (!account) return null;
+
+    const token = 'mock-token';
+    localStorage.setItem(TOKEN_KEY, token);
+    localStorage.setItem(USER_KEY, JSON.stringify(account.user));
+    return { user: account.user, token };
+  }
 }
 
 export function logout(): void {
