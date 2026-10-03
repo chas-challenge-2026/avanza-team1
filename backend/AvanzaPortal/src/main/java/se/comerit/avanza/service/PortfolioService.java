@@ -12,6 +12,8 @@ public class PortfolioService {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+    @Autowired
+    private AlertService alertService;  // ← DENNA här för att spara alerts
 
     private static final double USD_TO_SEK = 10.5; // Example exchange rate or loaded configuration
     private static final double DRIFT_THRESHOLD = 0.05; // 5% drift threshold
@@ -107,12 +109,35 @@ public class PortfolioService {
             double categoryVal = categoryTotals.getOrDefault(category, 0.0);
             double actualPct = totalPortfolioValue > 0 ? (categoryVal / totalPortfolioValue) * 100.0 : 0.0;
             double targetPct = targetMap.getOrDefault(category, 0.0);
+            double driftPct = actualPct - targetPct;
             double drift = Math.abs(actualPct - targetPct) / 100.0;
 
-            boolean overThreshold = drift > DRIFT_THRESHOLD;
+            boolean overThreshold = Math.abs(driftPct /100.0) > DRIFT_THRESHOLD;
+
+            //I loopen där du beräknar drift per assetCategory:
             if (overThreshold) {
                 anyDrift = true;
+
+                // Bygg dynamiskt varningsmeddelande baserat på asset_category
+                String alertMessage = String.format(Locale.US,
+                        "%s-allokering avviker %.2f%% (mål %.2f%%, aktuell %.2f%% ",
+                        category, // t.ex. "Aktier"
+                       driftPct,
+                        targetPct,
+                        actualPct
+                );
+
+                // Skapa ett temporärt alert-objekt eller spara till databasen
+                Map<String, Object> dynamicAlert = new HashMap<>();
+                dynamicAlert.put("alert_type", "DRIFT");
+                dynamicAlert.put("message", alertMessage);
+
+                // Lägg till i listan över aktiva alerts för dashboarden
+                recentAlerts.add(dynamicAlert);
+                // ✅ SPARA I DB
+                alertService.saveAlert(userId, "DRIFT", alertMessage);
             }
+
 
             Map<String, Object> row = new HashMap<>();
             row.put("assetCategory", category);
