@@ -3,6 +3,7 @@ package se.comerit.avanza.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+import se.comerit.avanza.dto.*;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -184,5 +185,109 @@ public class PortfolioService {
         currentPrices.put("SAND", 212.80);
         currentPrices.put("DEFAULT", 100.0);
         return currentPrices;
+    }
+    public PortfolioResponse getPortfolioResponse(Long userId) {
+        Map<String, Object> data = buildDashboardData(userId);
+
+        // 1. Hämta riktigt användarnamn från DB
+        String userName = "Användare";
+        try {
+            userName = jdbcTemplate.queryForObject("SELECT name FROM users WHERE id = ?", String.class, userId);
+        } catch (Exception ignored) {}
+
+        // 2. Skapa konto-lookup för ID -> Type (t.ex. 1 -> "ISK")
+        String accountSql = "SELECT id, account_type FROM accounts WHERE user_id = ?";
+        List<Map<String, Object>> accountRows = jdbcTemplate.queryForList(accountSql, userId);
+        Map<Integer, String> accountTypeById = new HashMap<>();
+        for (Map<String, Object> acc : accountRows) {
+            accountTypeById.put((Integer) acc.get("id"), (String) acc.get("account_type"));
+        }
+
+        // 3. Mappa FX
+        FxDto fx = new FxDto(USD_TO_SEK, 11.5);
+
+        // 4. Mappa Accounts
+        @SuppressWarnings("unchecked")
+        List<Map<String, Object>> accountsList = (List<Map<String, Object>>) data.get("accounts");
+        List<AccountDto> accounts = accountsList.stream()
+                .map(a -> new AccountDto(
+                        (String) a.get("accountType"),
+                        (String) a.get("accountType"),
+                        ((Number) a.get("totalValueSek")).doubleValue()
+                ))
+                .toList();
+
+        // 5. Mappa Holdings (med fixat kontonamn!)
+        @SuppressWarnings("unchecked")
+        List<Map<String, Object>> holdingsList = (List<Map<String, Object>>) data.get("holdings");
+        List<HoldingDto> holdings = holdingsList.stream()
+                .map(h -> {
+                    Integer accId = (Integer) h.get("account_id");
+                    String accType = accountTypeById.getOrDefault(accId, "DEPA");
+                    String rawCategory = (String) h.getOrDefault("asset_category", "EQUITY");
+                    String mappedAssetClass = ("EQUITY".equalsIgnoreCase(rawCategory) || "AKTIER".equalsIgnoreCase(rawCategory))
+                            ? "AKTIER"
+                            : "STABILT";
+
+                    return new HoldingDto(
+                            (String) h.get("ticker"),
+                            (String) h.get("instrument_name"),
+                            accType, // ← Sätter "ISK", "KF", etc. istället för null
+                            ((Number) h.get("quantity")).doubleValue(),
+                            (String) h.get("currency"),
+                            ((Number) h.get("valueSek")).doubleValue(),
+                            ((Number) h.get("unrealizedReturnPct")).doubleValue(),
+                            mappedAssetClass
+                    );
+                })
+                .toList();
+
+        // 6. Mappa Allocation
+        @SuppressWarnings("unchecked")
+        List<Map<String, Object>> allocRows = (List<Map<String, Object>>) data.get("allocationRows");
+        double actualAktier = 0.0, actualStabilt = 0.0, targetAktier = 0.0, targetStabilt = 0.0;
+
+        for (Map<String, Object> row : allocRows) {
+            String cat = (String) row.get("assetCategory");
+            double actual = ((Number) row.get("actual")).doubleValue();
+            double target = ((Number) row.get("target")).doubleValue();
+
+            if ("EQUITY".equalsIgnoreCase(cat) || "AKTIER".equalsIgnoreCase(cat)) {
+                actualAktier = actual;
+                targetAktier = target;
+            } else {
+                actualStabilt = actual;
+                targetStabilt = target;
+            }
+        }
+
+        boolean anyDrift = (Boolean) data.getOrDefault("anyDrift", false);
+        AllocationDto allocation = new AllocationDto(
+                actualAktier, actualStabilt, targetAktier, targetStabilt, 5.0, anyDrift
+        );
+
+        // 7. Mappa Alerts
+        @SuppressWarnings("unchecked")
+        List<Map<String, Object>> alertsList = (List<Map<String, Object>>) data.get("recentAlerts");
+        List<AlertDto> alerts = alertsList.stream()
+                .map(a -> new AlertDto(
+                        (String) a.get("alert_type"),
+                        (String) a.get("message")
+                ))
+                .filter(a -> a.message().contains("EQUITY") || a.message().contains("STABLE"))
+                .distinct() // Tar bort identiska dubblettmeddelanden
+                .toList();
+
+        double totalVal = ((Number) data.get("totalPortfolioValue")).doubleValue();
+
+        return new PortfolioResponse(
+                userName, // ← Riktigt användarnamn
+                totalVal,
+                fx,
+                accounts,
+                allocation,
+                holdings,
+                alerts
+        );
     }
 }
