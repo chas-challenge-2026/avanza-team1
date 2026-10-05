@@ -46,6 +46,7 @@ public class HoldingController {
                              @RequestParam String quantity,
                              @RequestParam String avgBuyPrice,
                              @RequestParam(defaultValue = "SEK") String currency,
+                             @RequestParam String assetCategory,
                              Model model) {
 
         // Read userId from SecurityContext (v2)
@@ -56,7 +57,7 @@ public class HoldingController {
         Long uid = Long.valueOf(userId);
 
         // Add holding (userId not needed here yet, but available if needed later)
-        holdingService.addHolding(accountId, ticker, instrumentName, quantity, avgBuyPrice, currency);
+        holdingService.addHolding(accountId, ticker, instrumentName, quantity, avgBuyPrice, currency, assetCategory);
 
         return "redirect:/holdings";
     }

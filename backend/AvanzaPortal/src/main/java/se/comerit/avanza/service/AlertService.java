@@ -109,6 +109,17 @@ public class AlertService {
         result.put("driftThreshold", (int)(DRIFT_THRESHOLD * 100));
         return result;
     }
+    /**
+     * Spara alert i databasen
+     */
+    public void saveAlert(Long userId, String alertType, String message) {
+        String sql = """
+            INSERT INTO alerts (user_id, alert_type, message, dismissed, created_at)
+            VALUES (?, ?, ?, false, NOW())
+            """;
+
+        jdbcTemplate.update(sql, userId, alertType, message);
+    }
 
     // IDOR — Notiser (Insecure Direct Object Reference)
     // Problem: UPDATE alerts SET dismissed = true WHERE id = ?
