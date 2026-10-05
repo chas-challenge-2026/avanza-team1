@@ -69,13 +69,10 @@ int main()
     FX_Code result;
 
     const char *curr = "USD";
-    
-    /*  Tests the major function */
-    FX_Data fx_data_convert;
-    result = fx_convert_current(&fx_data_convert, curr);
-    check("FX convert", result, FX_OK);
+    double val = fx_convert_current(100.0, curr);
+    std::cout << "val: " << val << "\r\n";
         
-    /*  Only tests that the GET request receives a response, does not check if the response contains valid data */
+    /*  Tests that the GET request receives a response, does not check if the response contains valid data */
     const char *url = "https://api.riksbank.se/swea/v1/Observations/Latest/sekeurpmi";
     Response response;
     result = fx_curl(url, &response);

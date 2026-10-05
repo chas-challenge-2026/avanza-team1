@@ -49,15 +49,15 @@ typedef struct
 size_t write_data(char *buffer, size_t size, size_t nmemb, void *user_data);
 
 /**
- * @brief Gets the current exchange rate between SEK and curr.
+ * @brief Calculates an amount of money from a different currency into Swedish kronor (SEK).
  * 
- * @param fx_data Pointer to FX_Data struct which will hold timestamp and exchange rate.
+ * @param val Amount of money in curr currency to convert to SEK.
  * @param curr 3 letter currency code (examples: EUR, USD, CAD) to convert into Swedish kronor (SEK)
  * 
- * @return Error code.
+ * @return Resulting amount of money in SEK.
  * 
  */
-FX_Code fx_convert_current(FX_Data *fx_data, const char *curr);
+double fx_convert_current(double val, const char *curr);
 
 /**
  * @brief Converts a series of daily stock prices from curr to SEK.

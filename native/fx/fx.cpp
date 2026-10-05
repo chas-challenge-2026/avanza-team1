@@ -30,23 +30,18 @@ size_t write_data(char *buffer, size_t size, size_t nmemb, void *user_data)
     return real_size;
 }
 
-FX_Code fx_convert_current(FX_Data *fx_data, const char *curr)
+double fx_convert_current(double val, const char *curr)
 {
-    if (fx_data == NULL)
-    {
-        return FX_ERR_NULLPTR;
-    }
-
     /*  Expect currency to be 3 letters (examples: GBP, EUR, USD) */
     if ((strlen(curr) != 3))
     {
-        return FX_ERR_INVALID_CURRENCY;
+        return 0;
     }
  
+    double res;
     char url[URL_LEN];
 
     snprintf(url, URL_LEN, "https://api.riksbank.se/swea/v1/Observations/Latest/SEK%spmi", curr);
-    
     
     /*  response.string gets allocated on the heap in fx_curl, remember to free after parsing */
     Response response;
@@ -54,19 +49,22 @@ FX_Code fx_convert_current(FX_Data *fx_data, const char *curr)
     if (result != FX_OK)
     {
         free(response.string);
-        return result;
+        return 0;
     }
 
-    result = fx_parse_string(fx_data, response.string);
+    FX_Data fx_data;
+    result = fx_parse_string(&fx_data, response.string);
     if (result != FX_OK)
     {
         free(response.string);
-        return result;
+        return 0;
     }
 
     free(response.string);
 
-    return FX_OK;
+    res = val * fx_data.rate;
+
+    return res;
 }
 
 FX_Code fx_curl(const char *url, Response *response)
