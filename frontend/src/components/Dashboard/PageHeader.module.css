@@ -1,11 +1,16 @@
 .pageHeader {
+  max-width: 100dvw;
+  width: 100dvw;
   margin-bottom: var(--space-large);
+  padding-top: 2rem;
+  background-image: linear-gradient(157.68421395683941deg, rgba(72, 196, 60, 0.2) 37.024%, rgba(72, 196, 60, 0.5) 62.976%);
 }
 
 .title {
   font-size: var(--font-size-xlarge);
   font-weight: 600;
   color: var(--text-color-alt);
+  margin-top: 0;
   margin-bottom: var(--space-xsmall);
 }
 

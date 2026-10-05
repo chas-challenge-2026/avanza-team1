@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: clamp(300px, 100%, 500px);
+  width: clamp(200px, 100%, 300px);
 }
 
 .svg {

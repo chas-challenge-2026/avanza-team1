@@ -2,7 +2,7 @@
   background-color: #f5f5f5;
   min-height: calc(100vh - 80px);
   height: 100%;
-  padding: 1rem;
+  /* padding: 1rem; */
 }
 
 .table th {
@@ -26,8 +26,13 @@ tr.success td {
 
 @media (min-width: 768px) {
   .pageContent {
-    padding: 2rem;
-    max-width: 1200px;
+    /* padding: 2rem; */
+    max-width: 100%;
     margin: 0 auto;
+    justify-items: center;
+  }
+
+  .pageContent > * {
+    max-width: 1024px;
   }
 }
