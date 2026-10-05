@@ -230,38 +230,28 @@ RiskStatus calculate_rolling_sharpe(const double prices[], size_t size, size_t w
         rolling_statistics_add(&stats, daily_return);
     }
 
-    double mean = rolling_statistics_mean(&stats);
-    double variance = rolling_statistics_variance(&stats);
-    double volatility = sqrt(variance);
-    if (volatility < 1e-12)
+    for (size_t i = 0; i < result_count; i++)
     {
-        return RISK_ZERO_VOLATILITY;
-    }
-
-    double daily_sharpe = (mean - daily_risk_free_rate) / volatility;
-
-    results[0] = daily_sharpe * sqrt(ANNUAL_TRADING_DAYS);
-
-    for (size_t i = 1; i < result_count; i++)
-    {
-        /* Slide the window forward by one price: remove the oldest return and add the newest return. */
-        double removed_return = (prices[i] - prices[i - 1]) / prices[i - 1];
-        double added_return = (prices[i + window - 1] - prices[i + window - 2]) / prices[i + window - 2];
-                
-        rolling_statistics_remove(&stats, removed_return);
-        rolling_statistics_add(&stats, added_return);
-        
-        mean = rolling_statistics_mean(&stats);
-        variance = rolling_statistics_variance(&stats);
-        volatility = sqrt(variance);
-        if (volatility < 1e-12)
+        if (i > 0)
         {
-            return RISK_ZERO_VOLATILITY;
+            /* Slide the window forward by one price: remove the oldest return and add the newest return. */
+            double removed_return = (prices[i] - prices[i - 1]) / prices[i - 1];
+            double added_return = (prices[i + window - 1] - prices[i + window - 2]) / prices[i + window - 2];
+                    
+            rolling_statistics_remove(&stats, removed_return);
+            rolling_statistics_add(&stats, added_return);
         }
         
-        daily_sharpe = (mean - daily_risk_free_rate) / volatility;
-
-        results[i] = daily_sharpe * sqrt(ANNUAL_TRADING_DAYS);
+        double volatility = sqrt(rolling_statistics_variance(&stats));
+        if (volatility < 1e-12)
+        {
+            results[i] = NAN; /* Undefined for a flat window. */
+        }
+        else
+        {
+            double daily_sharpe = (rolling_statistics_mean(&stats) - daily_risk_free_rate) / volatility;
+            results[i] = daily_sharpe * sqrt(ANNUAL_TRADING_DAYS);
+        }
     }
 
     return RISK_SUCCESS;
@@ -292,35 +282,3 @@ RiskStatus calculate_rolling_max_drawdown(const double prices[], size_t size, si
 
     return RISK_SUCCESS;
 }
-
-// RiskStatus calculate_rolling_ewma_volatility(const double prices[], size_t size, size_t window, double lambda, double results[])
-// {
-//     if (results == NULL || !valid_price_series(prices, size))
-//     {
-//         return RISK_INVALID_INPUT;
-//     }
-    
-//     if (window < 2 || window > size)
-//     {
-//         return RISK_INSUFFICIENT_DATA;
-//     }
-    
-//     if (!isfinite(lambda) || lambda <= 0.0 || lambda >= 1.0)
-//     {
-//         return RISK_INVALID_INPUT;
-//     }
-
-//     results[0] = 0.0;
-
-//     size_t result_count = size - window + 1;
-//     for (size_t i = 0; i < result_count; i++)
-//     {
-//         RiskStatus status = calculate_ewma_volatility(&prices[i], window, lambda, &results[i]);
-//         if (status != RISK_SUCCESS)
-//         {
-//             return status;
-//         }
-//     }
-
-//     return RISK_SUCCESS;
-// }

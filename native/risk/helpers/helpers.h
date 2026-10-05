@@ -6,7 +6,7 @@
 #include <stdbool.h>
 
 /**
- * @brief Running statistics used for rolling return calculations.
+ * @brief Running statistics used for rolling calculations.
  * 
  * Stores the sum and sum of squares of the current observations so that
  * values can be added to and removed from a rolling window efficiently.
@@ -18,7 +18,17 @@ typedef struct
     size_t count;
 } RollingStatistics;
 
-
+/**
+ * @brief Validate a price series.
+ * 
+ * Checks that the price array is non-null, non-empty and contains only finite positive values.
+ * Minimum series length required by specific calculations are checked by those calculations separately.
+ * 
+ * @param prices Price array to validate.
+ * @param size Number of prices.
+ * 
+ * @return true if all prices are valid, otherwise false.
+ */
 bool valid_price_series(const double prices[], size_t size);
 
 /**
@@ -29,7 +39,7 @@ bool valid_price_series(const double prices[], size_t size);
  *
  * @param prices Price array in chronological order.
  * @param size Number of prices. Must be at least 2.
- * @param returns Output array containing size - 1 returns.
+ * @param returns Output array that must have space for size - 1 values.
  * 
  * @return RISK_SUCCESS on success.
  * @return RISK_INVALID_INPUT if prices or returns is invalid.
@@ -40,7 +50,7 @@ RiskStatus calculate_returns(const double prices[], size_t size, double returns[
 /**
  * @brief Calculate the mean and sample variance of daily returns.
  * 
- * Calculates simple daily returns directly from the price series and use
+ * Calculates simple daily returns directly from the price series and uses
  * Welford's online algorithm to calculate their mean and sample variance.
  * Welford's algorithm provides improved numerical stability compared with
  * directly calculating variance from sums.
@@ -57,7 +67,7 @@ RiskStatus calculate_returns(const double prices[], size_t size, double returns[
 RiskStatus calculate_return_statistics(const double prices[], size_t size, double *mean, double *variance);
 
 /**
- * @brief Add a value to rolling statistics.
+ * @brief Add an observation to rolling statistics.
  * 
  * @param stats Rolling statistics to update.
  * @param value Value to add.
@@ -65,17 +75,17 @@ RiskStatus calculate_return_statistics(const double prices[], size_t size, doubl
 void rolling_statistics_add(RollingStatistics *stats, double value);
 
 /**
- * @brief Remove a value from rolling statistics.
+ * @brief Remove an observation from rolling statistics.
  * 
  * @param stats Rolling statistics to update.
- * @param value Value to add.
+ * @param value Value to remove.
  */
 void rolling_statistics_remove(RollingStatistics *stats, double value);
 
 /**
  * @brief Calculate the mean of the current observations.
  * 
- * @param stats Rolling statistics.
+ * @param stats Rolling statistics containing the observations.
  * 
  * @return Mean of the stored observations.
  */
@@ -84,7 +94,10 @@ double rolling_statistics_mean(const RollingStatistics *stats);
 /**
  * @brief Calculate the sample variance of the current observations.
  * 
- * @param stats Rolling statistics.
+ * Uses the running sum and sum squares of the observations.
+ * Negative results caused by floating-point rounding are clamped to zero.
+ * 
+ * @param stats Rolling statistics containing the observations.
  * 
  * @return Sample variance of the stored observations.
  */
