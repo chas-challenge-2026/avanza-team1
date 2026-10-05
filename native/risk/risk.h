@@ -132,7 +132,7 @@ RiskStatus calculate_ewma_volatility(const double prices[], size_t size, double 
  * @param results Output array containing rolling annualized volatility values.
  * 
  * @return RISK_SUCCESS on success.
- * @return RISK_INVALID_INPUT if prices, size or result is invalid.
+ * @return RISK_INVALID_INPUT if prices, size or results is invalid.
  * @return RISK_INSUFFICIENT_DATA if window is less than 3 or greater than size.
  * 
  * @note The output array is valid only when RISK_SUCCESS is returned.
@@ -157,11 +157,11 @@ RiskStatus calculate_rolling_volatility(const double prices[], size_t size, size
  * @param results Output array containing rolling annualized Sharpe ratio values.
  * 
  * @return RISK_SUCCESS on success.
- * @return RISK_INVALID_INPUT if prices, size, result or risk_free_rate is invalid.
+ * @return RISK_INVALID_INPUT if prices, size, results or risk_free_rate is invalid.
  * @return RISK_INSUFFICIENT_DATA if window is less than 3 or greater than size.
- * @return RISK_ZERO_VOLATILITY if a window has effectively zero return volatility.
  * 
  * @note The output array is valid only when RISK_SUCCESS is returned.
+ * @note Windows with zero volatility produce NaN.
  */
 RiskStatus calculate_rolling_sharpe(const double prices[], size_t size, size_t window, double risk_free_rate, double results[]);
 

@@ -43,3 +43,7 @@ inte i en separat logg.
 | 2026-09-30 | Henrik | Historisk lookup för FX | - | #98 |
 | 2026-10-01 | Henrik | Gjort klart intervall-konversion så gott det går innan brygga mellan native och backend är på plats. | - | #98 |
 | 2026-10-01 | Pär | Städat upp en hel del i risk.c/h men även lagt till funktionalitet i helpers.c/h för att underlätta vissa uträkningar och upprepade anrop. | - | #73 |
+| 2026-10-01 | Pär | Uppdaterade BIDRAG.md. Fixade så att en folder bytte namn och den ursprungliga togs bort för att det kan krocka med eventuella funktioner i CMakeLists. Uppdaterade flertalet kommentarer i risk-filerna. | - | #73 |
+| 2026-10-01 | Henrik | Uppdaterade fx.hpp med Doxygen kommentarer för varje funktion. Städade även upp några onödiga print-outs. | - | #98 |
+| 2026-10-05 | Henrik | Uppdaterade fx_convert_current så att den förhoppningsvis kan vara mer intuitiv att använda. Kanske behöver mer arbete vid ett senare tillfälle. | - | #98 |
+| 2026-10-05 | Pär | Ytterligare städning bland risk-filerna och i helpers bland kommentarerna, samt att i risk så skyddas rolling_sharpe nu av en NAN-koll på platta fönster av volatilitet (att priset inte ändras), för att undvika att programmet skickar 0 som svar och sedan avslutar uträkningen, nu skickar den istället NAN för det fönstret och går vidare. Förhoppningsvis fungerar det korrekt, blir ytterligare test när backtest-motorn kopplas in. | - | #73 |
