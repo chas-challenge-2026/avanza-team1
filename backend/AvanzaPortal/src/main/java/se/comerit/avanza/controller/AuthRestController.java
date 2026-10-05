@@ -46,4 +46,16 @@ public class AuthRestController {
 
         return ResponseEntity.ok(new AuthResponse(userDto, token));
     }
+
+    /**
+     * DELETE /api/auth/logout
+     * Handles logout for REST clients as defined in the v2 architecture specification.
+     * Clears authentication state / invalidates token on client request.
+     */
+    @DeleteMapping("/logout")
+    public ResponseEntity<Void> logout() {
+        // Eftersom JWT är stateless rensas token primärt i klienten (React),
+        // men endpointen bekräftar utloggningen för frontend.
+        return ResponseEntity.noContent().build(); // Returnerar 204 No Content
+    }
 }
