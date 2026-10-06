@@ -1,5 +1,4 @@
-import { useState, useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 import PageHeader from "../components/Dashboard/PageHeader";
 import WarningBanner from "../components/Dashboard/WarningBanner";
 import AssetAllocation from "../components/Dashboard/AssetAllocation";
@@ -9,9 +8,9 @@ import NoticesEmpty from "../components/Dashboard/NoticesEmpty";
 import HoldingsTable from "../components/Dashboard/HoldingsTable";
 import "./Portfolio.css";
 import type { Alert, Allocation } from "../types/portfolio";
-import { portfolioApi } from "../api/portfolioApi";
 import { readStoredTarget } from "../lib/targetAllocation";
 import { computeDrift } from "../lib/drift";
+import { usePortfolio } from "../hooks/usePortfolio";
 
 function withDrift(allocation: Allocation): Allocation {
   const { overThreshold } = computeDrift(allocation);
@@ -25,55 +24,39 @@ function driftAlerts(allocation: Allocation): Alert[] {
 }
 
 function Portfolio() {
-  const { data, isPending, isError } = useQuery({
-    queryKey: ["portfolio"],
-    queryFn: () => portfolioApi.getPortfolio(),
-  });
+  const { portfolio, isPending, isError } = usePortfolio();
 
-  const [allocation, setAllocation] = useState<Allocation | null>(null);
+  const [targetOverride, setTargetOverride] = useState<{
+    targetAktierPct: number;
+    targetStabiltPct: number;
+  } | null>(null);
 
-  useEffect(() => {
-    if (!data) return;
-
-    const storedTarget = readStoredTarget();
-
-    setAllocation(
-      withDrift({
-        ...data.allocation,
-        targetAktierPct:
-          storedTarget?.targetAktierPct ?? data.allocation.targetAktierPct,
-        targetStabiltPct:
-          storedTarget?.targetStabiltPct ?? data.allocation.targetStabiltPct,
-      }),
-    );
-  }, [data]);
-
-  if (isPending || allocation === null) {
+  if (isPending) {
     return <p>Laddar portfölj…</p>;
   }
 
-  if (isError || !data) {
+  if (isError || !portfolio) {
     return <p>Kunde inte hämta portföljen.</p>;
   }
 
-  const portfolio = data;
+  const storedTarget = targetOverride ?? readStoredTarget();
 
-  const drift = computeDrift(allocation);
+  const allocation = withDrift({
+    ...portfolio.allocation,
+    targetAktierPct:
+      storedTarget?.targetAktierPct ?? portfolio.allocation.targetAktierPct,
+    targetStabiltPct:
+      storedTarget?.targetStabiltPct ?? portfolio.allocation.targetStabiltPct,
+  });
 
   function handleTargetSaved(
     targetAktierPct: number,
     targetStabiltPct: number,
   ) {
-    setAllocation((prev) => {
-      if (!prev) return prev;
-
-      return withDrift({
-        ...prev,
-        targetAktierPct,
-        targetStabiltPct,
-      });
-    });
+    setTargetOverride({ targetAktierPct, targetStabiltPct });
   }
+
+  const drift = computeDrift(allocation);
 
   return (
     <>
