@@ -1,10 +1,11 @@
 package se.comerit.avanza.controller;
 
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import se.comerit.avanza.dto.AuthResponse;
+import se.comerit.avanza.dto.LoginRequest;
 import se.comerit.avanza.security.JwtService;
 import se.comerit.avanza.service.AuthService;
 
@@ -33,24 +34,28 @@ public class AuthRestController {
      * Frontend must send email/password as request parameters.
      */
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestParam String email,
-                                   @RequestParam String password) {
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request) {
+        var userDto = authService.authenticateUser(request.email(), request.password());
 
-        // Authenticate user using database + BCrypt
-        Map<String, Object> user = authService.authenticate(email, password);
-
-        if (user == null) {
-            // Wrong credentials → return HTTP 401 Unauthorized
-            return ResponseEntity.status(401).body("Invalid credentials");
+        if (userDto == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "Invalid credentials"));
         }
 
-        // Extract userId from DB result
-        Long userId = ((Number) user.get("id")).longValue();
-
-        // Generate JWT token for the authenticated user
+        Long userId = Long.valueOf(userDto.id());
         String token = jwtService.generateToken(userId);
 
-        // Return JSON response: { "token": "..." }
-        return ResponseEntity.ok(Map.of("token", token));
+        return ResponseEntity.ok(new AuthResponse(userDto, token));
+    }
+
+    /**
+     * DELETE /api/auth/logout
+     * Handles logout for REST clients as defined in the v2 architecture specification.
+     * Clears authentication state / invalidates token on client request.
+     */
+    @DeleteMapping("/logout")
+    public ResponseEntity<Void> logout() {
+        // Eftersom JWT är stateless rensas token primärt i klienten (React),
+        // men endpointen bekräftar utloggningen för frontend.
+        return ResponseEntity.noContent().build(); // Returnerar 204 No Content
     }
 }

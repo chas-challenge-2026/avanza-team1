@@ -40,7 +40,7 @@ public class AlertService {
                 "(SELECT id FROM accounts WHERE user_id = " + userId + ")";
         List<Map<String, Object>> holdings = jdbcTemplate.queryForList(holdingSql);
 
-        String targetSql = "SELECT account_type, target_pct FROM target_allocations WHERE user_id = " + userId;
+        String targetSql = "SELECT asset_category, target_pct FROM target_allocations WHERE user_id = " + userId;
         List<Map<String, Object>> targets = jdbcTemplate.queryForList(targetSql);
 
         // Hardcoded prices — THIRD place in the codebase they appear
@@ -108,6 +108,17 @@ public class AlertService {
         result.put("liveAlerts", liveAlerts);
         result.put("driftThreshold", (int)(DRIFT_THRESHOLD * 100));
         return result;
+    }
+    /**
+     * Spara alert i databasen
+     */
+    public void saveAlert(Long userId, String alertType, String message) {
+        String sql = """
+            INSERT INTO alerts (user_id, alert_type, message, dismissed, created_at)
+            VALUES (?, ?, ?, false, NOW())
+            """;
+
+        jdbcTemplate.update(sql, userId, alertType, message);
     }
 
     // IDOR — Notiser (Insecure Direct Object Reference)
