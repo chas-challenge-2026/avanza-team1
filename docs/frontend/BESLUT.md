@@ -1,5 +1,14 @@
 # Beslut — frontend
 
+## 2026-09-01 — CSS-struktur
+
+- Beslut: Placerar resets och globala CSS-variabler i `src/index.css` och grundläggande styles som styr den grova sidlayouten i `App.css`.
+- Varför: `index.css` är den som läses in i `<HEAD>` så den mentala modellen hjälper till att förstå strukturen, dessutom säkerställer man att värden som ska vara globala och kunna kommas åt var som helst verkligen finns med ända "uppifrån toppen". `App.tsx` renderar själva sidstrukturen och de största semantiska avdelningarna så att dess css-fil får innehålla alla style rules som kontrollerar världen utanför komponenterna är det mest logiska.
+- Avgränsning: Gäller resets för marginaler i `<BODY>` och box-sizing för samtliga element, globala `--variabler` för spacing, färger och font-storlekar, regler för `<HEADER>`, `<NAV>` och `<MAIN>`
+- Konsekvens: Det blir lätt att avgöra vad nya deklarationer ska placeras.
+- Bevis: issue #44, PR #79
+- Björn
+
 ## 2026-09-02 — Mock före Java-API
 
 - **Beslut:** UI läser `src/data/portfolio.json` via typen `Portfolio` och `mockPortfolio` tills `GET /api/portfolio` finns.
@@ -16,6 +25,15 @@
 - **Bevis:** issue #47
 - Tomac
 
+## 2026-09-03 — CSS naming convention för klasser och id:n
+
+- Beslut: Naming convention att använda `kebab-case` vid namngivning av klasser och id:n i CSS.
+- Varför: Det är en vanlig standard, och AI modeller brukar oftast använda det i sin genererade kod. Annars föredrar jag själv `camelCase` just när man jobbar i React eftersom det blir mer lättläst kod i JSX-komponenten, men då skulle man eventuellt behöva ändra till det i efterhand i kod-snuttar som kommer från AI.
+- Avgränsning: `STYLING.md`
+- Konsekvens: Vi följer den vanliga standarden i branschen, och vi behöver inte instruera AI-verktyg om att följa en annan konvention.
+- Bevis: issue #44, commit: a1a3f436a762e28ae4f2600f901ccf630b5996f9
+- Björn
+
 ## 2026-09-09 — Målallokering mot mock + localStorage
 
 - **Beslut:** Mål (targetAktierPct / targetStabiltPct) redigeras i UI och sparas i `localStorage` under `ph_target_allocation`. Actual kommer kvar från mocken.
@@ -23,6 +41,15 @@
 - **Avgränsning:** ingen backend, ingen drift-beräkning (#42).
 - **Kontrakt:** fältnamn i `Portfolio` förblir som i #24. Ny UI-kod använder engelska identifierare.
 - **Bevis:** issue #41
+
+## 2026-09-09 — CSS naming convention för klasser och id:n
+
+- Beslut: Ändrade naming convention till `camelCase` vid namngivning av klasser och id:n i CSS.
+- Varför: I React blir det mer lättläst kod i JSX-komponenterna när man inte använder "-" i klassnamnen, och det visade sig att AI gärna rättar sig efter etablerade konventioner om den får context och redan färdiga exempel att gå efter.
+- Avgränsning: `STYLING.md`
+- Konsekvens: Mer överblicklig kod och mindre risk att skriva fel (enklare syntax)
+- Bevis: issue #44, commit: 63555390fdb05781faed2622985e62ae286c6f45
+- Björn
 
 ## 2026-09-10 — Drift räknas i frontend mot mock + sparat mål
 

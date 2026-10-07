@@ -1,0 +1,81 @@
+.container {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.menuButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  background-color: var(--white);
+  border: 1px solid var(--light-gray);
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+
+.menuIcon {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.25rem;
+  width: 1.25rem;
+  height: 1rem;
+}
+
+.line {
+  display: block;
+  width: 100%;
+  height: 0.125rem;
+  background-color: var(--text-color-alt);
+}
+
+.menu {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  min-width: 12rem;
+  background-color: var(--white);
+  border: 1px solid var(--light-gray);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  z-index: 10;
+}
+
+.menu a,
+.logoutButton {
+  width: 100%;
+  padding: var(--space-medium);
+  background-color: var(--white);
+  border: 0;
+  border-bottom: 1px solid var(--light-gray);
+  color: var(--text-color-alt);
+  font-size: var(--font-size-emphasis);
+  font-weight: 600;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.menu a:last-of-type,
+.logoutButton {
+  border-bottom: 0;
+}
+
+.menu a:hover,
+.logoutButton:hover {
+  color: var(--primary-color);
+}
+
+.active {
+  color: var(--primary-color);
+}
+
+.logoutButton {
+  border-top: 1px solid var(--light-gray);
+}

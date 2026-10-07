@@ -1,18 +1,25 @@
 package se.comerit.avanza.security;
 
-import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.ServletRequest;
-import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.List;
 
+/**
+ * JwtAuthenticationFilter integrates JWT authentication into Spring Security.
+ * It extracts the token, validates it and registers the authenticated user
+ * inside the SecurityContext for the current request.
+ */
 @Component
-public class JwtAuthenticationFilter implements Filter {
+public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
 
@@ -21,46 +28,32 @@ public class JwtAuthenticationFilter implements Filter {
     }
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-            throws IOException, ServletException {
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain filterChain)
+            throws ServletException, IOException {
 
-        HttpServletRequest req = (HttpServletRequest) request;
-        HttpServletResponse res = (HttpServletResponse) response;
+        // Extract JWT from Authorization header
+        String token = jwtService.extractToken(request);
 
-        String path = req.getRequestURI();
+        // Validate token and set authentication context
+        if (token != null && jwtService.isValid(token)
+                && SecurityContextHolder.getContext().getAuthentication() == null) {
 
-        // Public endpoints (ingen JWT krävs)
-        if (path.equals("/login") ||
-                path.equals("/logout") ||
-                path.startsWith("/css") ||
-                path.startsWith("/js") ||
-                path.startsWith("/images")) {
+            // Read userId from JWT claims
+            String userId = jwtService.getUserId(token);
 
-            chain.doFilter(request, response);
-            return;
+            // Create authentication object (stateless)
+            UsernamePasswordAuthenticationToken auth =
+                    new UsernamePasswordAuthenticationToken(userId, null, List.of());
+
+            auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+            // Register authenticated user in SecurityContext
+            SecurityContextHolder.getContext().setAuthentication(auth);
         }
 
-        // Läs Authorization-header
-        String authHeader = req.getHeader("Authorization");
-
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            res.setStatus(401);
-            return;
-        }
-
-        String token = authHeader.substring(7);
-
-        try {
-            Long userId = jwtService.validateToken(token);
-
-            // Lägg userId i request så controllers kan använda det
-            req.setAttribute("userId", userId);
-
-            chain.doFilter(request, response);
-
-        } catch (Exception e) {
-            res.setStatus(401);
-            return;
-        }
+        // Continue filter chain
+        filterChain.doFilter(request, response);
     }
 }

@@ -3,6 +3,8 @@ package se.comerit.avanza.service;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import se.comerit.avanza.dto.UserDto;
+
 import java.util.List;
 import java.util.Map;
 
@@ -42,6 +44,19 @@ public class AuthService {
         }
 
         return null;
+    }
+
+    public UserDto authenticateUser(String email, String rawPassword) {
+        Map<String, Object> userMap = authenticate(email, rawPassword);
+        if (userMap == null) {
+            return null;
+        }
+
+        String id = String.valueOf(userMap.get("id"));
+        String name = (String) userMap.get("name");
+        String userEmail = (String) userMap.get("email");
+
+        return new UserDto(id, name, userEmail);
     }
 
 

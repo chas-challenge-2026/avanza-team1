@@ -1,6 +1,7 @@
 package se.comerit.avanza.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
+
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,12 +18,16 @@ public class DashboardController {
     }
 
     @GetMapping("/")
-    public String dashboard(HttpServletRequest request, Model model) {
+    public String dashboard(Model model) {
 
-        Long userId = (Long) request.getAttribute("userId");
+        // Read userId from SecurityContext (v2)
+        String userId = (String) SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getPrincipal();
 
-        // Flyttad logik — nu i service
-        Map<String, Object> data = portfolioService.buildDashboardData(userId);
+        Long uid = Long.valueOf(userId);
+
+        Map<String, Object> data = portfolioService.buildDashboardData(uid);
 
         // Lägg in allt i model (exakt som v1)
         model.addAttribute("accounts", data.get("accounts"));
@@ -36,8 +41,5 @@ public class DashboardController {
         return "dashboard";
     }
 }
-
-
-
 
 
