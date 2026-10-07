@@ -5,11 +5,16 @@
 #include <cstdlib>
 #include <vector>
 
-BacktestResult *run_backtest(const double *prices, int instruments, int days, const char *strategy)
+void free_backtest_result(NativeBridgeModule *result)
 {
-    // Will be implemented and further tested when we have the basic functionality in place.
-    (void)strategy;
+    if (result != nullptr)
+    {
+        free(result);
+    }
+}
 
+NativeBridgeModule *run_backtest(const double *prices, int instruments, int days)
+{
     if (prices == nullptr || days < 3 || instruments < 1)
     {
         return nullptr;
@@ -17,7 +22,7 @@ BacktestResult *run_backtest(const double *prices, int instruments, int days, co
 
     double risk_free_rate = 0.03;
 
-    BacktestResult *result = static_cast<BacktestResult*>(malloc(sizeof(BacktestResult)));
+    NativeBridgeModule *result = static_cast<NativeBridgeModule*>(malloc(sizeof(NativeBridgeModule)));
     if (result == nullptr)
     {
         return nullptr;
@@ -33,24 +38,16 @@ BacktestResult *run_backtest(const double *prices, int instruments, int days, co
     RiskStatus status = calculate_max_drawdown(prices, size, &result->max_drawdown);
     if (status != RISK_SUCCESS)
     {
-        free(result);
+        free_backtest_result(result);
         return nullptr;
     }
 
     status = calculate_sharpe(prices, size, risk_free_rate, &result->sharpe_ratio);
     if (status != RISK_SUCCESS)
     {
-        free(result);
+        free_backtest_result(result);
         return nullptr;
     }
 
     return result;
-}
-
-void free_backtest_result(BacktestResult *result)
-{
-    if (result != nullptr)
-    {
-        free(result);
-    }
 }
