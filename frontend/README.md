@@ -112,6 +112,14 @@ Environment flags, read by Vite from `frontend/.env.development`:
 
 Restart `npm run dev` after changing either flag. Vite reads env files at startup, not when you save a component.
 
+Run against the backend:
+
+1. Start the backend so it listens on port 8082.
+2. In `frontend/.env.development`, set `VITE_USE_MOCK=false`.
+3. Restart `npm run dev`. Vite only reads env files at startup.
+4. Log in as `anna@example.com` / `password123`. The portfolio should come from `GET /api/portfolio`, not from `src/data/portfolio.json`.
+5. Set the flag back to `true` and restart to return to mock data.
+
 ## Scope (current)
 
 - No login against the backend
