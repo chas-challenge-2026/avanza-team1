@@ -35,7 +35,7 @@ int main()
     const int days = 252;
     const int instruments = 1;
     
-    BacktestResult *result = run_backtest(prices, instruments, days, "BUY_HOLD");
+    BacktestLibrary *result = run_backtest(prices, instruments, days);
     if (result == nullptr)
     {
         std::cerr << "run_backtest failed\n";
