@@ -1,25 +1,27 @@
-import { useState, type ReactNode } from 'react';
-import type { User, AuthContextValue } from '../types/auth';
-import { login as loginRequest, logout as logoutRequest, getCurrentUser } from './auth';
-import { AuthContext } from './authContext';
+import { useState, type ReactNode } from "react";
+import type { User, AuthContextValue } from "../types/auth";
+import {
+  login as loginRequest,
+  logout as logoutRequest,
+  getCurrentUser,
+} from "./auth";
+import { AuthContext } from "./authContext";
 
 function AuthProvider({ children }: { children: ReactNode }): JSX.Element {
   // Lazy initializer (() => ...) körs bara vid FÖRSTA renderingen.
   // Det gör att en redan inloggad user (token finns i localStorage) förblir inloggad efter en sidladdning.
   const [user, setUser] = useState<User | null>(() => getCurrentUser());
 
-  function login(email: string, password: string): boolean {
-    const result = loginRequest(email, password); // anropar mock-auth i auth.ts
-    if (result === null) {
-      return false; // fel credentials - komponenten som anropar visar felmeddelande
-    }
-    setUser(result.user); // triggar en re-render av HELA appen med rätt inloggad user
+  async function login(email: string, password: string): Promise<boolean> {
+    const result = await loginRequest(email, password);
+    if (result === null) return false;
+    setUser(result.user);
     return true;
   }
 
-  function logout(): void {
-    logoutRequest(); // rensar localStorage
-    setUser(null); // rensar React-state - annars skulle isAuthenticated fortfarande vara true i UI:t
+  async function logout(): Promise<void> {
+    await logoutRequest();
+    setUser(null);
   }
 
   const value: AuthContextValue = {
