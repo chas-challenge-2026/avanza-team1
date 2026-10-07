@@ -12,9 +12,10 @@
 * Calculates the maximum drawdown: the single largest peak-to-trough decline anywhere in the price series. This measures the worst loss an investor holding from a high point would have experienced, which is a different kind of risk than day-to-day volatility.
 
 ### FX-Pipeline
-* Uses Sveriges Riksbank's exchange rate API to get the current exchange rate between Swedish kronor (SEK) and any other currency.
+* Uses Sveriges Riksbank's exchange rate API.
+* Can get the current exchange rate between Swedish kronor (SEK) and any other currency.
+* Can take a double array with daily stock prices and convert the correct sequence of indices from another currency to SEK.
 * Uses libcurl and Jansson to call the API and process the received JSON data.
-* For now it will only be able to handle conversions between SEK and another currency, but later on we might support comparing any two currencies.
 
 ### Backtest-Engine
 * 

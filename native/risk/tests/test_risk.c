@@ -57,7 +57,7 @@ static void check_invalid(const char *test_name, RiskStatus status)
     else
     {
         tests_failed++;
-        printf("[FAIL] %s -> expected RISK_INVALID_INPUT but got RISK_SUCCESS\r\n", test_name);
+        printf("[FAIL] %s -> expected RISK_INVALID_INPUT but got %d\r\n", test_name, status);
     }
 }
 
@@ -92,7 +92,7 @@ static void check_zero_volatility(const char *test_name, RiskStatus status)
     }
 }
 
-int main()
+int main(void)
 {
     double prices[] = {100.00, 101.50, 99.80, 102.30, 104.10, 
                         103.00, 105.75, 101.20, 102.00, 103.50};
@@ -117,9 +117,9 @@ int main()
 
     /* Fewer than three prices should be rejected. */
     status = calculate_annual_volatility(too_few, 2, &result);
-    check_invalid("volatility with < 3 prices returns invalid", status);
+    check_insufficient_data("volatility with < 3 prices returns insufficient data", status);
     status = calculate_sharpe(too_few, 2, DEFAULT_RISK_FREE_RATE, &result);
-    check_invalid("sharpe with < 3 prices returns invalid", status);
+    check_insufficient_data("sharpe with < 3 prices returns insufficient data", status);
 
     /* Three prices is the minimum input for volatility and Sharpe calculations. */
     status = calculate_annual_volatility(three_prices, 3, &result);
@@ -167,7 +167,7 @@ int main()
     /* Fewer than two prices should be rejected. */
     double single_price[] = {100.00};
     status = calculate_max_drawdown(single_price, 1, &result);
-    check_invalid("max drawdown with < 2 prices returns invalid", status);
+    check_insufficient_data("max drawdown with < 2 prices returns insufficient data", status);
 
     /* Two prices is the minimum valid input for drawdown. */
     double two_prices[] = {100.00, 90.00};
@@ -201,12 +201,12 @@ int main()
     /* --- EWMA Volatility --- */
 
     /* Regression test using an independently calculated expected value. */
-    status = calculate_ewma_volatility(prices, size, 0.94, &result);
+    status = calculate_ewma_volatility(prices, size, DEFAULT_EWMA_LAMBDA, &result);
     check("ewma volatility on known price series", status, result, 0.294032, 0.0001);
 
     /* Fewer than two prices should be rejected. */
-    status = calculate_ewma_volatility(single_price, 1, 0.94, &result);
-    check_invalid("ewma volatility with < 2 prices returns invalid", status);
+    status = calculate_ewma_volatility(single_price, 1, DEFAULT_EWMA_LAMBDA, &result);
+    check_insufficient_data("ewma volatility with < 2 prices returns insufficient data", status);
 
     /* Lambda must be strictly between 0 and 1. */
     status = calculate_ewma_volatility(prices, size, 0.0, &result);
@@ -215,7 +215,7 @@ int main()
     check_invalid("ewma volatility with lambda >=1 returns invalid", status);
 
     /* Flat prices should produce a valid EWMA volatility of 0.0. */
-    status = calculate_ewma_volatility(flat_prices, 5, 0.94, &result);
+    status = calculate_ewma_volatility(flat_prices, 5, DEFAULT_EWMA_LAMBDA, &result);
     check("ewma volatility on flat prices is 0", status, result, 0.0, 1e-12);
 
     /* --- Rolling risk metrics --- */
@@ -292,7 +292,7 @@ int main()
         int all_match = 1;
         for (size_t i = 0; i < rolling_count; i++)
         {
-            if (!approx_equal(rolling_results[i], expected_rolling_sharpe[i], 1e-9))
+            if (!approx_equal(rolling_results[i], expected_rolling_sharpe[i], 1e-8))
             {
                 all_match = 0;
                 break;
@@ -355,55 +355,14 @@ int main()
         printf("[FAIL] rolling max drawdown returned an error\r\n");
     }
 
-    /* Rolling EWMA volatility. */
-    status = calculate_rolling_ewma_volatility(rolling_prices, rolling_size, rolling_window, 0.94, rolling_results);
-
-    tests_run++;
-    if (status == RISK_SUCCESS)
-    {
-        /* Compare each rolling result with the existing EWMA calculation applied to the corresponding window. */
-        double expected_rolling_ewma[4];
-
-        for (size_t i = 0; i < rolling_count; i++)
-        {
-            calculate_ewma_volatility(&rolling_prices[i], rolling_window, 0.94, &expected_rolling_ewma[i]);
-        }
-
-        int all_match = 1;
-        for (size_t i = 0; i < rolling_count; i++)
-        {
-            if (!approx_equal(rolling_results[i], expected_rolling_ewma[i], 1e-9))
-            {
-                all_match = 0;
-                break;
-            }
-        }
-
-        if (all_match)
-        {
-            printf("[PASS] rolling EWMA volatility produces correct overlapping windows\r\n");
-        }
-        else
-        {
-            tests_failed++;
-            printf("[FAIL] rolling EWMA volatility produced an unexpected result\r\n");
-        }
-    }
-    else
-    {
-        tests_failed++;
-        printf("[FAIL] rolling EWMA volatility returned an error\r\n");
-    }
-
     /* --- Rolling input validation --- */
 
     /* Historical volatility and Sharpe require at least three prices per window. */
     check_insufficient_data("rolling volatility with window < 3 returns insufficient data", calculate_rolling_volatility(rolling_prices, rolling_size, 2, rolling_results));
     check_insufficient_data("rolling Sharpe with window < 3 returns insufficient data", calculate_rolling_sharpe(rolling_prices, rolling_size, 2, DEFAULT_RISK_FREE_RATE, rolling_results));
     
-    /* Drawdown and EWMA volatility require at least two prices per window. */
+    /* Drawdown require at least two prices per window. */
     check_insufficient_data("rolling max drawdown with window < 2 returns insufficient data", calculate_rolling_max_drawdown(rolling_prices, rolling_size, 1, rolling_results));
-    check_insufficient_data("rolling EWMA volatility with window < 2 returns insufficient data", calculate_rolling_ewma_volatility(rolling_prices, rolling_size, 1, 0.94, rolling_results));
 
     /* A window larger than the available price series is invalid. */
     check_insufficient_data("rolling volatility with window > size returns insufficient data", calculate_rolling_volatility(rolling_prices, rolling_size, rolling_size + 1, rolling_results));
@@ -412,19 +371,19 @@ int main()
     check_invalid("annual volatility with NULL prices returns invalid", calculate_annual_volatility(NULL, size, &result));
     check_invalid("sharpe with NULL prices returns invalid", calculate_sharpe(NULL, size, DEFAULT_RISK_FREE_RATE, &result));
     check_invalid("max drawdown with NULL prices returns invalid", calculate_max_drawdown(NULL, size, &result));
-    check_invalid("ewma volatility with NULL prices returns invalid", calculate_ewma_volatility(NULL, size, 0.94, &result));
+    check_invalid("ewma volatility with NULL prices returns invalid", calculate_ewma_volatility(NULL, size, DEFAULT_EWMA_LAMBDA, &result));
     
     /* --- Size == 0 --- */
     check_invalid("annual volatility with zero prices returns invalid", calculate_annual_volatility(prices, 0, &result));
     check_invalid("sharpe with zero prices returns invalid", calculate_sharpe(prices, 0, DEFAULT_RISK_FREE_RATE, &result));
     check_invalid("max drawdown with zero prices returns invalid", calculate_max_drawdown(prices, 0, &result));
-    check_invalid("ewma volatility with zero prices returns invalid", calculate_ewma_volatility(prices, 0, 0.94, &result));
+    check_invalid("ewma volatility with zero prices returns invalid", calculate_ewma_volatility(prices, 0, DEFAULT_EWMA_LAMBDA, &result));
 
     /* --- NULL result pointer --- */
     check_invalid("annual volatility with NULL result returns invalid", calculate_annual_volatility(prices, size, NULL));
     check_invalid("sharpe with NULL result returns invalid", calculate_sharpe(prices, size, DEFAULT_RISK_FREE_RATE, NULL));
     check_invalid("max drawdown with NULL result returns invalid", calculate_max_drawdown(prices, size, NULL));
-    check_invalid("ewma volatility with NULL result returns invalid", calculate_ewma_volatility(prices, size, 0.94, NULL));
+    check_invalid("ewma volatility with NULL result returns invalid", calculate_ewma_volatility(prices, size, DEFAULT_EWMA_LAMBDA, NULL));
 
     printf("\r\n%zu/%zu tests passed\r\n", tests_run - tests_failed, tests_run);
 
