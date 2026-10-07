@@ -1,7 +1,7 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/useAuth";
 import styles from "./Topbar.module.css";
-import logo from "../assets/logo.webp";
+import logo from "../../assets/logo.webp";
 import HamburgerMenu from "./HamburgerMenu";
 
 function Topbar() {
