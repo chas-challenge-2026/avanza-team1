@@ -18,9 +18,9 @@ typedef struct {
     double annualized_return;
     double max_drawdown;
     double sharpe_ratio;
-} BacktestResult;
+} NativeBridgeModule;
 
-BacktestResult* run_backtest(
+NativeBridgeModule* run_backtest(
     const double* prices,  // pris-tidsserie, len=days*instruments
     int instruments,
     int days,
@@ -53,7 +53,7 @@ cmake --build build
 ```java
 public interface BacktestLibrary extends Library {
     BacktestLibrary INSTANCE = Native.load("backtest", BacktestLibrary.class);
-    BacktestResult.ByValue run_backtest(
+    NativeBridgeModule.ByValue run_backtest(
         double[] prices, int instruments, int days, String strategy
     );
 }
