@@ -20,7 +20,7 @@ public class HoldingService {
     // Fetch all holdings — no pagination, no LIMIT
     // This will load all rows into memory. Fine for small datasets. Definitely fine.
     String sql = "SELECT h.id, h.ticker, h.instrument_name, h.quantity, h.avg_buy_price, " +
-            "h.currency, a.account_type, a.account_name " +
+            "h.currency, h.asset_category, a.account_type, a.account_name " +
             "FROM holdings h " +
             "JOIN accounts a ON h.account_id = a.id " +
             "WHERE a.user_id = " + userId + " " +
@@ -63,17 +63,36 @@ public class HoldingService {
     }
 
     public void addHolding(Integer accountId, String ticker, String instrumentName,
-                           String quantity, String avgBuyPrice, String currency) {
+                           String quantity, String avgBuyPrice, String currency,
+                           String assetCategory) {
 
-    // No input validation whatsoever — negative quantities? Strings as numbers? Sure, why not.
-    // The database will throw an error if it's really wrong. Good enough.
-    String sql = "INSERT INTO holdings (account_id, ticker, instrument_name, quantity, avg_buy_price, currency) " +
-            "VALUES (" + accountId + ", '" + ticker.toUpperCase() + "', '" + instrumentName + "', " +
-            quantity + ", " + avgBuyPrice + ", '" + currency + "')";
+        // No input validation whatsoever — negative quantities? Strings as numbers? Sure, why not.
+        // The database will throw an error if it's really wrong. Good enough.
+        // Använd parametrized SQL för att undvika SQL-injection
+        String sql = """
+            
+                INSERT INTO holdings (account_id, ticker, instrument_name, quantity, avg_buy_price, currency, asset_category)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+            """;
 
-        jdbcTemplate.execute(sql);
-    }
+            try {
+                double qty = Double.parseDouble(quantity);
+                double price = Double.parseDouble(avgBuyPrice);
 
+                if (qty <= 0 || price <= 0) {
+                    throw new IllegalArgumentException("Quantity och price måste vara större än 0");
+                }
+
+                // Validera asset_category
+                validateAssetCategory(assetCategory);
+
+                jdbcTemplate.update(sql, accountId, ticker.toUpperCase(), instrumentName,
+                        qty, price, currency.toUpperCase(), assetCategory.toUpperCase());
+            } catch (NumberFormatException e) {
+                throw new IllegalArgumentException("Quantity och avgBuyPrice måste vara giltiga nummer", e);
+            }
+
+}
 
     // IDOR — Innehav (Insecure Direct Object Reference)
     // Problem: DELETE FROM holdings WHERE id = ? utan att verifiera att innehavet tillhör inloggad användare.
@@ -95,5 +114,21 @@ public class HoldingService {
         jdbcTemplate.update(sql, holdingId, sessionUserId);
     }
 
+/**
+ * Validera att asset_category är ett giltigt värde
+ */
+        private void validateAssetCategory(String assetCategory){
+            if (assetCategory == null || assetCategory.trim().isEmpty()) {
+                throw new IllegalArgumentException("asset_category kan inte vara tom");
+            }
+
+            String upper = assetCategory.toUpperCase();
+            if (!upper.equals("EQUITY") && !upper.equals("STABLE") &&
+                    !upper.equals("CASH") && !upper.equals("ALTERNATIVES")) {
+                throw new IllegalArgumentException(
+                        "Ogiltig asset_category: " + assetCategory +
+                                ". Giltiga värden: EQUITY, STABLE, CASH, ALTERNATIVES");
+            }
+        }
 
 }

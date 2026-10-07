@@ -15,18 +15,23 @@ public class TargetAllocation {
     @JoinColumn(name = "user_id")
     private User user;
 
-    private String accountType;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "asset_category")
+    private AssetCategory assetCategory;
     private Double targetPct;
 
     // Empty constructor required by JPA
     public TargetAllocation() {}
 
     // Custom constructor for manual creation
-    public TargetAllocation(User user, String accountType, Double targetPct) {
+
+    public TargetAllocation(Long id, User user, AssetCategory assetCategory, Double targetPct) {
+        this.id = id;
         this.user = user;
-        this.accountType = accountType;
+        this.assetCategory = assetCategory;
         this.targetPct = targetPct;
     }
+
 
     // Getters & setters
 
@@ -46,12 +51,12 @@ public class TargetAllocation {
         this.user = user;
     }
 
-    public String getAccountType() {
-        return accountType;
+    public AssetCategory getAssetCategory() {
+        return assetCategory;
     }
 
-    public void setAccountType(String accountType) {
-        this.accountType = accountType;
+    public void setAssetCategory(AssetCategory assetCategory) {
+        this.assetCategory = assetCategory;
     }
 
     public Double getTargetPct() {

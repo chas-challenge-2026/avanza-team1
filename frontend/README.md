@@ -104,6 +104,21 @@ The UI reads the portfolio through `src/api/portfolioApi.ts`.
 The default adapter returns `src/data/portfolio.json`.
 Switching `VITE_USE_MOCK=false` later uses `GET /api/portfolio` instead.
 Change numbers in the JSON, not in the components.
+Environment flags, read by Vite from `frontend/.env.development`:
+
+- `VITE_API_BASE_URL` is the backend origin. Locally that is `http://localhost:8082`.
+- `VITE_USE_MOCK` defaults to `true`. The dashboard then keeps using `src/data/portfolio.json`.
+- Set `VITE_USE_MOCK=false` to turn on the HTTP adapter. That adapter is still a stub in this issue, so leave the flag on `true` until the login and portfolio issues land.
+
+Restart `npm run dev` after changing either flag. Vite reads env files at startup, not when you save a component.
+
+Run against the backend:
+
+1. Start the backend so it listens on port 8082.
+2. In `frontend/.env.development`, set `VITE_USE_MOCK=false`.
+3. Restart `npm run dev`. Vite only reads env files at startup.
+4. Log in as `anna@example.com` / `password123`. The portfolio should come from `GET /api/portfolio`, not from `src/data/portfolio.json`.
+5. Set the flag back to `true` and restart to return to mock data.
 
 ## Scope (current)
 
@@ -114,10 +129,10 @@ Change numbers in the JSON, not in the components.
 
 ## Test status (#24)
 
-| What                 | How                             | Result                            |
-| -------------------- | ------------------------------- | --------------------------------- |
-| Type contracts       | `npx tsc -b` in `frontend/`     | Passed 2026-09-02                 |
-| JSON shape           | Manual review against issue #24 | Passed                            |
+| What                 | How                                    | Result             |
+| -------------------- | -------------------------------------- | ------------------ |
+| Type contracts       | `npx tsc -b` in `frontend/`            | Passed 2026-09-02  |
+| JSON shape           | Manual review against issue #24        | Passed             |
 | Automated unit tests | `npm run test` (Vitest + RTL), see #87 | Smoke test passing |
 
 ---
