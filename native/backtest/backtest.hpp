@@ -28,6 +28,6 @@ typedef struct
 extern "C" 
 {
     EXPORT void free_backtest_result(NativeBridgeModule *result);
-
+    
     EXPORT NativeBridgeModule *run_backtest(const double *prices, int instruments, int days);    
 }

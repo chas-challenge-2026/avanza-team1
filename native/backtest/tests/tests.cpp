@@ -32,10 +32,10 @@ int main()
                         344.58, 343.97, 352.59, 353.16, 352.05, 352.05, 345.77, 344.69, 355.17, 339.65,
                         350.59, 340.91};
 
-    const int days = 252;
-    const int instruments = 1;
+    const int days = 126;
+    const int instruments = 2;
     
-    BacktestResult *result = run_backtest(prices, instruments, days, "BUY_HOLD");
+    NativeBridgeModule *result = run_backtest(prices, instruments, days);
     if (result == nullptr)
     {
         std::cerr << "run_backtest failed\n";
