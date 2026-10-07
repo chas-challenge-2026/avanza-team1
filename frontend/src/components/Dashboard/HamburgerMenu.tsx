@@ -12,8 +12,8 @@ function HamburgerMenu() {
     setIsOpen(false);
   }
 
-  function handleLogout(): void {
-    logout();
+  async function handleLogout(): Promise<void> {
+    await logout();
     closeMenu();
     navigate("/login");
   }
@@ -37,16 +37,33 @@ function HamburgerMenu() {
 
       {isOpen && (
         <nav className={styles.menu} id="hamburger-menu" aria-label="Mobilmeny">
-          <NavLink to="/" end className={({ isActive }) => (isActive ? styles.active : "")} onClick={closeMenu}>
+          <NavLink
+            to="/"
+            end
+            className={({ isActive }) => (isActive ? styles.active : "")}
+            onClick={closeMenu}
+          >
             Portfolio
           </NavLink>
-          <NavLink to="/holdings" className={({ isActive }) => (isActive ? styles.active : "")} onClick={closeMenu}>
+          <NavLink
+            to="/holdings"
+            className={({ isActive }) => (isActive ? styles.active : "")}
+            onClick={closeMenu}
+          >
             Innehav
           </NavLink>
-          <NavLink to="/alerts" className={({ isActive }) => (isActive ? styles.active : "")} onClick={closeMenu}>
+          <NavLink
+            to="/alerts"
+            className={({ isActive }) => (isActive ? styles.active : "")}
+            onClick={closeMenu}
+          >
             Notiser
           </NavLink>
-          <button type="button" className={styles.logoutButton} onClick={handleLogout}>
+          <button
+            type="button"
+            className={styles.logoutButton}
+            onClick={handleLogout}
+          >
             Logga ut
           </button>
         </nav>

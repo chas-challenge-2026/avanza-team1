@@ -39,7 +39,8 @@ function Portfolio() {
     return <p>Kunde inte hämta portföljen.</p>;
   }
 
-  const storedTarget = targetOverride ?? readStoredTarget();
+  const useMock = import.meta.env.VITE_USE_MOCK !== "false";
+  const storedTarget = useMock ? (targetOverride ?? readStoredTarget()) : null;
 
   const allocation = withDrift({
     ...portfolio.allocation,
