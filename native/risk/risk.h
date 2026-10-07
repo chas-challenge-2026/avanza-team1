@@ -11,16 +11,14 @@ extern "C" {
  * @file risk.h
  * @brief Functions for calculating historical portfolio risk metrics.
  * 
- * Price arrays are expected to contain historical prices in chronological order,
- * with the oldest price first. Functions do not modify the input array.
+ * @details Price arrays are expected to contain historical prices in chronological order, with the oldest price first. Functions do not modify the input array.
  */
 
 /** Number of trading days assumed in annual calculations. */
 #define ANNUAL_TRADING_DAYS     252.0
 
 /** 
- * Default annual risk-free rate used by the Sharpe ratio calculation.
- * 
+ * Default annual risk-free rate used by the Sharpe ratio calculation. 
  * This is a configurable assumption and does not represent a guaranteed market rate, can be changed later if so needed.
  */
 #define DEFAULT_RISK_FREE_RATE  0.03
@@ -42,8 +40,7 @@ typedef enum
 /**
  * @brief Calculate annualized historical volatility.
  * 
- * Uses the sample standard deviation of daily returns and annualizes it
- * using the square-root-of-time rule.
+ * @details Uses the sample standard deviation of daily returns and annualizes it using the square-root-of-time rule.
  * 
  * @param prices Historical closing prices, oldest first.
  * @param size Number of prices. Must be at least 3.
@@ -60,8 +57,7 @@ RiskStatus calculate_annual_volatility(const double prices[], size_t size, doubl
 /**
  * @brief Calculate the annualized Sharpe ratio.
  * 
- * Calculates the mean daily return relative to the daily equivalent of
- * the specified annual risk-free rate, then scales the result to an annualized Sharpe ratio.
+ * @details Calculates the mean daily return relative to the daily equivalent of the specified annual risk-free rate, then scales the result to an annualized Sharpe ratio.
  * 
  * @param prices Historical closing prices, oldest first.
  * @param size Number of prices. Must be at least 3.
@@ -80,7 +76,7 @@ RiskStatus calculate_sharpe(const double prices[], size_t size, double risk_free
 /**
  * @brief Calculate the maximum drawdown.
  * 
- * Finds the largest peak-to-trough decline in the price series.
+ * @details Finds the largest peak-to-trough decline in the price series.
  * 
  * @param prices Historical closing prices, oldest first.
  * @param size Number of prices. Must be at least 2.
@@ -98,9 +94,8 @@ RiskStatus calculate_max_drawdown(const double prices[], size_t size, double *re
 /**
  * @brief Calculate annualized EWMA (Exponentially Weighted Moving Average) volatility.
  * 
- * Applies exponentially decreasing weights to squared daily returns,
- * giving more influence to recent observations. 
- * The variance estimate assumes a zero mean return.
+ * @details Applies exponentially decreasing weights to squared daily returns, giving more influence to recent observations. 
+ * @details The variance estimate assumes a zero mean return.
  * 
  * @param prices Historical closing prices, oldest first.
  * @param size Number of prices. Must be at least 2.
@@ -118,13 +113,13 @@ RiskStatus calculate_ewma_volatility(const double prices[], size_t size, double 
 /**
  * @brief Calculate rolling annualized historical volatility.
  * 
- * Calculates annualized historical volatility for every consecutive window of the specified size.
- * Each window contains @p window prices and therefore @p window - 1 daily returns.
+ * @details Calculates annualized historical volatility for every consecutive window of the specified size.
+ * @details Each window contains @p window prices and therefore @p window - 1 daily returns.
  * 
- * The first result corresponds to prices[0 ... window - 1].
- * The next result corresponds to prices[1 ... window].
+ * @details The first result corresponds to prices[0 ... window - 1].
+ * @details The next result corresponds to prices[1 ... window].
  * 
- * The caller must provide an output array containing at least (size - window + 1) elements.
+ * @details The caller must provide an output array containing at least (size - window + 1) elements.
  * 
  * @param prices Historical closing prices, oldest first.
  * @param size Number of prices.
@@ -142,13 +137,13 @@ RiskStatus calculate_rolling_volatility(const double prices[], size_t size, size
 /**
  * @brief Calculate rolling annualized Sharpe ratio.
  * 
- * Calculates an annualized Sharpe ratio for every consecutive window of the specified size.
- * Each window contains @p window prices and therefore @p window - 1 daily returns.
+ * @details Calculates an annualized Sharpe ratio for every consecutive window of the specified size.
+ * @details Each window contains @p window prices and therefore @p window - 1 daily returns.
  * 
- * The first result corresponds to prices[0 ... window - 1].
- * The next result corresponds to prices[1 ... window].
+ * @details The first result corresponds to prices[0 ... window - 1].
+ * @details The next result corresponds to prices[1 ... window].
  * 
- * The caller must provide an output array containing at least (size - window + 1) elements.
+ * @details The caller must provide an output array containing at least (size - window + 1) elements.
  * 
  * @param prices Historical closing prices, oldest first.
  * @param size Number of prices.
@@ -168,14 +163,14 @@ RiskStatus calculate_rolling_sharpe(const double prices[], size_t size, size_t w
 /**
  * @brief Calculate rolling maximum drawdown.
  * 
- * Calculates the maximum drawdown for every consecutive window of the specified size.
+ * @details Calculates the maximum drawdown for every consecutive window of the specified size.
  * 
- * For each position, the function passes one window of prices to calculate_max_drawdown().
+ * @details For each position, the function passes one window of prices to calculate_max_drawdown().
  * 
- * The first result corresponds to prices[0 ... window - 1].
- * The next result corresponds to prices[1 ... window].
+ * @details The first result corresponds to prices[0 ... window - 1].
+ * @details The next result corresponds to prices[1 ... window].
  * 
- * The caller must provide an output array containing at least (size - window + 1) elements.
+ * @details The caller must provide an output array containing at least (size - window + 1) elements.
  * 
  * @param prices Historical closing prices, oldest first.
  * @param size Number of prices.
