@@ -41,6 +41,8 @@
 data/*
 
 # other
+logs
+logs/*
 build
 build/*
 demo
