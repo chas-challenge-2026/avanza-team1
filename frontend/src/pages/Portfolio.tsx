@@ -64,7 +64,6 @@ function Portfolio() {
       <PageHeader totalValueSek={portfolio.totalValueSek} fx={portfolio.fx} />
       {drift.overThreshold && <WarningBanner message={drift.message} />}
       <div className="dashboardGrid">
-        <AccountsTable accounts={portfolio.accounts} allocation={allocation} holdings={portfolio.holdings} />
         <AssetAllocation allocation={allocation} />
         <GoalAllocation
           targetAktierPct={allocation.targetAktierPct}
@@ -73,6 +72,7 @@ function Portfolio() {
         />
         <NoticesEmpty alerts={driftAlerts(allocation)} />
         <HoldingsTable holdings={portfolio.holdings} />
+        <AccountsTable accounts={portfolio.accounts} allocation={allocation} holdings={portfolio.holdings} />
       </div>
     </>
   );

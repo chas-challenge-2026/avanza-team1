@@ -13,16 +13,18 @@ function PageHeader({
   fx,
 }: PageHeaderProps): JSX.Element {
   return (
-    <div className={styles.pageHeader}>
-      <h1 className={styles.title}>{title}</h1>
-      <div className={styles.value}>
-        {totalValueSek.toLocaleString("sv-SE")} <span>SEK</span>
+    <section className={styles.pageHeader}>
+      <div className={styles.pageHeaderContainer}>
+        <h1 className={styles.title}>{title}</h1>
+        <div className={styles.value}>
+          {totalValueSek.toLocaleString("sv-SE")} <span>SEK</span>
+        </div>
+        <p className={styles.subtitle}>
+          USD/SEK {fx.usdSek.toLocaleString("sv-SE")} · EUR/SEK{" "}
+          {fx.eurSek.toLocaleString("sv-SE")}
+        </p>
       </div>
-      <p className={styles.subtitle}>
-        USD/SEK {fx.usdSek.toLocaleString("sv-SE")} · EUR/SEK{" "}
-        {fx.eurSek.toLocaleString("sv-SE")}
-      </p>
-    </div>
+    </section>
   );
 }
 
