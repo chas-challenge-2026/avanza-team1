@@ -1,0 +1,7 @@
+.heading {
+    background-color: var(--gray);
+}
+
+.paragraph {
+    border-bottom: 1px solid var(--off-white);
+}

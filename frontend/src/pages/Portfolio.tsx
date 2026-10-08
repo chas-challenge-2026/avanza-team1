@@ -1,6 +1,7 @@
 import { useState } from "react";
 import PageHeader from "../components/Dashboard/PageHeader";
 import WarningBanner from "../components/Dashboard/WarningBanner";
+import { InfoAside } from "../components/Dashboard/InfoAside";
 import AssetAllocation from "../components/Dashboard/AssetAllocation";
 import GoalAllocation from "../components/Dashboard/GoalAllocation";
 import AccountsTable from "../components/Dashboard/AccountsTable";
@@ -62,17 +63,22 @@ function Portfolio() {
   return (
     <>
       <PageHeader totalValueSek={portfolio.totalValueSek} fx={portfolio.fx} />
-      {drift.overThreshold && <WarningBanner message={drift.message} />}
       <div className="dashboardGrid">
-        <AssetAllocation allocation={allocation} />
-        <GoalAllocation
-          targetAktierPct={allocation.targetAktierPct}
-          targetStabiltPct={allocation.targetStabiltPct}
-          onTargetSaved={handleTargetSaved}
-        />
-        <NoticesEmpty alerts={driftAlerts(allocation)} />
-        <HoldingsTable holdings={portfolio.holdings} />
-        <AccountsTable accounts={portfolio.accounts} allocation={allocation} holdings={portfolio.holdings} />
+        <div className="leftColumn">
+          {drift.overThreshold && <WarningBanner message={drift.message} />}
+          <AssetAllocation allocation={allocation} />
+          <GoalAllocation
+            targetAktierPct={allocation.targetAktierPct}
+            targetStabiltPct={allocation.targetStabiltPct}
+            onTargetSaved={handleTargetSaved}
+          />
+          <NoticesEmpty alerts={driftAlerts(allocation)} />
+          <HoldingsTable holdings={portfolio.holdings} />
+          <AccountsTable accounts={portfolio.accounts} allocation={allocation} holdings={portfolio.holdings} />
+        </div>
+        <div className={"leftColumn"}>
+          <InfoAside />
+        </div>
       </div>
     </>
   );
