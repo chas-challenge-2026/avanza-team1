@@ -23,7 +23,7 @@ inte i en separat logg.
 | 2026-09-08 | Henrik | La till en missad free i test_fx.cpp | - | #61 |
 | 2026-09-08 | Pär | Slutfört den första versionen av Risk-modulen, lagt till en ny funktion för att hantera EWMA i Volatilitetsberäkningarna. Ändrade om min hela dokumentation kring filerna och städade upp mycket. | Chat GPT: AI hjälpte mig att snygga till kommentarerna till Doxygen | #11 #13 #14 #15 |
 | 2026-09-08 | Pär | La till fler tester i testfilen för att täcka de nya funktionerna, samt för att täcka fler eventuella fel. Snyggade till dokumentationen i filen också. | - | #55 |
-| 2026-09-09 | Pär | Skapade ett dokument för att hantera våra bidrag till projektet, utgår direkt från våra commits inledningsvis. | - | - |
+| 2026-09-09 | Pär | Skapade ett dokument för att hantera våra bidrag till projektet (BIDRAG.md), utgår direkt från våra commits inledningsvis. | - | - |
 | 2026-09-09 | Pär | Mergade in develop-branchen in i våran branch för att försäkra om oss att vi har senaste uppdateringen. | - | - |
 | 2026-09-09 | Pär | Uppdaterade BIDRAG.md och mergade in de senaste uppdateringarna från develop då det hänt lite där. | - | - |
 | 2026-09-09 | Pär | Uppdaterade variabelnamn, städade upp några kommentarer och uppdaterade Natives README. | - | #65 #74 |
@@ -43,7 +43,12 @@ inte i en separat logg.
 | 2026-09-30 | Henrik | Historisk lookup för FX | - | #98 |
 | 2026-10-01 | Henrik | Gjort klart intervall-konversion så gott det går innan brygga mellan native och backend är på plats. | - | #98 |
 | 2026-10-01 | Pär | Städat upp en hel del i risk.c/h men även lagt till funktionalitet i helpers.c/h för att underlätta vissa uträkningar och upprepade anrop. | - | #73 |
-| 2026-10-01 | Pär | Uppdaterade BIDRAG.md. Fixade så att en folder bytte namn och den ursprungliga togs bort för att det kan krocka med eventuella funktioner i CMakeLists. Uppdaterade flertalet kommentarer i risk-filerna. | - | #73 |
+| 2026-10-01 | Pär | Uppdaterade BIDRAG.md. Fixade så att en folder bytte namn och den ursprungliga togs bort för att det kan krocka med eventuella funktioner i CMakeLists. Uppdaterade flertalet kommentarer i risk-filerna. | ChatGPT: Hjälpte mig fixa till CMakeLists.txt och la till eventuell Sanitizer, behöver kollas mer. | #73 |
 | 2026-10-01 | Henrik | Uppdaterade fx.hpp med Doxygen kommentarer för varje funktion. Städade även upp några onödiga print-outs. | - | #98 |
 | 2026-10-05 | Henrik | Uppdaterade fx_convert_current så att den förhoppningsvis kan vara mer intuitiv att använda. Kanske behöver mer arbete vid ett senare tillfälle. | - | #98 |
 | 2026-10-05 | Pär | Ytterligare städning bland risk-filerna och i helpers bland kommentarerna, samt att i risk så skyddas rolling_sharpe nu av en NAN-koll på platta fönster av volatilitet (att priset inte ändras), för att undvika att programmet skickar 0 som svar och sedan avslutar uträkningen, nu skickar den istället NAN för det fönstret och går vidare. Förhoppningsvis fungerar det korrekt, blir ytterligare test när backtest-motorn kopplas in. | - | #73 |
+| 2026-10-06 | Pär | Skapade en BESLUT.md där vi skrivit ner några av besluten vi tagit hittills, kommer uppdateras mer. | - | - |
+| 2026-10-07 | Pär | Mergade in develop till våran branch, uppdaterade CMakeLists lite grann då en sak AI gett mig kanske kan skapa lite problem. | - | - |
+| 2026-10-07 | Pär & Henrik | Skapade en Pull Request in i develop så att JNA bryggan kan börja testas mot Java. Henrik hittade en del småsaker som behövde korrigeras, så det tog vi hand om snabbt och genomförde P.R. | - | #6 #16 #73 #74 #98 #124 |
+| 2026-10-07 | Pär | Fixade till lite småsaker som vi missat och uppdaterar BIDRAG.md | - | - |
+| 2026-10-07 | Henrik | Uppdaterade logger-funktionaliteten så att vi kan börja implementera det i våra moduler framöver. | - | #153 |
