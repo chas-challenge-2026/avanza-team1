@@ -5,17 +5,22 @@
 #include <cstdlib>
 #include <vector>
 
-extern "C" 
+void free_backtest_result(BacktestLibrary *result)
 {
-    void free_backtest_result(NativeBridgeModule *result)
+    free(result);
+}
+
+BacktestLibrary *run_backtest(const double *prices, int instruments, int days)
+{
+    if (prices == nullptr || days < 3 || instruments < 1)
     {
-        if (result != nullptr)
-        {
-            free(result);
-        }
+        return nullptr;
     }
 
-    NativeBridgeModule *run_backtest(const double *prices, int instruments, int days)
+    double risk_free_rate = 0.03;
+
+    BacktestLibrary *result = static_cast<BacktestLibrary*>(malloc(sizeof(BacktestLibrary)));
+    if (result == nullptr)
     {
         if (prices == nullptr || days < 3 || instruments < 1)
         {
@@ -23,12 +28,6 @@ extern "C"
         }
 
         double risk_free_rate = 0.03;
-
-        NativeBridgeModule *result = static_cast<NativeBridgeModule*>(malloc(sizeof(NativeBridgeModule)));
-        if (result == nullptr)
-        {
-            return nullptr;
-        }
 
         size_t size = static_cast<size_t>(days) * static_cast<size_t>(instruments);
         double years = static_cast<double>(days - 1) / 252.0;

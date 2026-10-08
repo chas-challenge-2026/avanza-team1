@@ -35,7 +35,7 @@ int main()
     const int days = 126;
     const int instruments = 2;
     
-    NativeBridgeModule *result = run_backtest(prices, instruments, days);
+    BacktestLibrary *result = run_backtest(prices, instruments, days);
     if (result == nullptr)
     {
         std::cerr << "run_backtest failed\n";

@@ -8,8 +8,8 @@ function Topbar() {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
 
-  function handleLogout(): void {
-    logout(); // rensar token + user - utan detta är man fortfarande "inloggad" efter redirecten
+  async function handleLogout(): Promise<void> {
+    await logout();
     navigate("/login");
   }
 
@@ -42,7 +42,10 @@ function Topbar() {
       </nav>
       <div className={styles.user}>
         <span className={styles.userName}>{user?.name ?? ""}</span>
-        <button className={`${styles.logoutButton} ${styles.desktopLogout}`} onClick={handleLogout}>
+        <button
+          className={`${styles.logoutButton} ${styles.desktopLogout}`}
+          onClick={handleLogout}
+        >
           Logga ut
         </button>
         <div className={styles.hamburgerContainer}>
