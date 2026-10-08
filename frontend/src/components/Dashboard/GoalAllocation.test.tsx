@@ -1,6 +1,23 @@
 import { render, screen, fireEvent } from '@testing-library/react'
 import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import GoalAllocation from './GoalAllocation'
+
+const createTestQueryClient = () => new QueryClient({
+  defaultOptions: {
+    queries: { retry: false },
+    mutations: { retry: false },
+  },
+})
+
+const renderWithQueryClient = (component: React.ReactElement) => {
+  const testQueryClient = createTestQueryClient()
+  return render(
+    <QueryClientProvider client={testQueryClient}>
+      {component}
+    </QueryClientProvider>
+  )
+}
 
 beforeEach(() => {
   localStorage.clear()
@@ -9,7 +26,7 @@ beforeEach(() => {
 describe('GoalAllocation', () => {
   it('saves when the initial sum is valid (100%)', () => {
     const onTargetSaved = vi.fn()
-    render(
+    renderWithQueryClient(
       <GoalAllocation
         targetAktierPct={60}
         targetStabiltPct={40}
@@ -24,7 +41,7 @@ describe('GoalAllocation', () => {
 
   it('does not save when the initial sum is invalid (not 100%)', () => {
     const onTargetSaved = vi.fn()
-    render(
+    renderWithQueryClient(
       <GoalAllocation
         targetAktierPct={70}
         targetStabiltPct={50}
@@ -38,7 +55,7 @@ describe('GoalAllocation', () => {
   })
 
   it('shows "Spara mål" and is enabled before saving', () => {
-    render(
+    renderWithQueryClient(
       <GoalAllocation
         targetAktierPct={60}
         targetStabiltPct={40}
@@ -51,7 +68,7 @@ describe('GoalAllocation', () => {
   })
 
   it('shows "Mål sparat" and is disabled after saving', () => {
-    render(
+    renderWithQueryClient(
       <GoalAllocation
         targetAktierPct={60}
         targetStabiltPct={40}
@@ -66,7 +83,7 @@ describe('GoalAllocation', () => {
   })
 
   it('re-enables "Spara mål" after editing a field again', () => {
-    render(
+    renderWithQueryClient(
       <GoalAllocation
         targetAktierPct={60}
         targetStabiltPct={40}
