@@ -22,7 +22,7 @@
     
     --primary-color: hsl(148, 96%, 34%);
     --primary-color-dark: hsl(148, 96%, 20%);
-    --green: #00a651;
+    --primary-color-light: hsl(120, 96%, 50%);
 
     --background: var(--white);
     --background-alt: var(--off-white);

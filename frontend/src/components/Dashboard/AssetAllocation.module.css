@@ -1,5 +1,35 @@
 .container {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  /* justify-content: center; */
   width: 100%;
+}
+
+.colorExplanation {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  line-height: var(--font-size-large);
+  /* justify-content: space-between; */
+  > * {
+    flex-grow: 1;
+    translate: 2.5rem 0;
+    &:before {
+        content: "";
+        position: absolute;
+        translate: -2.5rem 0;
+        width: var(--font-size-large);
+        height: var(--font-size-large);
+    }
+  }
+}
+.lightClrExpl:before {
+  background-color: var(--primary-color-light);
+}
+.darkClrExpl:before {
+  background-color: var(--primary-color-dark);
+}
+
+span[data-procent] {
+  width: attr(data-procent type(<percentage>));
 }
