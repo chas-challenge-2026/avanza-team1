@@ -28,8 +28,6 @@ BacktestLibrary *run_backtest(const double *prices, int instruments, int days)
         return nullptr;
     }
 
-    double risk_free_rate = 0.03;
-
     size_t size = static_cast<size_t>(days) * static_cast<size_t>(instruments);
     double years = static_cast<double>(days - 1) / 252.0;
     double growth_factor = prices[size - 1] / prices[0];
