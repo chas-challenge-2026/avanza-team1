@@ -4,11 +4,20 @@
   gap: 1rem;
 }
 
+.leftColumn {
+  width: 100%;
+}
+.rightColumn {
+  /* width: 200px; */
+}
+
 /* Tablet */
 @media (min-width: 768px) {
   .dashboardGrid {
-    grid-template-columns: repeat(2, 1fr);  /* 📱→ 2 kolumner */
+    grid-template-columns: 1fr 200px;  /* 📱→ 2 kolumner */
     gap: 1.5rem;
+    width: 100%;
+    max-width: 1024px;
   }
 }
 
@@ -43,7 +52,7 @@ td {
 button {
   padding: 0.5rem 1rem;
   background-color: var(--primary-color);
-  color: white;
+  color: var(--white);
   border: none;
   border-radius: 4px;
   cursor: pointer;

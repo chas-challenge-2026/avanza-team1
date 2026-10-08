@@ -10,7 +10,7 @@
   margin: 0;
   padding: var(--space-medium);
   border-bottom: 1px solid var(--light-gray);
-  background-color: var(--off-white);
+  background-color: var(--background-alt);
   font-size: var(--font-size-medium);
   /* font-weight: 600; */
   color: var(--text-color-alt);
@@ -40,8 +40,6 @@
 
   .medium {
     grid-column: span 1;
-    color: red;
-
   }
 
   .large {

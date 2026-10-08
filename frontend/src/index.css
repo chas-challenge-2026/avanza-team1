@@ -15,7 +15,7 @@
     /* colors */
     --white: #ffffff;
     --off-white: #f4f6f9;
-    --light-gray: #f0f0f0;
+    --light-gray: #e0e0e0;
     --gray: #808080;
     --dark-gray: #333333;
     --black: #202020;
@@ -24,8 +24,8 @@
     --primary-color-dark: hsl(148, 96%, 20%);
     --green: #00a651;
 
-    --background: var(--off-white);
-    --background-alt: var(--light-gray);
+    --background: var(--white);
+    --background-alt: var(--off-white);
 
     --text-color: var(--black);
     --text-color-alt: var(--dark-gray);

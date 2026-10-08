@@ -67,16 +67,18 @@ function Portfolio() {
         <div className="leftColumn">
           {drift.overThreshold && <WarningBanner message={drift.message} />}
           <AssetAllocation allocation={allocation} />
-          <GoalAllocation
+          {/* TODO: Turn GoalAllocation into a modal */}
+          {/* <GoalAllocation
             targetAktierPct={allocation.targetAktierPct}
             targetStabiltPct={allocation.targetStabiltPct}
             onTargetSaved={handleTargetSaved}
-          />
-          <NoticesEmpty alerts={driftAlerts(allocation)} />
-          <HoldingsTable holdings={portfolio.holdings} />
+          /> */}
+          {/* TODO: Move HoldingsTable to separate page */}
+          {/* <HoldingsTable holdings={portfolio.holdings} /> */}
           <AccountsTable accounts={portfolio.accounts} allocation={allocation} holdings={portfolio.holdings} />
+          <NoticesEmpty alerts={driftAlerts(allocation)} />
         </div>
-        <div className={"leftColumn"}>
+        <div className={"rightColumn"}>
           <InfoAside />
         </div>
       </div>
