@@ -8,7 +8,12 @@
 #include <jansson.h>
 #include <curl/curl.h>
 
+#include "../logger/logger.hpp"
+
 #define URL_LEN 100
+#define LOG_FILE "fx_log.txt"
+
+static std::string fx_code_to_string(FX_Code code);
 
 size_t write_data(char *buffer, size_t size, size_t nmemb, void *user_data)
 {
@@ -35,6 +40,7 @@ double fx_convert_current(double val, const char *curr)
     /*  Expect currency to be 3 letters (examples: GBP, EUR, USD) */
     if ((strlen(curr) != 3))
     {
+        log(LOG_ERR, LOG_FILE, fx_code_to_string(FX_ERR_INVALID_CURRENCY));
         return 0;
     }
  
@@ -49,6 +55,7 @@ double fx_convert_current(double val, const char *curr)
     if (result != FX_OK)
     {
         free(response.string);
+        log(LOG_ERR, LOG_FILE, fx_code_to_string(result));
         return 0;
     }
 
@@ -57,6 +64,7 @@ double fx_convert_current(double val, const char *curr)
     if (result != FX_OK)
     {
         free(response.string);
+        log(LOG_ERR, LOG_FILE, fx_code_to_string(result));
         return 0;
     }
 
@@ -73,6 +81,7 @@ FX_Code fx_curl(const char *url, Response *response)
     CURLcode result;
     if (handle == NULL)
     {
+        log(LOG_ERR, LOG_FILE, fx_code_to_string(FX_ERR_CURL));
         return FX_ERR_CURL;
     }
 
@@ -86,8 +95,8 @@ FX_Code fx_curl(const char *url, Response *response)
     result = curl_easy_perform(handle);
     if (result != CURLE_OK)
     {
-        std::cout << "Error: " << curl_easy_strerror(result) << "\r\n";
         curl_easy_cleanup(handle);
+        log(LOG_ERR, LOG_FILE, curl_easy_strerror(result));
         return FX_ERR_CURL;
     }
 
@@ -102,7 +111,8 @@ FX_Code fx_parse_string(FX_Data *fx_data, const char *buffer)
     json_t *json = json_loads(buffer, 0, &json_error);
     if (!json)
     {
-        std::cout << "Error on line " << json_error.line << ": " << json_error.text << "\r\n";
+        std::string error = "Error on line " + std::to_string(json_error.line) + ": " + json_error.text;
+        log(LOG_ERR, LOG_FILE, error);
         return FX_ERR_JSON;
     }
 
@@ -110,6 +120,7 @@ FX_Code fx_parse_string(FX_Data *fx_data, const char *buffer)
     if (!json_is_string(json_date))
     {
         json_decref(json);
+        log(LOG_ERR, LOG_FILE, fx_code_to_string(FX_ERR_JSON));
         return FX_ERR_JSON;
     }
     
@@ -120,6 +131,7 @@ FX_Code fx_parse_string(FX_Data *fx_data, const char *buffer)
     if (!json_is_real(json_value))
     {
         json_decref(json);
+        log(LOG_ERR, LOG_FILE, fx_code_to_string(FX_ERR_JSON));
         return FX_ERR_JSON;
     }
 
@@ -137,7 +149,8 @@ FX_Code fx_parse_string_interval(const char *buffer, std::map<std::string, doubl
     json_t *json = json_loads(buffer, 0, &json_error);
     if (!json)
     {
-        std::cout << "Error on line " << json_error.line << ": " << json_error.text << "\r\n";
+        std::string error = "Error on line " + std::to_string(json_error.line) + ": " + json_error.text;
+        log(LOG_ERR, LOG_FILE, error);
         return FX_ERR_JSON;
     }
     
@@ -182,16 +195,19 @@ FX_Code fx_convert_series(double *prices, int instruments, int instrument_target
     /*  Expect currency to be 3 letters (examples: GBP, EUR, USD) */
     if ((strlen(curr) != 3))
     {
+        log(LOG_ERR, LOG_FILE, "Invalid currency.");
         return FX_ERR_INVALID_CURRENCY;
     }
 
     if (days < 1 || instruments < 1 || instrument_target < 0 || instrument_target > instruments - 1)
     {
+        log(LOG_ERR, LOG_FILE, "Incorrect days, instruments, or instrument target.");
         return FX_ERR;
     }
 
     if (prices == nullptr)
     {
+        log(LOG_ERR, LOG_FILE, "Prices is nullptr.");
         return FX_ERR_NULLPTR;
     }
     
@@ -220,6 +236,7 @@ FX_Code fx_convert_series(double *prices, int instruments, int instrument_target
     if (result != FX_OK)
     {
         free(response.string);
+        log(LOG_ERR, LOG_FILE, fx_code_to_string(result));
         return result;
     }
 
@@ -228,6 +245,7 @@ FX_Code fx_convert_series(double *prices, int instruments, int instrument_target
     if (result != FX_OK)
     {
         free(response.string);
+        log(LOG_ERR, LOG_FILE, fx_code_to_string(result));
         return result;
     }
 
@@ -252,4 +270,22 @@ FX_Code fx_convert_series(double *prices, int instruments, int instrument_target
     }
 
     return FX_OK;
+}
+
+static std::string fx_code_to_string(FX_Code code)
+{
+    if (code == FX_ERR_INVALID_CURRENCY)
+        return "Invalid currency.";
+    else if(code == FX_ERR_CURL)
+        return "cURL error.";
+    else if(code == FX_ERR_NULLPTR)
+        return "Nullptr error.";
+    else if(code == FX_ERR_JSON)
+        return "JSON error.";
+    else if(code == FX_ERR_INVALID_DATE)
+        return "Invalid date.";
+    else if(code == FX_ERR)
+        return "Unspecified error.";
+    else
+        return "Unknown error.";
 }
