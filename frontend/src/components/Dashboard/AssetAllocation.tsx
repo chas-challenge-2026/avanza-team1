@@ -1,4 +1,3 @@
-import Panel from "../Panel";
 import styles from "./AssetAllocation.module.css";
 // import AllocationPieChart from "./AllocationPieChart";
 import type { Allocation } from "../../types/portfolio";
@@ -9,24 +8,44 @@ interface AssetAllocationProps {
 
 function AssetAllocation({ allocation }: AssetAllocationProps): JSX.Element {
   return (
-    <div className={styles.container}>
-      <Panel title="Din riskallokering" size="large">
-        <p>Hela portföljens fördelning av riskbetonade / stabila innehav</p>
-        {/* Chart colors explained */}
-        <div className={styles.colorExplanation}>
-          <span className={styles.lightClrExpl}>Riskbetonade innehav</span>
-          <span className={styles.darkClrExpl}>Stabila innehav med låg risk</span>
-        </div>
-        {/* Faktiskt allokering label */}
-        <p className={styles.actualLabel}>Faktisk allokering</p>
+    <>
+      <h2>Din riskallokering</h2>
+      <div className={styles.container}>
+      <p>Hela portföljens fördelning av riskbetonade / stabila innehav</p>
+      {/* Chart colors explained */}
+      <div className={styles.colorExplanation}>
+        <span className={styles.lightClrExpl}>Riskbetonade innehav</span>
+        <span className={styles.darkClrExpl}>Stabila innehav med låg risk</span>
+      </div>
         {/* Actual/Target BarChart */}
-        <div data-procent={allocation.actualAktierPct}>BLA BLA</div><div data-procent={allocation.actualStabiltPct}>BLA BLA</div>
-        <p>{allocation.targetAktierPct} / {allocation.targetStabiltPct}</p>
-        {/* Målallokering label */}
-        <p className={styles.targetLabel}>Målallokering</p>
+        <div className={styles.barChartContainer}>
+          {/* Faktiskt allokering label */}
+          <p className={styles.actualLabel}>Faktisk allokering</p>
+          <div className={styles.barsContainer}>
+            <div className={styles.bar}>
+              <div className={styles.lightColor} data-percent={`${allocation.actualAktierPct}%`}>
+                <p>{allocation.actualAktierPct}%</p>
+              </div>
+              <div className={styles.darkColor} data-percent={`${allocation.actualStabiltPct}%`}>
+                <p>{allocation.actualStabiltPct}%</p>
+              </div>
+            </div>
+            <div className={styles.bar}>
+              <div className={styles.targetLightColor} data-percent={`${allocation.targetAktierPct}%`}>
+                <p>{allocation.targetAktierPct}%</p>
+              </div>
+              <div className={styles.targetDarkColor} data-percent={`${allocation.targetStabiltPct}%`}>
+                <p>{allocation.targetStabiltPct}%</p>
+              </div>
+            </div>
+          </div>
+          {/* Målallokering label */}
+          <p className={styles.targetLabel}>Målallokering</p>
+        </div>
+        {/* Old PieChart component: */}
         {/* <AllocationPieChart aktierPct={allocation.actualAktierPct} stabiltPct={allocation.actualStabiltPct} /> */}
-        </Panel>
-    </div>
+      </div>
+    </>
   );
 }
 

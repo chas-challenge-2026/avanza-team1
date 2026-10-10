@@ -6,7 +6,7 @@
   overflow: hidden;
 }
 
-.panel h3 {
+.panelHeader h3 {
   margin: 0;
   padding: var(--space-medium);
   border-bottom: 1px solid var(--light-gray);

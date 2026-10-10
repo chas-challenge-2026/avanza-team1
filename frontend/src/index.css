@@ -11,6 +11,7 @@
     --space-medium: 1rem;
     --space-small: 0.75rem;
     --space-xsmall: 0.5rem;
+    --space-xxsmall: 0.2rem;
 
     /* colors */
     --white: #ffffff;
@@ -21,8 +22,8 @@
     --black: #202020;
     
     --primary-color: hsl(148, 96%, 34%);
-    --primary-color-dark: hsl(148, 96%, 20%);
-    --primary-color-light: hsl(120, 96%, 50%);
+    --primary-color-dark: hsl(148, 97%, 31%);
+    --primary-color-light: hsl(120, 95%, 45%);
 
     --background: var(--white);
     --background-alt: var(--off-white);
@@ -51,4 +52,8 @@ body {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: var(--font-size-normal);
     color: var(--text-color);
+}
+
+h3 {
+    margin: 0;
 }

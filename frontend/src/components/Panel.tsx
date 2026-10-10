@@ -1,4 +1,4 @@
-import "./Panel.module.css";
+import styles from "./Panel.module.css";
 
 interface PanelProps {
   title: string;
@@ -8,8 +8,8 @@ interface PanelProps {
 
 function Panel({ title, size = 'medium', children }: PanelProps) {
   return (
-    <section className={`panel ${size}`}>
-      <div className="panelHeader">
+    <section className={`${styles.panel} ${size}`}>
+      <div className={styles.panelHeader}>
         <h3>{title}</h3>
       </div>
       <div className="panelContent">

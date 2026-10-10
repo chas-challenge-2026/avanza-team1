@@ -1,8 +1,12 @@
 .container {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  gap: var(--space-medium);
   /* justify-content: center; */
   width: 100%;
+}
+
+.container p {
+  margin: 0;
 }
 
 .colorExplanation {
@@ -30,6 +34,66 @@
   background-color: var(--primary-color-dark);
 }
 
-span[data-procent] {
-  width: attr(data-procent type(<percentage>));
+div[data-percent] {
+  width: attr(data-percent type(<length-percentage>));
+}
+.lightColor {
+  background-color: var(--primary-color-light);
+  text-align: start;
+}
+.darkColor {
+  background-color: var(--primary-color-dark);
+  text-align: end;
+  color: var(--off-white);
+}
+.targetLightColor {
+  background-color: var(--light-gray);
+  text-align: start;
+}
+.targetDarkColor {
+  background-color: var(--gray);
+  text-align: end;
+  color: var(--off-white);
+}
+
+.actualLabel, .targetLabel {
+  width: max-content;
+  margin: 0;
+  corner-right-shape: bevel;
+  background-color: var(--background-alt);
+  overflow: hidden;
+  font-size: var(--font-size-emphasis);
+  font-weight: 500;
+  color: var(--gray);
+}
+.actualLabel {
+  border-radius: 8px 10rem 0 0;
+  padding: var(--space-xxsmall) var(--space-large) 0 var(--space-small);
+}
+.targetLabel {
+  border-radius: 0 0 10rem 8px;
+  padding: 0 var(--space-large) var(--space-xxsmall) var(--space-small);
+}
+
+.barsContainer {
+  display: grid;
+  gap: var(--space-xsmall);
+  background-color: var(--background-alt); 
+  padding: var(--space-xsmall) var(--space-small);
+  border-radius: 0 8px 8px 0;
+}
+
+.bar {
+  display: flex;
+  flex-direction: row;
+  height: 3rem;
+  border-radius: 8px;
+  overflow: hidden;
+  p {
+    margin-inline: var(--space-xsmall);
+    font-size: 2.4rem;
+    font-weight: 500;
+    
+    /* filter: drop-shadow(0 1px 2px var(--text-color-alt)); */
+  }
 }

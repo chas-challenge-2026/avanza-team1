@@ -6,6 +6,8 @@
 
 .leftColumn {
   width: 100%;
+  display: grid;
+  gap: var(--space-medium);
 }
 .rightColumn {
   /* width: 200px; */
