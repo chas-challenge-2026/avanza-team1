@@ -68,7 +68,7 @@ function Portfolio() {
         <div className="leftColumn">
           {drift.overThreshold && <WarningBanner message={drift.message} />}
           <AssetAllocation allocation={allocation} />
-          <button
+          <button className="setAllocationBtn"
             type="button"
             onClick={() => goalAllocationDialog.current?.showModal()}
           >

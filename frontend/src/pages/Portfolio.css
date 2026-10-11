@@ -51,14 +51,20 @@ td {
 }
 
 button {
+  width: max-content;
+  justify-self: end;
   padding: 0.5rem 1rem;
-  background-color: var(--primary-color);
-  color: var(--white);
+  background-color: var(--light-gray);
+  color: var(--text-color-alt);
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  font-weight: 500;
+  font-weight: 600;
   transition: background-color 0.2s ease;
+}
+
+.setAllocationBtn {
+  margin-top: -1.5rem;
 }
 
 button:hover {
