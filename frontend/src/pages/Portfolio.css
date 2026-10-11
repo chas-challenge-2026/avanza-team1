@@ -61,26 +61,11 @@ td {
   border-bottom: 1px solid #f0f0f0;
 }
 
-button {
-  width: max-content;
-  justify-self: end;
-  padding: 0.5rem 1rem;
-  background-color: var(--light-gray);
-  color: var(--text-color-alt);
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: background-color 0.2s ease;
-}
 
 .setAllocationBtn {
   margin-top: -1.5rem;
 }
 
-button:hover {
-  background-color: #008a42;
-}
 
 .goalAllocationDialog {
   width: min(90vw, 48rem);

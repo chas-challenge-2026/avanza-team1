@@ -18,17 +18,15 @@
 .columnTitle {
   font-size: var(--font-size-large);
   font-weight: 600;
-  /* color: #333; */
   margin-bottom: var(--space-medium);
   margin-inline: var(--space-xsmall);
   border-bottom: 1px solid var(--gray);
-  /* background-color: var(--light-gray); */
 }
 
 .row {
   display: flex;
   justify-content: space-between;
-  padding-inline: var(--space-xsmall);
+  padding: var(--space-xxsmall) var(--space-xsmall);
 }
 
 .value {

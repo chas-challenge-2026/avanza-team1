@@ -1,4 +1,4 @@
-.container {
+ .container {
   display: grid;
   gap: var(--space-medium);
   /* justify-content: center; */
@@ -13,11 +13,12 @@
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  gap: var(--space-medium);
   line-height: var(--font-size-large);
   /* justify-content: space-between; */
   > * {
     flex-grow: 1;
-    min-width: calc(100% + 4rem);
+    /* min-width: calc(fit-content + 6rem); */
     translate: 2rem 0;
     &:before {
         content: "";
