@@ -11,9 +11,16 @@
   padding: var(--space-medium);
   border-bottom: 1px solid var(--light-gray);
   background-color: var(--background-alt);
-  font-size: var(--font-size-medium);
-  /* font-weight: 600; */
   color: var(--text-color-alt);
+}
+
+.panelHeader .primaryLight {
+  background-color: var(--primary-color-light);
+}
+
+.panelHeader .primaryDark {
+  background-color: var(--primary-color-dark);
+  color: var(--off-white);
 }
 
 .panelContent {
@@ -23,14 +30,27 @@
 /* Responsive sizes */
 .small {
   grid-column: span 1;
+  .panelHeader h3 {
+      padding: var(--space-xsmall);
+      font-size: var(--font-size-large);
+      font-weight: 600;
+  }
 }
 
 .medium {
   grid-column: span 1;
+  .pageHeader h3 {
+    font-size: var(--font-size-large);
+    font-weight: 600;
+  }
 }
 
 .large {
   grid-column: span 1;
+  .panelHeader h3 {
+      font-size: var(--font-size-xlarge);
+      font-weight: 700;
+    }
 }
 
 @media (min-width: 768px) {

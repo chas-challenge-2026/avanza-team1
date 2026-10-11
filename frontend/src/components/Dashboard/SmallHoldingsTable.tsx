@@ -24,12 +24,13 @@ function SmallHoldingsTable({
     (total, holding) => total + holding.valueSek,
     0,
   );
+  const titleColor = assetClass === "AKTIER" ? "primaryLight" : "primaryDark"
 
   return (
-    <Panel title={title} size="medium">
-      <div className={styles.row}>
-        <span>{title}</span>
-        <span className={styles.value}>{formatSek(totalValueSek)}</span>
+    <Panel title={title} size="small" titleColor={titleColor}>
+      <div className={`${styles.row} ${styles.topRow}`}>
+        <span>Totalt i denna allokering</span>
+        <span className={styles.totalValue}>{formatSek(totalValueSek)}</span>
       </div>
       <div className={styles.holdingsList}>
         {classHoldings.map((holding) => (
@@ -38,7 +39,7 @@ function SmallHoldingsTable({
               {holding.name} ({holding.returnPct > 0 && "+"}
               {holding.returnPct}%)
             </span>
-            <span>{holding.valueSek} kr</span>
+            <span>{formatSek(holding.valueSek)} kr</span>
           </div>
         ))}
       </div>
