@@ -24,21 +24,19 @@
   color: var(--primary-color);
 }
 
-.footer {
-  margin-top: var(--space-medium);
-  text-align: right;
-}
-
 .right {
   text-align: right;
 }
 
-/* TODO: move this styling to global style for "a" links and remove this class */
-.viewLink {
-  color: var(--primary-color);
-  text-decoration: none;
+.historyButton {
+  padding: var(--space-xxsmall) var(--space-xsmall);
+  border: 1px solid var(--primary-color);
+  border-radius: 4px;
+  background: var(--white);
+  color: var(--primary-color-dark);
+  cursor: pointer;
 }
 
-.viewLink:hover {
-  text-decoration: underline;
+.selectedRow {
+  background: var(--background-alt);
 }
