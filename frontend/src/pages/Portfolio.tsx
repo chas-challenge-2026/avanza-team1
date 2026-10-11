@@ -86,16 +86,18 @@ function Portfolio() {
               onTargetSaved={handleTargetSaved}
             />
           </dialog>
-          <SmallHoldingsTable
-            holdings={portfolio.holdings}
-            assetClass="AKTIER"
-            title="Riskbetonade innehav"
-          />
-          <SmallHoldingsTable
-            holdings={portfolio.holdings}
-            assetClass="STABILT"
-            title="Stabila innehav"
-          />
+          <div className="smallTables">
+            <SmallHoldingsTable
+              holdings={portfolio.holdings}
+              assetClass="AKTIER"
+              title="Riskbetonade innehav"
+            />
+            <SmallHoldingsTable
+              holdings={portfolio.holdings}
+              assetClass="STABILT"
+              title="Stabila innehav"
+            />
+          </div>
           <AccountsTable accounts={portfolio.accounts} />
           <NoticesEmpty alerts={driftAlerts(allocation)} />
         </div>

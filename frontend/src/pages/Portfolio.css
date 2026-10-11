@@ -12,6 +12,17 @@
 /* .rightColumn {
 } */
 
+.smallTables {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-medium);
+  > * {
+    flex-grow: 1;
+  }
+}
+
 /* Tablet */
 @media (min-width: 768px) {
   .dashboardGrid {

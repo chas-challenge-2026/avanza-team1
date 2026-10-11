@@ -30,6 +30,7 @@
 /* Responsive sizes */
 .small {
   grid-column: span 1;
+  max-width: clamp(320px, 100%, 600px);
   .panelHeader h3 {
       padding: var(--space-xsmall);
       font-size: var(--font-size-large);
