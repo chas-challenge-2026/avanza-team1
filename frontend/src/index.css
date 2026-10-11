@@ -57,3 +57,12 @@ body {
 h3 {
     margin: 0;
 }
+
+a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+/* a:hover {
+    text-decoration: underline;
+} */

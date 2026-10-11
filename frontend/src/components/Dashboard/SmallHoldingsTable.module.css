@@ -1,0 +1,15 @@
+.row {
+  display: flex;
+  justify-content: space-between;
+  padding-inline: var(--space-xsmall);
+}
+
+.holdingsList {
+  max-height: 15rem;
+  overflow-y: auto;
+}
+
+.value {
+  font-weight: 600;
+  color: var(--primary-color);
+}

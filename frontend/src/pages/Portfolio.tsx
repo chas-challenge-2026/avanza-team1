@@ -1,12 +1,12 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import PageHeader from "../components/Dashboard/PageHeader";
 import WarningBanner from "../components/Dashboard/WarningBanner";
 import { InfoAside } from "../components/Dashboard/InfoAside";
 import AssetAllocation from "../components/Dashboard/AssetAllocation";
-// import GoalAllocation from "../components/Dashboard/GoalAllocation";
+import GoalAllocation from "../components/Dashboard/GoalAllocation";
 import AccountsTable from "../components/Dashboard/AccountsTable";
+import SmallHoldingsTable from "../components/Dashboard/SmallHoldingsTable";
 import NoticesEmpty from "../components/Dashboard/NoticesEmpty";
-// import HoldingsTable from "../components/Dashboard/HoldingsTable";
 import "./Portfolio.css";
 import type { Alert, Allocation } from "../types/portfolio";
 import { readStoredTarget } from "../lib/targetAllocation";
@@ -26,6 +26,7 @@ function driftAlerts(allocation: Allocation): Alert[] {
 
 function Portfolio() {
   const { portfolio, isPending, isError } = usePortfolio();
+  const goalAllocationDialog = useRef<HTMLDialogElement>(null);
 
   const [targetOverride, setTargetOverride] = useState<{
     targetAktierPct: number;
@@ -67,15 +68,35 @@ function Portfolio() {
         <div className="leftColumn">
           {drift.overThreshold && <WarningBanner message={drift.message} />}
           <AssetAllocation allocation={allocation} />
-          {/* TODO: Turn GoalAllocation into a modal */}
-          {/* <GoalAllocation
-            targetAktierPct={allocation.targetAktierPct}
-            targetStabiltPct={allocation.targetStabiltPct}
-            onTargetSaved={handleTargetSaved}
-          /> */}
-          {/* TODO: Move HoldingsTable to separate page */}
-          {/* <HoldingsTable holdings={portfolio.holdings} /> */}
-          <AccountsTable accounts={portfolio.accounts} allocation={allocation} holdings={portfolio.holdings} />
+          <button
+            type="button"
+            onClick={() => goalAllocationDialog.current?.showModal()}
+          >
+            Ändra målallokering
+          </button>
+          <dialog ref={goalAllocationDialog} className="goalAllocationDialog">
+            <form method="dialog" className="goalAllocationDialogClose">
+              <button type="submit" aria-label="Stäng målallokering">
+                Stäng
+              </button>
+            </form>
+            <GoalAllocation
+              targetAktierPct={allocation.targetAktierPct}
+              targetStabiltPct={allocation.targetStabiltPct}
+              onTargetSaved={handleTargetSaved}
+            />
+          </dialog>
+          <SmallHoldingsTable
+            holdings={portfolio.holdings}
+            assetClass="AKTIER"
+            title="Riskbetonade innehav"
+          />
+          <SmallHoldingsTable
+            holdings={portfolio.holdings}
+            assetClass="STABILT"
+            title="Stabila innehav"
+          />
+          <AccountsTable accounts={portfolio.accounts} />
           <NoticesEmpty alerts={driftAlerts(allocation)} />
         </div>
         <div className={"rightColumn"}>

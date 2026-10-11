@@ -63,16 +63,16 @@ div[data-percent] {
   background-color: var(--background-alt);
   overflow: hidden;
   font-size: var(--font-size-emphasis);
-  font-weight: 500;
+  font-weight: 600;
   color: var(--gray);
 }
 .actualLabel {
-  border-radius: 8px 10rem 0 0;
-  padding: var(--space-xxsmall) var(--space-large) 0 var(--space-small);
+  border-radius: 8px 3rem 0 0;
+  padding: var(--space-xsmall) var(--space-xlarge) 0 var(--space-small);
 }
 .targetLabel {
-  border-radius: 0 0 10rem 8px;
-  padding: 0 var(--space-large) var(--space-xxsmall) var(--space-small);
+  border-radius: 0 0 3rem 8px;
+  padding: 0 var(--space-xlarge) var(--space-xxsmall) var(--space-small);
 }
 
 .barsContainer {

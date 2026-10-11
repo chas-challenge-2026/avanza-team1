@@ -1,5 +1,4 @@
 import styles from "./AssetAllocation.module.css";
-// import AllocationPieChart from "./AllocationPieChart";
 import type { Allocation } from "../../types/portfolio";
 
 interface AssetAllocationProps {
@@ -17,11 +16,17 @@ function AssetAllocation({ allocation }: AssetAllocationProps): JSX.Element {
         <span className={styles.lightClrExpl}>Riskbetonade innehav</span>
         <span className={styles.darkClrExpl}>Stabila innehav med låg risk</span>
       </div>
+
         {/* Actual/Target BarChart */}
         <div className={styles.barChartContainer}>
-          {/* Faktiskt allokering label */}
+      
+          {/* "Faktiskt allokering" label */}
           <p className={styles.actualLabel}>Faktisk allokering</p>
+      
+          {/* Bars container */}
           <div className={styles.barsContainer}>
+      
+            {/* Actual allocation bar */}
             <div className={styles.bar}>
               <div className={styles.lightColor} data-percent={`${allocation.actualAktierPct}%`}>
                 <p>{allocation.actualAktierPct}%</p>
@@ -30,6 +35,8 @@ function AssetAllocation({ allocation }: AssetAllocationProps): JSX.Element {
                 <p>{allocation.actualStabiltPct}%</p>
               </div>
             </div>
+      
+            {/* Target allocation bar */}
             <div className={styles.bar}>
               <div className={styles.targetLightColor} data-percent={`${allocation.targetAktierPct}%`}>
                 <p>{allocation.targetAktierPct}%</p>
@@ -39,11 +46,10 @@ function AssetAllocation({ allocation }: AssetAllocationProps): JSX.Element {
               </div>
             </div>
           </div>
-          {/* Målallokering label */}
+      
+          {/* "Målallokering" label */}
           <p className={styles.targetLabel}>Målallokering</p>
         </div>
-        {/* Old PieChart component: */}
-        {/* <AllocationPieChart aktierPct={allocation.actualAktierPct} stabiltPct={allocation.actualStabiltPct} /> */}
       </div>
     </>
   );

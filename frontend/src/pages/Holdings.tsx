@@ -1,9 +1,19 @@
+import HoldingsTable from "../components/Dashboard/HoldingsTable";
+import { usePortfolio } from "../hooks/usePortfolio";
+
 function Holdings() {
+  const { portfolio, isPending, isError } = usePortfolio();
+
+  if (isPending) {
+    return <p>Laddar innehav…</p>;
+  }
+
+  if (isError || !portfolio) {
+    return <p>Kunde inte hämta innehaven.</p>;
+  }
+
   return (
-    <>
-      <h2>Innehav</h2>
-      <p>Här kommer innehållslistan att visas</p>
-    </>
+    <HoldingsTable holdings={portfolio.holdings} />
   );
 }
 
