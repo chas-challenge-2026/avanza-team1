@@ -11,6 +11,7 @@ function formatSek(value: number): string {
 
 function AccountsTable({ accounts }: AccountsTableProps): JSX.Element {
   return (
+    // TODO: Adapt content and wrap it in a <Panel> component 
     <div className={styles.container}>
       <div className={styles.column}>
         <h3 className={styles.columnTitle}>Konton</h3>

@@ -19,13 +19,14 @@ function Topbar() {
         <img src={logo} alt="Logo" className={styles.logo} />
         <h1>PORTFÖLJHÄLSA</h1>
       </div>
+      {/* TODO: NavLinks are duplicated in HamburgerMenu component, responsive behaviour should be that the nav is rendered EITHER as the horizontal navbar as below OR as the HamburgerMenu. */}
       <nav className={styles.desktopNav}>
         <NavLink
           to="/"
           end
           className={({ isActive }) => (isActive ? styles.active : "")}
         >
-          Portfolio
+          Portfölj
         </NavLink>
         <NavLink
           to="/holdings"

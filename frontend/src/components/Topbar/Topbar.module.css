@@ -84,6 +84,8 @@
   margin: auto 0;
   height: 2rem;
   min-width: fit-content;
+  background-color: var(--primary-color);
+  color: var(--white);
 }
 /* ▲▲▲ user areas ▲▲▲ */
 
