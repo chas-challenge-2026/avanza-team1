@@ -68,7 +68,7 @@ td {
 
 
 .goalAllocationDialog {
-  width: min(90vw, 48rem);
+  width: min(90vw, 400px);
   max-height: 90vh;
   padding: 0;
   border: 0;
@@ -81,8 +81,10 @@ td {
 }
 
 .goalAllocationDialogClose {
-  display: flex;
-  justify-content: flex-end;
+  position: absolute;
+  right: 0;
+  /* display: flex; */
+  /* justify-content: flex-end; */
   padding: var(--space-small) var(--space-small) 0;
 }
 
