@@ -12,6 +12,7 @@
     - [Risk Assessment Engine](#risk-assessment-engine)
     - [FX-Pipeline](#fx-pipeline)
     - [Backtest-Engine](#backtest-engine)
+    - [Logger](#logger)
   - [Documentation](#documentation)
   - [Testing](#testing)
   - [Collaborators](#collaborators)
@@ -38,6 +39,7 @@ cmake --build build
 * Risk Assessment Engine - Calculates basic risk metrics (Volatility, Sharpe ratio, and Max drawdown) from a historical series of daily closing prices.
 * FX-Pipeline - Converts a stocks currency to SEK, can be used separately and also with the backtesting.
 * Backtest Engine - Simulates investment allocation using historical data and risk metrics using the Risk Assessment Engine.
+* Logger - Can be used by the other modules to write event logs to the console, a file, or both.
 
 ## Project structure
 ```bash
@@ -92,6 +94,13 @@ cmake --build build
 * Produces risk metrics such as total return, annualized return, max drawdown and Sharpe ratio.
 * Works together with the Risk Assessment Engine by performing risk calculations in the simulated portfolio.
 * Integrates with the Java application using a JNA bridge.
+
+### Logger
+* Can be used by other modules to log events to the console, a file, or both.
+* Automatically timestamps the logged event.
+* User can choose between tagging each event as INFO, WARNING, or ERROR.
+* User determines file name.
+* A new directory "logs" will be created in root. Currently no way to choose a different location.
 
 ## Documentation
 * Doxygen-styled comments.
