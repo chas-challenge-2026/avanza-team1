@@ -21,10 +21,6 @@ function GoalAllocation({
   const { saveAllocation, isPending, isError } = useSaveAllocation();
 
   useEffect(() => {
-    setSaved(false);
-  }, [equities, funds]);
-
-  useEffect(() => {
     if (!saved) return;
     const timer = setTimeout(() => setSaved(false), 3000);
     return () => clearTimeout(timer);
@@ -120,7 +116,7 @@ function GoalAllocation({
         <button
           className={styles.button}
           type="button"
-          disabled={saved && isPending}
+          disabled={isPending || !isValid}
           onClick={handleSave}
         >
           {saved ? "Mål sparat" : "Spara mål"}

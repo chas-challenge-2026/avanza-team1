@@ -1,5 +1,5 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import GoalAllocation from './GoalAllocation'
 
@@ -21,6 +21,11 @@ const renderWithQueryClient = (component: React.ReactElement) => {
 
 beforeEach(() => {
   localStorage.clear()
+  vi.useFakeTimers()
+})
+
+afterEach(() => {
+  vi.useRealTimers()
 })
 
 describe('GoalAllocation', () => {
@@ -71,7 +76,7 @@ describe('GoalAllocation', () => {
     expect(button).toBeEnabled()
   })
 
-  it('shows "Mål sparat" and is enabled after saving (timeout resets)', async () => {
+  it('shows "Mål sparat" and resets to "Spara mål" after 3 seconds', async () => {
     renderWithQueryClient(
       <GoalAllocation
         targetAktierPct={60}
@@ -83,8 +88,13 @@ describe('GoalAllocation', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Spara mål' }))
 
     await waitFor(() => {
-      const button = screen.getByRole('button', { name: 'Mål sparat' })
-      expect(button).toBeEnabled()
+      expect(screen.getByRole('button', { name: 'Mål sparat' })).toBeInTheDocument()
+    })
+
+    vi.advanceTimersByTime(3000)
+
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: 'Spara mål' })).toBeInTheDocument()
     })
   })
 
