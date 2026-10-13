@@ -34,8 +34,9 @@ int main()
 
     const int days = 126;
     const int instruments = 2;
+    const char currency[] = "USD";
     
-    BacktestLibrary *result = run_backtest(prices, instruments, days);
+    BacktestLibrary *result = run_backtest(prices, instruments, days, currency);
     if (result == nullptr)
     {
         std::cerr << "run_backtest failed\n";

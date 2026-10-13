@@ -23,11 +23,12 @@ typedef struct
     double annualized_return;
     double max_drawdown;
     double sharpe_ratio;
+    const char *currency;
 } BacktestLibrary;
 
 extern "C" 
 {
     EXPORT void free_backtest_result(BacktestLibrary *result);
 
-    EXPORT BacktestLibrary *run_backtest(const double *prices, int instruments, int days);    
+    EXPORT BacktestLibrary *run_backtest(const double *prices, int instruments, int days, const char *currency);
 }

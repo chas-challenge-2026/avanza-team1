@@ -3,35 +3,36 @@ package se.comerit.avanza.service;
 import org.springframework.stereotype.Service;
 import se.comerit.avanza.api.BacktestLibrary;
 import se.comerit.avanza.api.exception.JnaBridgeException;
+import se.comerit.avanza.dto.BacktestMetricsDto;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 @Service
 public class BacktestService {
-    public List<Double> executeBacktest(double[] prices, int instruments, int days) {
+    public BacktestMetricsDto executeBacktest(double[] prices, int instruments, int days, String currency) {
         boolean dataSent = false;
         boolean valuesReturned = false;
         boolean memoryCleaned = false;
         BacktestLibrary.BacktestResult.ByReference result = null;
-        List<Double> metrics = Collections.emptyList();
+
+        BacktestMetricsDto metrics = null;
 
         try {
             if (prices != null && prices.length > 0 && instruments > 0 && days > 0) {
                 dataSent = true;
             }
 
-            result = BacktestLibrary.INSTANCE.run_backtest(prices, instruments, days);
+            result = BacktestLibrary.INSTANCE.run_backtest(prices, instruments, days, currency);
 
             if (result != null) {
                 valuesReturned = true;
 
-                metrics = Arrays.asList(
+                metrics = new BacktestMetricsDto(
                         result.total_return,
                         result.annualized_return,
                         result.max_drawdown,
-                        result.sharpe_ratio
+                        result.sharpe_ratio,
+                        result.currency
                 );
 
                 BacktestLibrary.INSTANCE.free_backtest_result(result.getPointer());
