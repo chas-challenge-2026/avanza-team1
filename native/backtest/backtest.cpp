@@ -13,7 +13,7 @@ void free_backtest_result(BacktestLibrary *result)
     }
 }
 
-BacktestLibrary *run_backtest(const double *prices, int instruments, int days)
+BacktestLibrary *run_backtest(const double *prices, int instruments, int days, const char *currency)
 {
     if (prices == nullptr || days < 3 || instruments < 1)
     {
