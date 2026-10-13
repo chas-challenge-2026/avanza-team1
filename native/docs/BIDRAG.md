@@ -52,3 +52,7 @@ inte i en separat logg.
 | 2026-10-07 | Pär & Henrik | Skapade en Pull Request in i develop så att JNA bryggan kan börja testas mot Java. Henrik hittade en del småsaker som behövde korrigeras, så det tog vi hand om snabbt och genomförde P.R. | - | #6 #16 #73 #74 #98 #124 |
 | 2026-10-07 | Pär | Fixade till lite småsaker som vi missat och uppdaterar BIDRAG.md | - | - |
 | 2026-10-07 | Henrik | Uppdaterade logger-funktionaliteten så att vi kan börja implementera det i våra moduler framöver. | - | #153 |
+| 2026-10-08 | Pär | Uppdaterade både BIDRAG och README, fixade till en sak som missats när vi mergade till develop. Samt tog bort en dubbelskapad variabel. | - | #6 #74 |
+| 2026-10-08 | Henrik | Implementerade logger i FX-modulen | - | #153 |
+| 2026-10-12 | Pär & Henrik | Gjorde om nästan hela våran README för Native så att den är uppdaterad och välgjord. | - | #74 |
+| 2026-10-13 | Henrik | Uppdaterade logger-funktionerna med dokumentation i README och förberedde FX-modulen för att integreras med JNA-bryggan. | - | #161 |
