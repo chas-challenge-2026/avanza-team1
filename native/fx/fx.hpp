@@ -9,6 +9,21 @@
     using Libcurl and using Jansson to parse the JSON data.
 */
 
+/* Checks compiler on different OS systems so not to cause bad errors */
+/* Microsoft Visual Studio or MinGW (Windows) */
+#if defined(_MSC_VER) || defined(__MINGW32__)
+    #define EXPORT __declspec(dllexport)
+
+/* GCC or Clang (Linux, macOS, BSD, etc.) */
+#elif defined(__GNUC__) || defined(__clang__)
+    #define EXPORT __attribute__((visibility("default")))
+
+/* Fallback for unknown compilers */
+#else
+    #define EXPORT
+    #pragma warning Unknown dynamic link export semantics.
+#endif
+
 typedef enum
 {
     FX_OK,
@@ -48,16 +63,19 @@ typedef struct
  */
 size_t write_data(char *buffer, size_t size, size_t nmemb, void *user_data);
 
-/**
- * @brief Calculates an amount of money from a different currency into Swedish kronor (SEK).
- * 
- * @param val Amount of money in curr currency to convert to SEK.
- * @param curr 3 letter currency code (examples: EUR, USD, CAD) to convert into Swedish kronor (SEK)
- * 
- * @return Resulting amount of money in SEK.
- * 
- */
-double fx_convert_current(double val, const char *curr);
+extern "C" 
+{
+    /**
+     * @brief Calculates an amount of money from a different currency into Swedish kronor (SEK).
+     * 
+     * @param val Amount of money in curr currency to convert to SEK.
+     * @param curr 3 letter currency code (examples: EUR, USD, CAD) to convert into Swedish kronor (SEK)
+     * 
+     * @return Resulting amount of money in SEK.
+     * 
+     */
+    EXPORT double fx_convert_current(double val, const char *curr);
+}
 
 /**
  * @brief Converts a series of daily stock prices from curr to SEK.
@@ -116,6 +134,5 @@ FX_Code fx_curl(const char *url, Response *response);
  * 
  */
 FX_Code fx_parse_string_interval(const char *buffer, std::map<std::string, double> *fx_map);
-
 
 #endif // fx_hpp
