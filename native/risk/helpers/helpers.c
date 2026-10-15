@@ -21,26 +21,6 @@ bool valid_price_series(const double prices[], size_t size)
     return true;
 }
 
-RiskStatus calculate_returns(const double prices[], size_t size, double returns[])
-{
-    if (returns == NULL || !valid_price_series(prices, size))
-    {
-        return RISK_INVALID_INPUT;
-    }
-
-    if (size < 2)
-    {
-        return RISK_INSUFFICIENT_DATA;
-    }
-
-    for (size_t i = 1; i < size; i++)
-    {
-        returns[i - 1] = (prices[i] - prices[i - 1]) / prices[i - 1];
-    }
-
-    return RISK_SUCCESS;
-}
-
 RiskStatus calculate_return_statistics(const double prices[], size_t size, double *mean, double *variance)
 {
     if (mean == NULL || variance == NULL || !valid_price_series(prices, size))
@@ -75,32 +55,4 @@ RiskStatus calculate_return_statistics(const double prices[], size_t size, doubl
     *variance = sum_squared_deviation / (double)(return_count - 1);
 
     return RISK_SUCCESS;
-}
-
-void rolling_statistics_add(RollingStatistics *stats, double value)
-{
-    stats->sum += value;
-    stats->sum_squared += value * value;
-    stats->count++;
-}
-
-
-void rolling_statistics_remove(RollingStatistics *stats, double value)
-{
-    stats->sum -= value;
-    stats->sum_squared -= value * value;
-    stats->count--;
-}
-
-double rolling_statistics_mean(const RollingStatistics *stats)
-{
-    return stats->sum / (double)stats->count;
-}
-
-double rolling_statistics_variance(const RollingStatistics *stats)
-{
-    /* Floating-point cancellation can produce a small negative result even though variance is mathematically non-negative. */
-    double variance = (stats->sum_squared - (stats->sum * stats->sum) / (double)stats->count) / (double)(stats->count - 1);
-
-    return variance > 0.0 ? variance : 0.0;
 }
