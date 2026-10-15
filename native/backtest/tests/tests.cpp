@@ -1,7 +1,30 @@
 #include "../backtest.hpp"
+#include "../../logger/logger.hpp"
 
 #include <iostream>
 #include <iomanip>
+
+#define LOG_FILE "backtest.log"
+
+static std::string backtest_status_to_string(BacktestStatus status)
+{
+    switch (status)
+    {
+        case BACKTEST_SUCCESS:
+            return "Success.";
+
+        case BACKTEST_INVALID_INPUT:
+            return "Invalid input.";
+
+        case BACKTEST_INSUFFICIENT_DATA:
+            return "Insufficient data.";
+
+        case BACKTEST_ZERO_VOLATILITY:
+            return "Volatility is 0.0.";
+    }
+
+    return "Unknown error.";
+}
 
 int main()
 {
@@ -32,18 +55,29 @@ int main()
                         344.58, 343.97, 352.59, 353.16, 352.05, 352.05, 345.77, 344.69, 355.17, 339.65,
                         350.59, 340.91};
 
-    const int days = 126;
-    const int instruments = 2;
+    const int days = 42;
+    const int instruments = 6;
+    const char currency[] = "USD";
     
-    BacktestLibrary *result = run_backtest(prices, instruments, days);
+    BacktestLibrary *result = run_backtest(prices, instruments, days, currency);
     if (result == nullptr)
     {
-        std::cerr << "run_backtest failed\n";
+        log(LOG_ERR, LOG_FILE, "Failed to allocate or create backtest result.");
         return 1;
     }
 
-    std::cout << std::fixed << std::setprecision(4);
-    std::cout << "Total Return: " << result->total_return * 100 << "%" << "\r\nAnnualized return: " << result->annualized_return * 100 << "%" << "\r\nMax Drawdown: " << result->max_drawdown * 100 << "%" << "\r\nSharpe Ratio: " << result->sharpe_ratio << "\r\n"; 
+    if (result->status != BACKTEST_SUCCESS)
+    {
+        log(LOG_ERR, LOG_FILE, backtest_status_to_string(result->status));
+        free_backtest_result(result);
+        return 1;
+    }
+
+    std::ostringstream backtest_output;
+
+    backtest_output << std::fixed << std::setprecision(4) << "Backtest completed successfully with " << instruments << " instrument(s).\n" <<"Total Return: " << result->total_return * 100 << "%" << "\r\nAnnualized return: " << result->annualized_return * 100 << "%" << "\r\nMax Drawdown: " << result->max_drawdown * 100 << "%" << "\r\nSharpe Ratio: " << result->sharpe_ratio << "\r\n"; 
+    
+    log(LOG_INFO, LOG_FILE, backtest_output.str());
 
     free_backtest_result(result);
 
