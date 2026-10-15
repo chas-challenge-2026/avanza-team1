@@ -1,14 +1,26 @@
 .container {
     height: 100%;
-    background-color: var(--background-alt);
+    background-image: linear-gradient(to bottom, var(--primary-color), var(--background-alt) 10rem);
+    > * {
+        padding: var(--space-small) var(--space-xsmall);
+    }
+}
+
+.topHeading {
+    /* background: border-box var(--primary-color); */
+    padding-block: 1lh;
+    color: var(--white);
+}
+
+.container article {
+    background-color: #fff4;
+    margin: 4px;
 }
 
 .heading {
     margin: 0;
-    padding: var(--space-xsmall);
 }
 
-.paragraph {
-    border-bottom: 1px solid var(--light-gray);
-}
+/* .paragraph {
+} */
 
