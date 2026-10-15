@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Panel from "../Panel";
 import styles from "./GoalAllocation.module.css";
 import { useSaveAllocation } from "../../hooks/useSaveAllocation";
@@ -19,6 +19,12 @@ function GoalAllocation({
   const [saved, setSaved] = useState(false);
 
   const { saveAllocation, isPending, isError } = useSaveAllocation();
+
+  useEffect(() => {
+    if (!saved) return;
+    const timer = setTimeout(() => setSaved(false), 3000);
+    return () => clearTimeout(timer);
+  }, [saved]);
 
   const sum = equities + funds;
   const isValid = sum === 100;
@@ -110,7 +116,7 @@ function GoalAllocation({
         <button
           className={styles.button}
           type="button"
-          disabled={saved || isPending}
+          disabled={isPending || !isValid}
           onClick={handleSave}
         >
           {saved ? "Mål sparat" : "Spara mål"}
