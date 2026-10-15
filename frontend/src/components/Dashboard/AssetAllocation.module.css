@@ -33,7 +33,7 @@
   background-color: var(--primary-color-light);
 }
 .darkClrExpl:before {
-  background-color: var(--primary-color-dark);
+  background-color: var(--primary-color);
 }
 
 div[data-percent] {
@@ -44,7 +44,7 @@ div[data-percent] {
   text-align: start;
 }
 .darkColor {
-  background-color: var(--primary-color-dark);
+  background-color: var(--primary-color);
   text-align: end;
   color: var(--off-white);
 }
@@ -62,7 +62,7 @@ div[data-percent] {
   width: max-content;
   margin: 0;
   corner-right-shape: bevel;
-  background-color: var(--background-alt);
+  /* background-color: var(--background-alt); */
   overflow: hidden;
   font-size: var(--font-size-emphasis);
   font-weight: 600;
@@ -80,7 +80,7 @@ div[data-percent] {
 .barsContainer {
   display: grid;
   gap: var(--space-xsmall);
-  background-color: var(--background-alt); 
+  /* background-color: var(--background-alt);  */
   padding: var(--space-xsmall) var(--space-small);
   border-radius: 0 8px 8px 0;
 }
