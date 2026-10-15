@@ -1,14 +1,19 @@
 .pageHeader {
   width: 100%;
   /* margin-bottom: var(--space-large); */
-  padding-top: 2rem;
-  background-image: linear-gradient(157.68421395683941deg, rgba(72, 196, 60, 0.2) 37.024%, rgba(72, 196, 60, 0.5) 62.976%);
+  /* Keeping starting color hardcoded - it's not reused */
+  /* Keeping starting color transparency in case of future dark mode */
+  background:
+      linear-gradient(158deg, rgba(72, 196, 60, 0.2) 37.024%, var(--primary-color-light) 62.976%);
+      /* background-position: ; */
   justify-items: center;
 }
 
 .pageHeaderContainer {
-  max-width: 1024px;
+  max-width: var(--max-width);
   width: 100%;
+  background: bottom 0 right 0 / var(--aside-width) 100% no-repeat url(../../assets/logo_bars.svg);
+  padding-top: 2rem;
 }
 
 .title {
