@@ -19,6 +19,7 @@ function PageHeader({
         <div className={styles.value}>
           {totalValueSek.toLocaleString("sv-SE")} <span>SEK</span>
         </div>
+        {/* TODO: Show portfolio value in other currencies instead of showing exchange rates */}
         <p className={styles.subtitle}>
           USD/SEK {fx.usdSek.toLocaleString("sv-SE")} · EUR/SEK{" "}
           {fx.eurSek.toLocaleString("sv-SE")}

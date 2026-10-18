@@ -29,7 +29,7 @@
   padding: var(--space-xxsmall) var(--space-xsmall);
 }
 
-.value {
+/* .value {
   font-weight: 600;
   color: var(--primary-color);
-}
+} */

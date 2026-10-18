@@ -10,8 +10,8 @@ interface PanelProps {
 function Panel({ title, size = 'medium', titleColor, children }: PanelProps) {
   return (
     <section className={`${styles.panel} ${styles[size]}`}>
-      <div className={styles.panelHeader}>
-        <h3 className={titleColor ? styles[titleColor] : undefined}>{title}</h3>
+      <div className={`${styles.panelHeader} ${titleColor ? styles[titleColor] : undefined}`}>
+        <h3>{title}</h3>
       </div>
       <div className="panelContent">
         {children}
