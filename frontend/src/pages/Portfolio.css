@@ -27,7 +27,7 @@
 @media (min-width: 768px) {
   .dashboardGrid {
     grid-template-columns: 1fr var(--aside-width);  /* 📱→ 2 kolumner */
-    gap: 1.5rem;
+    gap: clamp(1rem, 5vw, 5rem);    
     width: 100%;
     max-width: var(--max-width);
   }

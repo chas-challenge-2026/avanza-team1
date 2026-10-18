@@ -7,12 +7,12 @@
     --aside-width: 200px;
 
     /* spacing */
-    --space-xlarge: 2.25rem;
-    --space-large: 1.5rem;
-    --space-medium: 1rem;
-    --space-small: 0.75rem;
-    --space-xsmall: 0.5rem;
-    --space-xxsmall: 0.2rem;
+    --space-xlarge: 4rem;
+    --space-large: 2.5rem;
+    --space-medium: 1.6rem;
+    --space-small: 1rem;
+    --space-xsmall: 0.6rem;
+    --space-xxsmall: 0.3rem;
 
     /* colors */
     --white: #ffffff;
