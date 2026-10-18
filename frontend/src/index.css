@@ -76,15 +76,18 @@ button {
     font-weight: 600;
     transition: background-color 0.2s ease;
 }
+button:hover {
+    background-color: var(--gray);
+    color: var(--white);
+}
 
 button.green {
     background-color: var(--primary-color);
     color: var(--white);
 }
-
-button:hover {
-    background-color: #008a42;
-    color: var(--white);
+button.green:hover {
+    background-color: var(--primary-color-dark);
+    /* background-color: #008a42; */
 }
 
 button:disabled {

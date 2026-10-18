@@ -44,7 +44,7 @@ function Topbar() {
       <div className={styles.user}>
         <span className={styles.userName}>{user?.name ?? ""}</span>
         <button
-          className={`${styles.logoutButton} ${styles.desktopLogout}`}
+          className={`${styles.logoutButton} ${styles.desktopLogout} green`}
           onClick={handleLogout}
         >
           Logga ut
