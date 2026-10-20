@@ -3,7 +3,6 @@
 
 #include <cmath>
 #include <cstdlib>
-#include <vector>
 
 void free_backtest_result(BacktestLibrary *result)
 {
@@ -20,7 +19,7 @@ BacktestLibrary *run_backtest(const double *prices, int instruments, int days)
         return nullptr;
     }
 
-    double risk_free_rate = 0.03;
+    double risk_free_rate = DEFAULT_RISK_FREE_RATE;
 
     BacktestLibrary *result = static_cast<BacktestLibrary*>(malloc(sizeof(BacktestLibrary)));
     if (result == nullptr)
