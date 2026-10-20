@@ -48,7 +48,7 @@ function Login(): JSX.Element {
   return (
     <div className={styles.page}>
       <form className={styles.form} onSubmit={handleSubmit}>
-        <h1 className={styles.title}>Portföljhälsa</h1>
+        <h1 className={styles.title}>Avanza</h1>
         {error && (
           // role="alert" gör att skärmläsare läser upp felet automatiskt
           // så fort det renderas, utan att användaren behöver leta efter det.
