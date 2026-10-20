@@ -55,7 +55,7 @@ div[data-percent] {
 .targetDarkColor {
   background-color: var(--gray);
   text-align: end;
-  color: var(--off-white);
+  /* color: var(--off-white); */
 }
 
 .actualLabel, .targetLabel {
@@ -83,19 +83,23 @@ div[data-percent] {
   /* background-color: var(--background-alt);  */
   padding-block: var(--space-xsmall);
   border-radius: 0 8px 8px 0;
+  p {
+    position: absolute;
+    margin-inline: var(--space-xsmall);
+    font-size: 2.4rem;
+    font-weight: 500;
+    overflow: visible;
+  }
+  p.right {
+    right: 0;
+  }
 }
 
 .bar {
+  position: relative;
   display: flex;
   flex-direction: row;
   height: 3rem;
   border-radius: 8px;
   overflow: hidden;
-  p {
-    margin-inline: var(--space-xsmall);
-    font-size: 2.4rem;
-    font-weight: 500;
-    
-    /* filter: drop-shadow(0 1px 2px var(--text-color-alt)); */
-  }
 }

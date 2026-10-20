@@ -32,7 +32,7 @@ function AssetAllocation({ allocation }: AssetAllocationProps): JSX.Element {
                 <p>{allocation.actualAktierPct}%</p>
               </div>
               <div className={styles.darkColor} data-percent={`${allocation.actualStabiltPct}%`}>
-                <p>{allocation.actualStabiltPct}%</p>
+                <p className={styles.right}>{allocation.actualStabiltPct}%</p>
               </div>
             </div>
       
@@ -42,7 +42,7 @@ function AssetAllocation({ allocation }: AssetAllocationProps): JSX.Element {
                 <p>{allocation.targetAktierPct}%</p>
               </div>
               <div className={styles.targetDarkColor} data-percent={`${allocation.targetStabiltPct}%`}>
-                <p>{allocation.targetStabiltPct}%</p>
+                <p className={styles.right}>{allocation.targetStabiltPct}%</p>
               </div>
             </div>
           </div>

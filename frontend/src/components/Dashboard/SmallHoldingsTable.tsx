@@ -30,7 +30,7 @@ function SmallHoldingsTable({
     <Panel title={title} size="small" titleColor={titleColor}>
       <div className={`${styles.row} ${styles.topRow}`}>
         <span>Totalt i denna allokering</span>
-        <span className={styles.totalValue}>{formatSek(totalValueSek)}</span>
+        <span>{formatSek(totalValueSek)}</span>
       </div>
       <div className={styles.holdingsList}>
         {classHoldings.map((holding) => (

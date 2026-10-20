@@ -13,7 +13,7 @@ function Panel({ title, size = 'medium', titleColor, children }: PanelProps) {
       <div className={`${styles.panelHeader} ${titleColor ? styles[titleColor] : undefined}`}>
         <h3>{title}</h3>
       </div>
-      <div className="panelContent">
+      <div>
         {children}
       </div>
     </section>
