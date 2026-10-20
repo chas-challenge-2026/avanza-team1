@@ -37,6 +37,6 @@
 }
 
 .subtitle {
-  color: var(--gray);
+  color: var(--text-color-alt);
   margin: 0;
 }

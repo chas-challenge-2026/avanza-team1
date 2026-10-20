@@ -39,7 +39,7 @@ function SmallHoldingsTable({
               {holding.name} ({holding.returnPct > 0 && "+"}
               {holding.returnPct}%)
             </span>
-            <span>{formatSek(holding.valueSek)} kr</span>
+            <span>{formatSek(holding.valueSek)}</span>
           </div>
         ))}
       </div>

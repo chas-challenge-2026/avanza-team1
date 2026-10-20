@@ -12,6 +12,7 @@ import type { Alert, Allocation } from "../types/portfolio";
 import { readStoredTarget } from "../lib/targetAllocation";
 import { computeDrift } from "../lib/drift";
 import { usePortfolio } from "../hooks/usePortfolio";
+import { useHistory } from "../hooks/useHistory";
 
 function withDrift(allocation: Allocation): Allocation {
   const { overThreshold } = computeDrift(allocation);
@@ -26,6 +27,7 @@ function driftAlerts(allocation: Allocation): Alert[] {
 
 function Portfolio() {
   const { portfolio, isPending, isError } = usePortfolio();
+  const { series: history } = useHistory({ key: "TOTAL", range: "1M" });
   const goalAllocationDialog = useRef<HTMLDialogElement>(null);
 
   const [targetOverride, setTargetOverride] = useState<{
@@ -63,7 +65,7 @@ function Portfolio() {
 
   return (
     <>
-      <PageHeader totalValueSek={portfolio.totalValueSek} fx={portfolio.fx} />
+      <PageHeader totalValueSek={portfolio.totalValueSek} history={history} />
       <div className="dashboardGrid">
         <div className="leftColumn">
           {drift.overThreshold && <WarningBanner message={drift.message} />}

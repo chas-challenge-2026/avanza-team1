@@ -1,17 +1,25 @@
 import styles from "./PageHeader.module.css";
-import type { Fx } from "../../types/portfolio";
+import type { HistorySeries } from "../../types/history";
 
 interface PageHeaderProps {
   title?: string;
   totalValueSek: number;
-  fx: Fx;
+  history?: HistorySeries;
 }
 
 function PageHeader({
   title = "Din portfölj",
   totalValueSek,
-  fx,
+  history,
 }: PageHeaderProps): JSX.Element {
+  const points = history?.points ?? [];
+  const previous = points[points.length - 2];
+  const latest = points[points.length - 1];
+  const change = previous && latest ? latest.value - previous.value : undefined;
+  const changePercent = previous && previous.value !== 0 && change !== undefined
+    ? (change / previous.value) * 100
+    : undefined;
+
   return (
     <section className={styles.pageHeader}>
       <div className={styles.pageHeaderContainer}>
@@ -19,10 +27,12 @@ function PageHeader({
         <div className={styles.value}>
           {totalValueSek.toLocaleString("sv-SE")} <span>SEK</span>
         </div>
-        {/* TODO: Show portfolio value in other currencies instead of showing exchange rates */}
         <p className={styles.subtitle}>
-          USD/SEK {fx.usdSek.toLocaleString("sv-SE")} · EUR/SEK{" "}
-          {fx.eurSek.toLocaleString("sv-SE")}
+          {change === undefined ? "Senaste månadens förändring saknas" : (
+            <>Senaste månadens förändring: {change > 0 ? "+" : ""}{change.toLocaleString("sv-SE")} kr
+              {changePercent !== undefined && ` (${changePercent > 0 ? "+" : ""}${changePercent.toLocaleString("sv-SE", { maximumFractionDigits: 2 })} %)`}
+            </>
+          )}
         </p>
       </div>
     </section>
