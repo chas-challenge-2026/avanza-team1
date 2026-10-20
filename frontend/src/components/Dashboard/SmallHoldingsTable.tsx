@@ -1,11 +1,13 @@
 import Panel from "../Panel";
 import styles from "./SmallHoldingsTable.module.css";
 import type { AssetClass, Holding } from "../../types/portfolio";
+import type { HistorySeries } from "../../types/history";
 
 interface SmallHoldingsTableProps {
   holdings: Holding[];
   assetClass: AssetClass;
   title: string;
+  histories: Record<string, HistorySeries | undefined>;
 }
 
 function formatSek(value: number): string {
@@ -16,6 +18,7 @@ function SmallHoldingsTable({
   holdings,
   assetClass,
   title,
+  histories,
 }: SmallHoldingsTableProps): JSX.Element {
   const classHoldings = holdings.filter(
     (holding) => holding.assetClass === assetClass,
@@ -34,13 +37,23 @@ function SmallHoldingsTable({
       </div>
       <div className={styles.holdingsList}>
         {classHoldings.map((holding) => (
-          <div key={holding.ticker} className={styles.row}>
-            <span>
-              {holding.name} ({holding.returnPct > 0 && "+"}
-              {holding.returnPct}%)
-            </span>
-            <span>{formatSek(holding.valueSek)}</span>
-          </div>
+          (() => {
+            const points = histories[holding.ticker]?.points ?? [];
+            const previous = points[points.length - 2];
+            const latest = points[points.length - 1];
+            const changePercent = previous && latest && previous.value !== 0
+              ? ((latest.value - previous.value) / previous.value) * 100
+              : undefined;
+
+            return (
+              <div key={holding.ticker} className={styles.row}>
+                <span>
+                  {holding.name} ({changePercent === undefined ? "–" : `${changePercent > 0 ? "+" : ""}${changePercent.toLocaleString("sv-SE", { maximumFractionDigits: 2 })} %`})
+                </span>
+                <span>{formatSek(holding.valueSek)}</span>
+              </div>
+            );
+          })()
         ))}
       </div>
     </Panel>

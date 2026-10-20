@@ -13,6 +13,7 @@ import { readStoredTarget } from "../lib/targetAllocation";
 import { computeDrift } from "../lib/drift";
 import { usePortfolio } from "../hooks/usePortfolio";
 import { useHistory } from "../hooks/useHistory";
+import { useHistories } from "../hooks/useHistories";
 
 function withDrift(allocation: Allocation): Allocation {
   const { overThreshold } = computeDrift(allocation);
@@ -28,6 +29,10 @@ function driftAlerts(allocation: Allocation): Alert[] {
 function Portfolio() {
   const { portfolio, isPending, isError } = usePortfolio();
   const { series: history } = useHistory({ key: "TOTAL", range: "1M" });
+  const holdingHistories = useHistories(
+    portfolio?.holdings.map((holding) => holding.ticker) ?? [],
+    "1M",
+  );
   const goalAllocationDialog = useRef<HTMLDialogElement>(null);
 
   const [targetOverride, setTargetOverride] = useState<{
@@ -93,11 +98,13 @@ function Portfolio() {
               holdings={portfolio.holdings}
               assetClass="AKTIER"
               title="Riskbetonade innehav"
+              histories={holdingHistories}
             />
             <SmallHoldingsTable
               holdings={portfolio.holdings}
               assetClass="STABILT"
               title="Stabila innehav"
+              histories={holdingHistories}
             />
           </div>
           <AccountsTable accounts={portfolio.accounts} />
