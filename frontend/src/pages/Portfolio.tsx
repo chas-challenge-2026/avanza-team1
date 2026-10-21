@@ -29,7 +29,7 @@ function driftAlerts(allocation: Allocation): Alert[] {
 function Portfolio() {
   const { portfolio, isPending, isError } = usePortfolio();
   const { series: history } = useHistory({ key: "TOTAL", range: "1M" });
-  const holdingHistories = useHistories(
+  const { histories: holdingHistories } = useHistories(
     portfolio?.holdings.map((holding) => holding.ticker) ?? [],
     "1M",
   );
@@ -53,6 +53,12 @@ function Portfolio() {
 
   const allocation = withDrift({
     ...portfolio.allocation,
+    actualAktierPct: Math.round(portfolio.holdings
+      .filter((holding) => holding.assetClass === "AKTIER")
+      .reduce((sum, holding) => sum + holding.valueSek, 0) / portfolio.totalValueSek * 100),
+    actualStabiltPct: Math.round(portfolio.holdings
+      .filter((holding) => holding.assetClass === "STABILT")
+      .reduce((sum, holding) => sum + holding.valueSek, 0) / portfolio.totalValueSek * 100),
     targetAktierPct:
       storedTarget?.targetAktierPct ?? portfolio.allocation.targetAktierPct,
     targetStabiltPct:

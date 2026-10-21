@@ -9,4 +9,5 @@ export interface HistorySeries {
   key: string;
   label: string;
   points: HistoryPoint[];
+  color?: string;
 }

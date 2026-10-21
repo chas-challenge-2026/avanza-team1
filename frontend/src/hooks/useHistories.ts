@@ -2,7 +2,17 @@ import { keepPreviousData, useQueries } from "@tanstack/react-query";
 import { portfolioApi } from "../api/portfolioApi";
 import type { HistoryRange, HistorySeries } from "../types/history";
 
-export function useHistories(keys: string[], range: HistoryRange): Record<string, HistorySeries | undefined> {
+export interface UseHistoriesResult {
+  histories: Record<string, HistorySeries | undefined>;
+  isFetching: boolean;
+  isError: boolean;
+}
+
+export function useHistories(
+  keys: string[],
+  range: HistoryRange,
+  enabled = true,
+): UseHistoriesResult {
   const uniqueKeys = [...new Set(keys)];
   const queries = useQueries({
     queries: uniqueKeys.map((key) => ({
@@ -10,11 +20,15 @@ export function useHistories(keys: string[], range: HistoryRange): Record<string
       queryFn: ({ signal }: { signal: AbortSignal }) =>
         portfolioApi.getHistory({ key, range }, signal),
       placeholderData: keepPreviousData,
-      enabled: Boolean(key),
+      enabled: enabled && Boolean(key),
     })),
   });
 
-  return Object.fromEntries(
-    uniqueKeys.map((key, index) => [key, queries[index].data]),
-  );
+  return {
+    histories: Object.fromEntries(
+      uniqueKeys.map((key, index) => [key, queries[index].data]),
+    ),
+    isFetching: queries.some((query) => query.isFetching),
+    isError: queries.some((query) => query.isError),
+  };
 }

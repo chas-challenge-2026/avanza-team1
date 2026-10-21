@@ -13,6 +13,7 @@ import styles from "./HistoryChart.module.css";
 
 interface HistoryChartProps {
   series: HistorySeries[];
+  valueFormat?: "sek" | "percent";
 }
 
 const numberFormat = new Intl.NumberFormat("sv-SE", { maximumFractionDigits: 0 });
@@ -30,7 +31,7 @@ function formatDate(value: string): string {
   return shortDateFormat.format(new Date(`${value}T00:00:00`));
 }
 
-function HistoryChart({ series }: HistoryChartProps): JSX.Element | null {
+function HistoryChart({ series, valueFormat = "sek" }: HistoryChartProps): JSX.Element | null {
   const data = useMemo(() => {
     const rows = new Map<string, Record<string, string | number>>();
     for (const item of series) {
@@ -59,13 +60,17 @@ function HistoryChart({ series }: HistoryChartProps): JSX.Element | null {
               minTickGap={28}
             />
             <YAxis
-              domain={["auto", "auto"]}
-              tickFormatter={(value: number) => numberFormat.format(value)}
+              domain={valueFormat === "percent" ? [0, 100] : ["auto", "auto"]}
+              tickFormatter={(value: number) => `${numberFormat.format(value)}${valueFormat === "percent" ? "%" : ""}`}
               width={76}
             />
             <Tooltip
               labelFormatter={(label) => formatDate(String(label))}
-              formatter={(value) => `${numberFormat.format(Number(value))} kr`}
+              formatter={(value) =>
+                valueFormat === "percent"
+                  ? `${numberFormat.format(Number(value))}%`
+                  : `${numberFormat.format(Number(value))} kr`
+              }
             />
             {series.map((item, index) => (
               <Line
@@ -73,7 +78,7 @@ function HistoryChart({ series }: HistoryChartProps): JSX.Element | null {
                 type="monotone"
                 dataKey={item.key}
                 name={item.label}
-                stroke={lineColors[index % lineColors.length]}
+                stroke={item.color ?? lineColors[index % lineColors.length]}
                 dot={false}
                 isAnimationActive={false}
               />

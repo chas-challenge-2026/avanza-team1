@@ -11,6 +11,10 @@ const rangeDays: Record<HistoryRange, number> = {
   ALL: 1825,
 };
 
+const RAMP_TICKER = "INVE-B";
+const RAMP_DAYS = 30;
+const RAMP_START_FACTOR = 0.6;
+
 function seedFor(key: string): number {
   let seed = 2166136261;
   for (let index = 0; index < key.length; index += 1) {
@@ -47,12 +51,39 @@ function createHistory({ key, range }: { key: string; range: HistoryRange }): Hi
 
   const finalValue = values[values.length - 1];
   const scale = finalValue === 0 ? 0 : startValue / finalValue;
-  const points = values.map((value, index) => {
+  const normalizedValues = values.map((value) => value * scale);
+
+  if (key === RAMP_TICKER) {
+    const rampStartIndex = Math.max(0, days - RAMP_DAYS);
+    const rampStartValue = startValue * RAMP_START_FACTOR;
+    const rampSpan = days - rampStartIndex - 1;
+    const rampRandom = randomGenerator(seedFor(`${key}-ramp`));
+
+    // Rebase the pre-ramp history so it reaches the lower pivot naturally.
+    const pivotScale = normalizedValues[rampStartIndex] === 0
+      ? 0
+      : rampStartValue / normalizedValues[rampStartIndex];
+    for (let index = 0; index <= rampStartIndex; index += 1) {
+      normalizedValues[index] *= pivotScale;
+    }
+
+    for (let index = rampStartIndex; index < days; index += 1) {
+      const progress = rampSpan === 0 ? 1 : (index - rampStartIndex) / rampSpan;
+      const trendValue = rampStartValue + (startValue - rampStartValue) * progress;
+      // Keep some of the seeded daily movement while pinning both ends of the ramp.
+      const variation = (rampRandom() - 0.5) * startValue * 0.02 * Math.sin(Math.PI * progress);
+      normalizedValues[index] = trendValue + variation;
+    }
+
+    normalizedValues[days - 1] = startValue;
+  }
+
+  const points = normalizedValues.map((value, index) => {
     const date = new Date(endDate);
     date.setUTCDate(date.getUTCDate() - (days - index - 1));
     return {
       date: date.toISOString().slice(0, 10),
-      value: Math.round(value * scale),
+      value: Math.round(value),
     };
   });
 
