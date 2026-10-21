@@ -17,8 +17,19 @@
 }
 
 .title {
-  text-align: center;
   margin: 0 0 var(--space-medium);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-xsmall);
+  font-size: var(--font-size-normal);
+  letter-spacing: 0.01rem;
+}
+
+.logo {
+  aspect-ratio: 250 / 80;
+  height: 40px;
+  width: 125px;
 }
 
 .field {

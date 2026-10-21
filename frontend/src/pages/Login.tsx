@@ -2,6 +2,8 @@ import { useState, useRef, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./Login.module.css";
 import { useAuth } from "../auth/useAuth";
+import Panel from "../components/Panel";
+import logo from "../assets/logo.webp";
 
 function Login(): JSX.Element {
   const [email, setEmail] = useState("");
@@ -24,41 +26,47 @@ function Login(): JSX.Element {
   }
 
   return (
+    // TODO: implement use of panel component for login form
     <div className={styles.page}>
-      <form className={styles.form} onSubmit={handleSubmit}>
-        <h1 className={styles.title}>Portföljhälsa</h1>
-        {error && (
-          // role="alert" gör att skärmläsare läser upp felet automatiskt
-          // så fort det renderas, utan att användaren behöver leta efter det.
-          <p id="login-error" role="alert" className={styles.error}>
-            {error}
-          </p>
-        )}
-        <label className={styles.field}>
-          E-post
-          <input
-            type="email"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-            required
-            aria-describedby={error ? "login-error" : undefined}
-          />
-        </label>
-        <label className={styles.field}>
-          Lösenord
-          <input
-            ref={passwordInputRef}
-            type="password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            required
-            aria-describedby={error ? "login-error" : undefined}
-          />
-        </label>
-        <button type="submit" className={styles.button}>
-          Logga in
-        </button>
-      </form>
+      <Panel title="Logga in" size="small">
+        <form className={styles.form} onSubmit={handleSubmit}>
+          <h1 className={styles.title}>
+            <img src={logo} alt="" className={styles.logo} />
+            <span>PORTFÖLJHÄLSA</span>
+          </h1>
+          {error && (
+            // role="alert" gör att skärmläsare läser upp felet automatiskt
+            // så fort det renderas, utan att användaren behöver leta efter det.
+            <p id="login-error" role="alert" className={styles.error}>
+              {error}
+            </p>
+          )}
+          <label className={styles.field}>
+            E-post
+            <input
+              type="email"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              required
+              aria-describedby={error ? "login-error" : undefined}
+            />
+          </label>
+          <label className={styles.field}>
+            Lösenord
+            <input
+              ref={passwordInputRef}
+              type="password"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              required
+              aria-describedby={error ? "login-error" : undefined}
+            />
+          </label>
+          <button type="submit" className={styles.button}>
+            Logga in
+          </button>
+        </form>
+      </Panel>
     </div>
   );
 }
