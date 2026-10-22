@@ -4,6 +4,9 @@
  * 
  * Tests cover valid inputs, invalid inputs and important edge cases.
  * The program returns a non-zero exit code if any test fails.
+ * 
+ * Run with:
+ *      gcc -Wall -Wextra -Werror -o test_risk risk.c helpers/helpers.c tests/test_risk.c -lm
  */
 
 #include <stdio.h>
