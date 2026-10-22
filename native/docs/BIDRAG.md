@@ -56,3 +56,6 @@ inte i en separat logg.
 | 2026-10-08 | Henrik | Implementerade logger i FX-modulen | - | #153 |
 | 2026-10-12 | Pär & Henrik | Gjorde om nästan hela våran README för Native så att den är uppdaterad och välgjord. | - | #74 |
 | 2026-10-13 | Henrik | Uppdaterade logger-funktionerna med dokumentation i README och förberedde FX-modulen för att integreras med JNA-bryggan. | - | #161 |
+| 2026-10-20 | Pär | Rensade bort lite onödiga headers, samt ändrade en variabel till att gå från ett värde till att använda en redan befintlig define istället | - | - |
+| 2026-10-22 | Pär | Uppdaterade Backtest med en funktion som möjliggör att splitta upp hela price-arrayen till separata holdings, för att bättre reflektera risk-värdena då de nu hanteras per innehav och instrument. La även till kompileringsinstruktioner till test-filen i backtest så att det underlättar för andra att köra modulen. | - | #123 |
+| 2026-10-22 | Pär | La till kompileringsinstruktioner även till testfilen i Risk-modulen så att det även där underlättar för andra att köra programmet. | - | #165 |
