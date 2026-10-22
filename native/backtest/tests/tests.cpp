@@ -3,6 +3,11 @@
 #include <iostream>
 #include <iomanip>
 
+/**
+ * Run with:
+ *      g++ -Wall -Werror -Wextra -o test_back ../risk/risk.c ../risk/helpers/helpers.c tests/tests.cpp backtest.cpp ../logger/logger.cpp -lm
+ */
+
 int main()
 {
     double prices[] = {311.43, 301.25, 295.55, 263.76, 265.72, 262.64, 260.21, 261.33, 264.69, 263.57,
