@@ -3,7 +3,6 @@
 
 #include <math.h>
 
-
 RiskStatus calculate_annual_volatility(const double prices[], size_t size, double *result)
 {
     if (result == NULL || !valid_price_series(prices, size))
@@ -64,7 +63,7 @@ RiskStatus calculate_sharpe(const double prices[], size_t size, double risk_free
         return RISK_ZERO_VOLATILITY;
     }
 
-    /* Convert annual risk-free rate to an equivalent daily rate. */
+    /* A geometric recalculation of the annual risk-free rate to an equivalent daily rate. */
     double daily_risk_free_rate = pow(1.0 + risk_free_rate, 1.0 / ANNUAL_TRADING_DAYS) - 1.0;
 
     /* Calculate excess return per unit of daily risk. */
@@ -90,7 +89,7 @@ RiskStatus calculate_max_drawdown(const double prices[], size_t size, double *re
 
     *result = 0.0;
 
-    /* Track the highest price seen so far. */
+    /* Track the highest price observed up to the current point. */
     double peak = prices[0];
     double max_drawdown = 0.0;
 
@@ -148,137 +147,6 @@ RiskStatus calculate_ewma_volatility(const double prices[], size_t size, double 
     /* Annualize the EWMA volatility. */
     double daily_ewma_volatility = sqrt(variance);
     *result = daily_ewma_volatility * sqrt(ANNUAL_TRADING_DAYS);
-
-    return RISK_SUCCESS;
-}
-
-
-RiskStatus calculate_rolling_volatility(const double prices[], size_t size, size_t window, double results[])
-{
-    if (results == NULL || !valid_price_series(prices, size))
-    {
-        return RISK_INVALID_INPUT;
-    }
-
-    if (window < 3 || window > size)
-    {
-        return RISK_INSUFFICIENT_DATA;
-    }
-    
-    size_t result_count = size - window + 1;
-
-    /* Initialize statistics for the first window. 
-     * Subsequent windows are calculated by removing the outgoing return and adding the incoming return. 
-     */
-    RollingStatistics stats = {.sum = 0.0, .sum_squared = 0.0, .count = 0};
-
-    for (size_t i = 1; i < window; i++)
-    {
-        double daily_return = (prices[i] - prices[i - 1]) / prices[i - 1];
-        rolling_statistics_add(&stats, daily_return);
-    }
-
-    double variance = rolling_statistics_variance(&stats);
-
-    results[0] = sqrt(variance) * sqrt(ANNUAL_TRADING_DAYS);
-
-    for (size_t i = 1; i < result_count; i++)
-    {
-        /* Slide the window forward by one price: remove the oldest return and add the newest return. */
-        double removed_return = (prices[i] - prices[i - 1]) / prices[i - 1];
-        double added_return = (prices[i + window - 1] - prices[i + window - 2]) / prices[i + window - 2];
-
-        rolling_statistics_remove(&stats, removed_return);
-        rolling_statistics_add(&stats, added_return);
-
-        variance = rolling_statistics_variance(&stats);
-
-        results[i] = sqrt(variance) * sqrt(ANNUAL_TRADING_DAYS);
-    }
-
-    return RISK_SUCCESS;
-}
-
-RiskStatus calculate_rolling_sharpe(const double prices[], size_t size, size_t window, double risk_free_rate, double results[])
-{
-    if (results == NULL || !valid_price_series(prices, size))
-    {
-        return RISK_INVALID_INPUT;
-    }
-    
-    if (window < 3 || window > size)
-    {
-        return RISK_INSUFFICIENT_DATA;
-    }
-
-    if (!isfinite(risk_free_rate) || risk_free_rate <= -1.0)
-    {
-        return RISK_INVALID_INPUT;
-    }
-    
-    size_t result_count = size - window + 1;
-    double daily_risk_free_rate = pow(1.0 + risk_free_rate, 1.0 / ANNUAL_TRADING_DAYS) - 1.0;
-
-    /* Initialize statistics for the first window. 
-     * Subsequent windows are calculated by removing the outgoing return and adding the incoming return. 
-     */
-    RollingStatistics stats = {.sum = 0.0, .sum_squared = 0.0, .count = 0};
-
-    for (size_t i = 1; i < window; i++)
-    {
-        double daily_return = (prices[i] - prices[i - 1]) / prices[i - 1];
-        rolling_statistics_add(&stats, daily_return);
-    }
-
-    for (size_t i = 0; i < result_count; i++)
-    {
-        if (i > 0)
-        {
-            /* Slide the window forward by one price: remove the oldest return and add the newest return. */
-            double removed_return = (prices[i] - prices[i - 1]) / prices[i - 1];
-            double added_return = (prices[i + window - 1] - prices[i + window - 2]) / prices[i + window - 2];
-                    
-            rolling_statistics_remove(&stats, removed_return);
-            rolling_statistics_add(&stats, added_return);
-        }
-        
-        double volatility = sqrt(rolling_statistics_variance(&stats));
-        if (volatility < 1e-12)
-        {
-            results[i] = NAN; /* Undefined for a flat window. */
-        }
-        else
-        {
-            double daily_sharpe = (rolling_statistics_mean(&stats) - daily_risk_free_rate) / volatility;
-            results[i] = daily_sharpe * sqrt(ANNUAL_TRADING_DAYS);
-        }
-    }
-
-    return RISK_SUCCESS;
-}
-
-/* Calculate each window independently. This favors simplicity and reuses the validated non-rolling drawdown calculations. */
-RiskStatus calculate_rolling_max_drawdown(const double prices[], size_t size, size_t window, double results[])
-{
-    if (results == NULL || !valid_price_series(prices, size))
-    {
-        return RISK_INVALID_INPUT;
-    }
-    
-    if (window < 2 || window > size)
-    {
-        return RISK_INSUFFICIENT_DATA;
-    }
-
-    size_t result_count = size - window + 1;
-    for (size_t i = 0; i < result_count; i++)
-    {
-        RiskStatus status = calculate_max_drawdown(&prices[i], window, &results[i]);
-        if (status != RISK_SUCCESS)
-        {
-            return status;
-        }
-    }
 
     return RISK_SUCCESS;
 }

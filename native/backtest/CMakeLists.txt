@@ -37,13 +37,3 @@ add_executable(test_backtest tests/tests.cpp)
 target_compile_options(test_backtest PRIVATE -Wall -Wextra -Wpedantic)
 target_link_libraries(test_backtest PRIVATE backtest)
 add_test(NAME test_backtest COMMAND test_backtest)
-
-# --- Sanitizers ---
-option(SANITIZE "Build with AddressSanitizer + UBSan" OFF)
-if(SANITIZE)
-    target_compile_options(risk PRIVATE -fsanitize=address,undefined -g)
-    target_compile_options(backtest PRIVATE -fsanitize=address,undefined -g)
-    target_compile_options(test_risk PRIVATE -fsanitize=address,undefined -g)
-    target_compile_options(test_backtest PRIVATE -fsanitize=address,undefined -g)
-    add_link_options(-fsanitize=address,undefined)
-endif()

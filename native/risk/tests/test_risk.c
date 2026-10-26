@@ -4,7 +4,7 @@
  * 
  * Tests cover valid inputs, invalid inputs and important edge cases.
  * The program returns a non-zero exit code if any test fails.
- * 
+ *
  * Run with:
  *      gcc -Wall -Wextra -Werror -o test_risk risk.c helpers/helpers.c tests/test_risk.c -lm
  */
@@ -105,24 +105,25 @@ int main(void)
     double three_prices[] = {100.00, 101.00, 102.00};
     double flat_prices[] = {100.00, 100.00, 100.00, 100.00, 100.00};
     double rising_prices[] = {100.00, 101.00, 102.00, 103.00, 104.00, 105.00};
-    double result;
-    double rising_vol;
-    double rising_sharpe;
+    double result = 0.0;
+    double rising_vol = 0.0;
+    double rising_sharpe = 0.0;
+    RiskStatus status;
 
     /* --- Annual volatility and Sharpe Ratio --- */
 
     /* Regression test using independently calculated expected values. */
-    RiskStatus status = calculate_annual_volatility(prices, size, &result);
+    status = calculate_annual_volatility(prices, size, &result);
     check("annual volatility on known price series", status, result, 0.365810, 0.0001);
 
     status = calculate_sharpe(prices, size, DEFAULT_RISK_FREE_RATE, &result);
-    check("sharpe on known price series", status, result, 2.7217, 0.001);
+    check("Sharpe ratio on known price series", status, result, 2.7217, 0.001);
 
     /* Fewer than three prices should be rejected. */
     status = calculate_annual_volatility(too_few, 2, &result);
-    check_insufficient_data("volatility with < 3 prices returns insufficient data", status);
+    check_insufficient_data("volatility with fewer than 3 prices returns insufficient data", status);
     status = calculate_sharpe(too_few, 2, DEFAULT_RISK_FREE_RATE, &result);
-    check_insufficient_data("sharpe with < 3 prices returns insufficient data", status);
+    check_insufficient_data("sharpe with fewer than 3 prices returns insufficient data", status);
 
     /* Three prices is the minimum input for volatility and Sharpe calculations. */
     status = calculate_annual_volatility(three_prices, 3, &result);
@@ -170,7 +171,7 @@ int main(void)
     /* Fewer than two prices should be rejected. */
     double single_price[] = {100.00};
     status = calculate_max_drawdown(single_price, 1, &result);
-    check_insufficient_data("max drawdown with < 2 prices returns insufficient data", status);
+    check_insufficient_data("max drawdown with fewer than 2 prices returns insufficient data", status);
 
     /* Two prices is the minimum valid input for drawdown. */
     double two_prices[] = {100.00, 90.00};
@@ -209,7 +210,7 @@ int main(void)
 
     /* Fewer than two prices should be rejected. */
     status = calculate_ewma_volatility(single_price, 1, DEFAULT_EWMA_LAMBDA, &result);
-    check_insufficient_data("ewma volatility with < 2 prices returns insufficient data", status);
+    check_insufficient_data("ewma volatility with fewer than 2 prices returns insufficient data", status);
 
     /* Lambda must be strictly between 0 and 1. */
     status = calculate_ewma_volatility(prices, size, 0.0, &result);
@@ -221,155 +222,73 @@ int main(void)
     status = calculate_ewma_volatility(flat_prices, 5, DEFAULT_EWMA_LAMBDA, &result);
     check("ewma volatility on flat prices is 0", status, result, 0.0, 1e-12);
 
-    /* --- Rolling risk metrics --- */
+    /* --- Regular risk functions on individual price windows --- */
 
-    /* 
-     * Use a small price series where the rolling windows are easy to verify
-     * manually. With a window of 3, the function should produce four results:
-     * 
-     * Window 1: {100.00, 101.00, 102.00}
-     * Window 2: {101.00, 102.00, 100.00}
-     * Window 3: {102.00, 100.00, 103.00}
-     * Window 4: {100.00, 103.00, 104.00}
+    /*
+     * Test the regular functions directly on overlapping windows.
+     * This verifies that each function handles a selected period.
+     * It does not test a separate rolling implementation.
      */
-    double rolling_prices[] = {100.00, 101.00, 102.00, 100.00, 103.00, 104.00};
-    size_t rolling_size = sizeof(rolling_prices) / sizeof(rolling_prices[0]);
-    size_t rolling_window = 3;
-    size_t rolling_count = rolling_size - rolling_window + 1;
-    double rolling_results[4];
+    double window_prices[] = {100.00, 101.00, 102.00, 100.00, 103.00, 104.00};
+    size_t window_size = 3;
+    size_t window_price_count = sizeof(window_prices) / sizeof(window_prices[0]);
+    size_t window_count = window_price_count - window_size + 1;
 
-    /* Rolling historical volatility. */
-    status = calculate_rolling_volatility(rolling_prices, rolling_size, rolling_window, rolling_results);
-
-    tests_run++;
-    if (status == RISK_SUCCESS)
+    for (size_t i = 0; i < window_count; i++)
     {
-        /* Compare the rolling results against the same calculation performed independently on each window. */
-        double expected_rolling_volatility[4];
+        double window_volatility = 0.0;
+        double window_sharpe = 0.0;
+        double window_drawdown = 0.0;
 
-        for (size_t i = 0; i < rolling_count; i++)
+        char test_name[100];
+
+        status = calculate_annual_volatility(&window_prices[i], window_size, &window_volatility);
+
+        snprintf(test_name, sizeof(test_name), "volatility on price window %zu", i + 1);
+
+        tests_run++;
+
+        if (status == RISK_SUCCESS && isfinite(window_volatility))
         {
-            calculate_annual_volatility(&rolling_prices[i], rolling_window, &expected_rolling_volatility[i]);
-        }
-
-        int all_match = 1;
-        for (size_t i = 0; i < rolling_count; i++)
-        {
-            if (!approx_equal(rolling_results[i], expected_rolling_volatility[i], 1e-9))
-            {
-                all_match = 0;
-                break;
-            }
-        }
-
-        if (all_match)
-        {
-            printf("[PASS] rolling volatility produces the correct overlapping windows\r\n");
-        }
-        else 
-        {
-            tests_failed++;
-            printf("[FAIL] rolling volatility produced an unexpected result\r\n");
-        }
-    }
-    else
-    {
-        tests_failed++;
-        printf("[FAIL] rolling volatility returned an error\r\n");
-    }
-
-    /* Rolling Sharpe ratio. */
-    status = calculate_rolling_sharpe(rolling_prices, rolling_size, rolling_window, DEFAULT_RISK_FREE_RATE, rolling_results);
-
-    tests_run++;
-    if (status == RISK_SUCCESS)
-    {
-        /* Compare each rolling result with the existing Sharpe calculation applied to the corresponding window. */
-        double expected_rolling_sharpe[4];
-
-        for (size_t i = 0; i < rolling_count; i++)
-        {
-            calculate_sharpe(&rolling_prices[i], rolling_window, DEFAULT_RISK_FREE_RATE, &expected_rolling_sharpe[i]);
-        }
-
-        int all_match = 1;
-        for (size_t i = 0; i < rolling_count; i++)
-        {
-            if (!approx_equal(rolling_results[i], expected_rolling_sharpe[i], 1e-8))
-            {
-                all_match = 0;
-                break;
-            }
-        }
-
-        if (all_match)
-        {
-            printf("[PASS] rolling Sharpe produces correct overlapping windows\r\n");
+            printf("[PASS] %s\r\n", test_name);
         }
         else
         {
             tests_failed++;
-            printf("[FAIL] rolling Sharpe produced an unexpected result\r\n");
-        }
-    }
-    else
-    {
-        tests_failed++;
-        printf("[FAIL] rolling Sharpe returned an error\r\n");
-    }
-
-    /* Rolling maximum drawdown. */
-    status = calculate_rolling_max_drawdown(rolling_prices, rolling_size, rolling_window, rolling_results);
-
-    tests_run++;
-    if (status == RISK_SUCCESS)
-    {
-        /* Each result should match the maximum drawdown of the corresponding three-price window. */
-        double expected_rolling_drawdown[4];
-
-        for (size_t i = 0; i < rolling_count; i++)
-        {
-            calculate_max_drawdown(&rolling_prices[i], rolling_window, &expected_rolling_drawdown[i]);
+            printf("[FAIL] %s -> calculation failed or returned non-finite value\r\n", test_name);
         }
 
-        int all_match = 1;
-        for (size_t i = 0; i < rolling_count; i++)
-        {
-            if (!approx_equal(rolling_results[i], expected_rolling_drawdown[i], 1e-9))
-            {
-                all_match = 0;
-                break;
-            }
-        }
+        status = calculate_sharpe(&window_prices[i], window_size, DEFAULT_RISK_FREE_RATE, &window_sharpe);
+        snprintf(test_name, sizeof(test_name), "Sharpe ratio on price window %zu", i + 1);
 
-        if (all_match)
+        tests_run++;
+
+        if (status == RISK_SUCCESS && isfinite(window_sharpe))
         {
-            printf("[PASS] rolling max drawdown produces correct overlapping windows\r\n");
+            printf("[PASS] %s\r\n", test_name);
         }
         else
         {
             tests_failed++;
-            printf("[FAIL] rolling max drawdown produced an unexpected result\r\n");
+            printf("[FAIL] %s -> calculations failed or returned non-finite value\r\n", test_name);
+        }
+
+        status = calculate_max_drawdown(&window_prices[i], window_size, &window_drawdown);
+        snprintf(test_name, sizeof(test_name), "max drawdown on price window %zu: %.4f%%", i + 1, window_drawdown * 100);
+
+        tests_run++;
+
+        if (status == RISK_SUCCESS && isfinite(window_drawdown))
+        {
+            printf("[PASS] %s\r\n", test_name);
+        }
+        else
+        {
+            tests_failed++;
+            printf("[FAIL] %s -> calculations failed or returned non-finite value\r\n", test_name);
         }
     }
-    else
-    {
-        tests_failed++;
-        printf("[FAIL] rolling max drawdown returned an error\r\n");
-    }
-
-    /* --- Rolling input validation --- */
-
-    /* Historical volatility and Sharpe require at least three prices per window. */
-    check_insufficient_data("rolling volatility with window < 3 returns insufficient data", calculate_rolling_volatility(rolling_prices, rolling_size, 2, rolling_results));
-    check_insufficient_data("rolling Sharpe with window < 3 returns insufficient data", calculate_rolling_sharpe(rolling_prices, rolling_size, 2, DEFAULT_RISK_FREE_RATE, rolling_results));
     
-    /* Drawdown require at least two prices per window. */
-    check_insufficient_data("rolling max drawdown with window < 2 returns insufficient data", calculate_rolling_max_drawdown(rolling_prices, rolling_size, 1, rolling_results));
-
-    /* A window larger than the available price series is invalid. */
-    check_insufficient_data("rolling volatility with window > size returns insufficient data", calculate_rolling_volatility(rolling_prices, rolling_size, rolling_size + 1, rolling_results));
-
     /* --- NULL prices --- */
     check_invalid("annual volatility with NULL prices returns invalid", calculate_annual_volatility(NULL, size, &result));
     check_invalid("sharpe with NULL prices returns invalid", calculate_sharpe(NULL, size, DEFAULT_RISK_FREE_RATE, &result));

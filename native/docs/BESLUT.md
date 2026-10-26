@@ -11,11 +11,17 @@
 - **Beslut:** Vi valde att inledningsvis inte lägga alltför mycket tid och energi på t.ex. automatiska tester eller gitHub Actions, utan kolla på det i mån av tid.
 - **Varför:** För att begränsa scopet lite grann inledningsvis.
 
+- **Beslut:** Vi valde efter mycket diskussioner att skippa både BLAS och SIMD i Risk-modulen.
+- **Varför:** För att i det stadie vi nu befinner oss i för projektet, så hade det inneburit en alldeles för stor tidsåtgång till att behöva sätta oss in i de två teknikerna och med tanke på hur kopplingen till Backend har gått så kommer inte det hinnas med, när vi har mer vitala delar som behöver prioriteras. Det är en sak vi lämnar som vidare utvecklingspotential om projektet hade jobbats vidare på.
+
+- **Beslut:** Efter diskussion med Java-teamet valde vi att skala ner backtest-modulen samt risk-uträkningarna.
+- **Varför:** För att Java inte skulle hinna implementera de delarna på sitt håll och för att minska stressen för dem så valde vi att ta bort strategier helt från anropet, vi kör på en fast implementerad grund-strategi med Buy & Hold.
+
 
 ## Tekniska-beslut
 
 - **Beslut:** Hantering av dokumentation för funktioner i Doxygen-stil.
-- **Varför:** För att underlätta genom att visa information kring en funktion när användaren hovrar över namnet i VSC (Visual Studio Code).
+- **Varför:** För att underlätta genom att visa information kring en funktion när användaren "hovrar" över namnet i VSC (Visual Studio Code).
 
 - **Beslut:** Henrik valde att använda libcurl för hämtning över HTTP.
 - **Varför:** Mestadels för att det är standard, det rekommenderas överallt samt att vi känner oss bekanta med det.
