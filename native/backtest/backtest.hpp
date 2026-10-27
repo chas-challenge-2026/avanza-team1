@@ -23,11 +23,11 @@ typedef struct
     double annualized_return;
     double max_drawdown;
     double sharpe_ratio;
-} NativeBridgeModule;
+} BacktestLibrary;
 
 extern "C" 
 {
-    EXPORT void free_backtest_result(NativeBridgeModule *result);
+    EXPORT void free_backtest_result(BacktestLibrary *result);
 
-    EXPORT NativeBridgeModule *run_backtest(const double *prices, int instruments, int days);    
+    EXPORT BacktestLibrary *run_backtest(const double *prices, int instruments, int days);    
 }

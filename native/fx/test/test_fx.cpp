@@ -1,6 +1,6 @@
 /*  Test suite for the FX (currency conversion) functions in fx.cpp.
     Run with:
-        g++ -Wall -Wextra -Werror -o test_fx fx.cpp test/test_fx.cpp -lcurl -ljansson
+        g++ -Wall -Wextra -Werror -o test_fx fx.cpp test/test_fx.cpp ../logger/logger.cpp -lcurl -ljansson
         ./test_fx
 */
 
