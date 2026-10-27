@@ -1,30 +1,105 @@
-.container {
+ .container {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
-  margin-top: 1rem;
+  gap: var(--space-medium);
+  /* justify-content: center; */
+  width: 100%;
 }
 
-.item {
+.container p {
+  margin: 0;
+}
+
+.colorExplanation {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: var(--space-medium);
+  line-height: var(--font-size-large);
+  /* justify-content: space-between; */
+  > * {
+    flex-grow: 1;
+    /* min-width: calc(fit-content + 6rem); */
+    translate: 2rem 0;
+    &:before {
+        content: "";
+        position: absolute;
+        translate: -2rem 0;
+        width: var(--font-size-large);
+        height: var(--font-size-large);
+    }
+  }
+}
+.lightClrExpl:before {
+  background-color: var(--primary-color-light);
+}
+.darkClrExpl:before {
+  background-color: var(--primary-color);
 }
 
-.percentage {
-  /* edge case element - needs some fixed values */
-  font-size: 2rem;
-  font-weight: bold;
-  color: var(--text-color-alt);
-  margin-bottom: 0.25rem;
+div[data-percent] {
+  width: attr(data-percent type(<length-percentage>));
+}
+.lightColor {
+  background-color: var(--primary-color-light);
+  text-align: start;
+}
+.darkColor {
+  background-color: var(--primary-color);
+  text-align: end;
+  color: var(--off-white);
+}
+.targetLightColor {
+  background-color: var(--light-gray);
+  text-align: start;
+}
+.targetDarkColor {
+  background-color: var(--gray);
+  text-align: end;
+  /* color: var(--off-white); */
 }
 
-.target {
-  font-size: var(--font-size-small);
+.actualLabel, .targetLabel {
+  width: max-content;
+  margin: 0;
+  /* corner-right-shape: bevel; */
+  /* background-color: var(--background-alt); */
+  overflow: hidden;
+  font-size: var(--font-size-emphasis);
+  font-weight: 600;
   color: var(--gray);
-  margin-bottom: var(--space-xsmall);
+}
+/* .actualLabel {
+  border-radius: 8px 3rem 0 0;
+  padding: var(--space-xsmall) var(--space-xlarge) 0 var(--space-small);
+}
+.targetLabel {
+  border-radius: 0 0 3rem 8px;
+  padding: 0 var(--space-xlarge) var(--space-xxsmall) var(--space-small);
+} */
+
+.barsContainer {
+  display: grid;
+  gap: var(--space-xsmall);
+  /* background-color: var(--background-alt);  */
+  padding-block: var(--space-xsmall);
+  border-radius: 0 8px 8px 0;
+  p {
+    position: absolute;
+    margin-inline: var(--space-xsmall);
+    font-size: 2.4rem;
+    font-weight: 500;
+    overflow: visible;
+  }
+  p.right {
+    right: 0;
+  }
 }
 
-.name {
-  font-weight: 500;
-  color: var(--text-color-alt);
+.bar {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  height: 3rem;
+  border-radius: 8px;
+  overflow: hidden;
 }

@@ -43,23 +43,15 @@ function GoalAllocation({
       // isError becomes true through hook
     }
   }
-  // TODO: Ändra description så det står "i din portfölj" i den. Ändra label till att bara innehålla orden "aktier" respektive "fonder"
-  // TODO: ta bort label subtitle .
   return (
-    <Panel title="Målallokering" size="large">
+    <Panel title="Sätt ny målallokering" size="large">
       <p className={styles.description}>
-        Ange hur du vill att aktier och fonder ska fördelas. Summan ska vara 100
-        %.
+        Ange hur du vill att andelen riskbetonade respektive stabila innehav ska fördelas i din portfölj.
       </p>
-
       <div className={styles.inputsContainer}>
         <div className={styles.inputRow}>
-          <div className={styles.icon}>📊</div>
           <div className={styles.label}>
             <div className={styles.labelTitle}>Aktier (%)</div>
-            <div className={styles.labelSubtitle}>
-              Andel aktier i din portfölj
-            </div>
           </div>
           <input
             type="number"
@@ -75,14 +67,9 @@ function GoalAllocation({
           />
           %
         </div>
-
         <div className={styles.inputRow}>
-          <div className={styles.icon}>🟢</div>
           <div className={styles.label}>
             <div className={styles.labelTitle}>Fonder (%)</div>
-            <div className={styles.labelSubtitle}>
-              Andel fonder i din portfölj
-            </div>
           </div>
           <input
             type="number"
@@ -98,23 +85,8 @@ function GoalAllocation({
           />
           %
         </div>
-      </div>
-
-      <div className={styles.summary}>
-        <div className={styles.summaryText}>
-          {/* Summa:{" "}
-          <span
-            className={styles.summarySum}
-            style={{ color: isValid ? undefined : "#c0392b" }}
-          >
-            {sum}
-          </span>{" "}
-          %{!isValid && " — Summan måste vara 100 %."}
-          {saved && isValid && " — Mål sparat."} */}
-          {/* {saved && "Mål sparat"} */}
-        </div>
         <button
-          className={styles.button}
+          className={"green"}
           type="button"
           disabled={isPending || !isValid}
           onClick={handleSave}
@@ -123,11 +95,10 @@ function GoalAllocation({
         </button>
         {isError && <p>Kunde inte spara målet.</p>}
       </div>
-
       <div className={styles.infoBox}>
         <span className={styles.infoIcon}>ℹ️</span>
         <span className={styles.infoText}>
-          Ett vanligt exempel är 60 / 40. Det är inte ett råd.
+          Detta förändrar inte innehållet i din portfölj! Du anger här endast hur du önskar att fördelningen i din samlade portfölj ska se ut mellan innehav som kan förändras mycket och mer stabila innehav med låg risk. 
         </span>
       </div>
     </Panel>

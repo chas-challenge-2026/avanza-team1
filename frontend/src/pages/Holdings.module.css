@@ -1,0 +1,87 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-medium);
+  width: min(100%, var(--max-width));
+  margin: 0 auto;
+  padding: var(--space-medium);
+}
+
+.title {
+  margin: 0;
+  color: var(--text-color);
+  font-size: var(--font-size-xlarge);
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: var(--space-medium);
+}
+
+.selection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xxsmall);
+  color: var(--text-color-alt);
+}
+
+.selection select {
+  min-width: 220px;
+  padding: var(--space-xsmall) var(--space-small);
+  border: 1px solid var(--light-gray);
+  border-radius: 4px;
+  background: var(--white);
+  color: var(--text-color);
+  font: inherit;
+}
+
+.rangeControls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xsmall);
+}
+
+.rangeControls button {
+  padding: var(--space-xsmall) var(--space-small);
+  border: 1px solid var(--light-gray);
+  border-radius: 4px;
+  background: var(--white);
+  color: var(--text-color-alt);
+  font: inherit;
+  cursor: pointer;
+}
+
+.rangeControls .activeRange {
+  border-color: var(--primary-color);
+  background: var(--primary-color);
+  color: var(--white);
+}
+
+.fetching {
+  opacity: 0.55;
+  transition: opacity 120ms ease;
+}
+
+.placeholder,
+.error {
+  margin: 0;
+  padding: var(--space-large);
+  border: 1px solid var(--light-gray);
+  border-radius: 8px;
+  background: var(--background-alt);
+  color: var(--text-color-alt);
+}
+
+.error {
+  border-color: var(--primary-color-dark);
+}
+
+@media (max-width: 600px) {
+  .selection,
+  .selection select {
+    width: 100%;
+  }
+}

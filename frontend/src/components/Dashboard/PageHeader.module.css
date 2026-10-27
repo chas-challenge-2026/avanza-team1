@@ -1,11 +1,26 @@
 .pageHeader {
-  margin-bottom: var(--space-large);
+  width: 100%;
+  /* margin-bottom: var(--space-large); */
+  /* Keeping starting color hardcoded - it's not reused */
+  /* Keeping starting color transparency in case of future dark mode */
+  background:
+      linear-gradient(158deg, rgba(72, 196, 60, 0.2) 37.024%, var(--primary-color-light) 62.976%);
+      /* background-position: ; */
+  justify-items: center;
+}
+
+.pageHeaderContainer {
+  max-width: var(--max-width);
+  width: 100%;
+  background: bottom 0 right 0 / var(--aside-width) 100% no-repeat url(../../assets/logo_bars.svg);
+  padding-top: 2rem;
 }
 
 .title {
   font-size: var(--font-size-xlarge);
   font-weight: 600;
   color: var(--text-color-alt);
+  margin-top: 0;
   margin-bottom: var(--space-xsmall);
 }
 
@@ -22,6 +37,6 @@
 }
 
 .subtitle {
-  color: var(--gray);
+  color: var(--text-color-alt);
   margin: 0;
 }

@@ -6,31 +6,53 @@
   overflow: hidden;
 }
 
-.panel h3 {
+.panelHeader {
+  margin: 0;
+  padding-inline: var(--space-medium);
+  /* border-top is needed, otherwise the top-margin area of the header "box" won't be rendered with background color */
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid var(--light-gray);
+  background-color: var(--background-alt);
+  color: var(--text-color-alt);
+}
+/* .panelHeader h3 {
   margin: 0;
   padding: var(--space-medium);
   border-bottom: 1px solid var(--light-gray);
-  background-color: var(--off-white);
-  font-size: var(--font-size-medium);
-  /* font-weight: 600; */
+  background-color: var(--background-alt);
   color: var(--text-color-alt);
+} */
+
+.panelHeader.primaryLight {
+  /* background-color: var(--primary-color-light); */
+  border-bottom: 8px solid var(--primary-color-light);
 }
 
-.panelContent {
-  padding: var(--space-large);
+.panelHeader.primaryDark {
+  /* background-color: var(--primary-color-dark); */
+  border-bottom: 8px solid var(--primary-color-dark);
 }
 
 /* Responsive sizes */
 .small {
   grid-column: span 1;
+  max-width: clamp(320px, 100%, 600px);
 }
 
 .medium {
   grid-column: span 1;
+  /* .pageHeader h3 {
+    font-size: var(--font-size-large);
+    font-weight: 600;
+  } */
 }
 
 .large {
   grid-column: span 1;
+  .panelHeader h3 {
+      font-size: var(--font-size-large);
+      font-weight: 700;
+    }
 }
 
 @media (min-width: 768px) {
@@ -40,8 +62,6 @@
 
   .medium {
     grid-column: span 1;
-    color: red;
-
   }
 
   .large {

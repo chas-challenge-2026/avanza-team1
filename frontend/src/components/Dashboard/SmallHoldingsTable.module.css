@@ -1,0 +1,25 @@
+.row {
+  display: flex;
+  justify-content: space-between;
+  padding-inline: var(--space-xsmall);
+  padding-block: var(--space-xxsmall);
+  &:last-child {
+    padding-bottom: var(--space-medium);
+  }
+}
+
+.topRow {
+  border-bottom: 1px solid var(--light-gray);
+  padding-block: var(--space-xsmall);
+  font-size: var(--font-size-emphasis);
+  font-weight: 600;
+}
+
+.holdingsList {
+  max-height: 15rem;
+  overflow-y: auto;
+}
+
+.totalValue {
+  color: var(--primary-color);
+}

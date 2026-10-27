@@ -1,6 +1,6 @@
 // import { useState } from 'react'
 import { Routes, Route } from 'react-router-dom';
-import Topbar from "./components/Topbar";
+import Topbar from "./components/Topbar/Topbar";
 import Portfolio from './pages/Portfolio';
 import Holdings from './pages/Holdings';
 import Alerts from './pages/Alerts';
