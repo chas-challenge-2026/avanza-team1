@@ -18,7 +18,7 @@ function AssetAllocation({ allocation }: AssetAllocationProps): JSX.Element {
       </div>
 
         {/* Actual/Target BarChart */}
-        <div className={styles.barChartContainer}>
+        <div>
       
           {/* "Faktiskt allokering" label */}
           <p className={styles.actualLabel}>Faktisk allokering</p>

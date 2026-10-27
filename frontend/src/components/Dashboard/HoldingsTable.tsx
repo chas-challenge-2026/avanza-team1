@@ -32,7 +32,7 @@ function HoldingsTable({ holdings, selectedKey, onSelect }: HoldingsTableProps):
               Värde SEK
             </th>
             <th className={styles.right}>
-              Ändring
+              Avskastning
             </th>
             <th>Historik</th>
           </tr>

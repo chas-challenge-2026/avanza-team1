@@ -61,7 +61,7 @@ div[data-percent] {
 .actualLabel, .targetLabel {
   width: max-content;
   margin: 0;
-  corner-right-shape: bevel;
+  /* corner-right-shape: bevel; */
   /* background-color: var(--background-alt); */
   overflow: hidden;
   font-size: var(--font-size-emphasis);
