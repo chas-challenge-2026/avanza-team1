@@ -2,19 +2,14 @@
 
 #include <cstdlib>
 
+#ifndef BACKTEST_HPP
+#define BACKTEST_HPP
+
 /* Checks compiler on different OS systems so not to cause bad errors */
-/* Microsoft Visual Studio or MinGW (Windows) */
-#if defined(_MSC_VER) || defined(__MINGW32__)
+#if defined(_WIN32) || defined(_WIN64)
     #define EXPORT __declspec(dllexport)
-
-/* GCC or Clang (Linux, macOS, BSD, etc.) */
-#elif defined(__GNUC__) || defined(__clang__)
-    #define EXPORT __attribute__((visibility("default")))
-
-/* Fallback for unknown compilers */
 #else
-    #define EXPORT
-    #pragma warning Unknown dynamic link export semantics.
+    #define EXPORT __attribute__((visibility("default")))
 #endif
 
 typedef struct
@@ -23,12 +18,20 @@ typedef struct
     double annualized_return;
     double max_drawdown;
     double sharpe_ratio;
-    const char *currency;
+    char *currency;
 } BacktestLibrary;
 
+#ifdef __cplusplus
 extern "C" 
 {
+#endif
+
     EXPORT void free_backtest_result(BacktestLibrary *result);
 
     EXPORT BacktestLibrary *run_backtest(const double *prices, int instruments, int days, const char *currency);
+
+#ifdef __cplusplus
 }
+#endif
+
+#endif
