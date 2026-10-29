@@ -17,17 +17,18 @@ public interface BacktestLibrary extends Library {
         public double annualized_return;
         public double max_drawdown;
         public double sharpe_ratio;
+        public String currency;
 
         @Override
         protected List<String> getFieldOrder() {
-            return Arrays.asList("total_return", "annualized_return", "max_drawdown", "sharpe_ratio");
+            return Arrays.asList("total_return", "annualized_return", "max_drawdown", "sharpe_ratio", "currency");
         }
 
         public static class ByReference extends BacktestResult implements Structure.ByReference {}
     }
 
 
-    BacktestResult.ByReference run_backtest(double[] prices, int instruments, int days);
+    BacktestResult.ByReference run_backtest(double[] prices, int instruments, int days, String currency);
     // Crucial: A method to free the memory allocated by C++
     void free_backtest_result(Pointer result);
 }
