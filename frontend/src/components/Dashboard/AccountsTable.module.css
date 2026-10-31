@@ -26,7 +26,7 @@
 .row {
   display: flex;
   justify-content: space-between;
-  padding: var(--space-xxsmall) var(--space-xsmall);
+  padding-block: var(--space-xxsmall);
 }
 
 /* .value {

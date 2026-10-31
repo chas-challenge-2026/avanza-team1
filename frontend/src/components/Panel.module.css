@@ -4,11 +4,14 @@
   border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   overflow: hidden;
+  > * {
+    padding-inline: var(--space-small);
+  }
 }
 
 .panelHeader {
   margin: 0;
-  padding-inline: var(--space-medium);
+  /* padding-inline: var(--space-medium); */
   /* border-top is needed, otherwise the top-margin area of the header "box" won't be rendered with background color */
   border-top: 1px solid transparent;
   border-bottom: 1px solid var(--light-gray);
