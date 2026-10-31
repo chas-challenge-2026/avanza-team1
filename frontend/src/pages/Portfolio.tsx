@@ -6,6 +6,7 @@ import AssetAllocation from "../components/Dashboard/AssetAllocation";
 import GoalAllocation from "../components/Dashboard/GoalAllocation";
 import AccountsTable from "../components/Dashboard/AccountsTable";
 import SmallHoldingsTable from "../components/Dashboard/SmallHoldingsTable";
+import DriftInterpretationPanel from "../components/Dashboard/DriftInterpretationPanel";
 import NoticesEmpty from "../components/Dashboard/NoticesEmpty";
 import "./Portfolio.css";
 import type { Alert, Allocation } from "../types/portfolio";
@@ -81,6 +82,7 @@ function Portfolio() {
         <div className="leftColumn">
           {drift.overThreshold && <WarningBanner message={drift.message} />}
           <AssetAllocation allocation={allocation} />
+          <DriftInterpretationPanel allocation={allocation} />
           <button className="setAllocationBtn"
             type="button"
             onClick={() => goalAllocationDialog.current?.showModal()}
