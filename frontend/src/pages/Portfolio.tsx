@@ -71,6 +71,7 @@ function Portfolio() {
     targetStabiltPct: number,
   ) {
     setTargetOverride({ targetAktierPct, targetStabiltPct });
+    goalAllocationDialog.current?.close();
   }
 
   const drift = computeDrift(allocation);
@@ -82,17 +83,34 @@ function Portfolio() {
         <div className="leftColumn">
           {drift.overThreshold && <WarningBanner message={drift.message} />}
           <AssetAllocation allocation={allocation} />
-          <DriftInterpretationPanel allocation={allocation} />
           <button className="setAllocationBtn"
             type="button"
             onClick={() => goalAllocationDialog.current?.showModal()}
           >
             Ändra målallokering
           </button>
-          <dialog ref={goalAllocationDialog} className="goalAllocationDialog">
+          <DriftInterpretationPanel allocation={allocation} />
+          <dialog 
+            ref={goalAllocationDialog} 
+            className="goalAllocationDialog"
+            onClick={(event) => {
+              const dialog = event.currentTarget;
+              const rect = dialog.getBoundingClientRect();
+              const outside =
+                event.target === dialog &&
+                (event.clientX < rect.left ||
+                  event.clientX > rect.right ||
+                  event.clientY < rect.top ||
+                  event.clientY > rect.bottom);
+
+              if (outside) dialog.close();
+            }}
+          >
             <form method="dialog" className="goalAllocationDialogClose">
               <button type="submit" aria-label="Stäng målallokering">
-                Stäng
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
               </button>
             </form>
             <GoalAllocation
