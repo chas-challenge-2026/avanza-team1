@@ -11,9 +11,11 @@ export function AktierAboveContent({ allocation }: DriftContentProps) {
       <p>
         Överväg rebalansering av din portfölj för att återställa den till din målallokering, om du vill fortsätta med din investeringsplan. Läs gärna mer om rebalansering i Avanzas guide: <a href="https://www.avanza.se/lar-dig-mer/guider/rebalansering.html" target="_blank" rel="noopener noreferrer">Rebalansering</a>.   
         
-        {/* Det kan innebära att sälja en del av dina aktier och/eller köpa mer av den stabila andelen. Avanza Portföljhälsa kan bara uppmärksamma dig på situationen, men inte ge några konkreta rekommendationer. Det är du som behöver ta ställning till om du vill agera på informationen, och hur. Avanzas andra verktyg för att hantera innehav finns redo i så fall.  */}
+        {/* Nedanstående text var tidigare en del av ovanstående stycke, men jag överväger att lägga den som del av informationen i högerkolumnens informationstext istället. I den här komponenten vill vi bara ge en kortfattad information om att det kan vara lämpligt att rebalansera portföljen.
+        
+        "Det kan innebära att sälja en del av dina aktier och/eller köpa mer av den stabila andelen. Avanza Portföljhälsa kan bara uppmärksamma dig på situationen, men inte ge några konkreta rekommendationer. Det är du som behöver ta ställning till om du vill agera på informationen, och hur. Avanzas andra verktyg för att hantera innehav finns redo i så fall."  */}
       </p>
-      <p>Du kan också välja att <em>inte</em> agera nu, och låta situationen utvecklas. Din portfölj har ju trots allt vuxit mer i värde än vad du trodde. Men det har även riskexponeringen gjort, och du behöver vara medveten om att ... </p>
+      <p>Du kan också välja att <em>inte</em> agera nu, och låta situationen utvecklas. Din portfölj har ju trots allt vuxit mer i värde än vad du trodde. Men det har även riskexponeringen gjort, och du behöver vara medveten om att mer pengar placerade i en aktie som förändras mycket i värde innebär att det är mer pengar som rör sig upp eller ner.</p>
     </>
   );
 }

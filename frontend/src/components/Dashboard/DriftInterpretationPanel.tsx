@@ -4,19 +4,10 @@ import { getDriftStatus } from "../../lib/drift";
 import type { Allocation, DriftStatus } from "../../types/portfolio";
 import { WithinThresholdContent } from "./WithinThresholdContent";
 import { AktierAboveContent } from "./AktierAboveContent";
+import { StabiltAboveContent } from "./StabiltAboveContent";
 
 export interface DriftContentProps {
   allocation: Allocation;
-}
-
-function StabiltAboveContent({ allocation }: DriftContentProps) {
-  return (
-    <p>
-      Den stabila andelen är {allocation.actualStabiltPct}% och ligger över målet
-      på {allocation.targetStabiltPct}% med mer än gränsen på{" "}
-      {allocation.thresholdPct}%.
-    </p>
-  );
 }
 
 const contentByStatus: Record<DriftStatus, ComponentType<DriftContentProps>> = {
