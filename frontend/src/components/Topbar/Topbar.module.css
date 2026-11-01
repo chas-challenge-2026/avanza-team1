@@ -1,4 +1,5 @@
 .topbar {
+  position: relative;
   width: 100%;
   height: 80px;
   background-color: var(--white);
@@ -87,6 +88,10 @@
   background-color: var(--primary-color);
   color: var(--white);
 }
+
+.mobileLogout {
+  display: none;
+}
 /* ▲▲▲ user areas ▲▲▲ */
 
 .hamburgerContainer {
@@ -96,23 +101,60 @@
 @media (max-width: 768px) {
   .topbar {
     grid-template-columns: auto auto;
-    grid-template-areas: "brand user" "nav nav"; 
-                         /* "brand nav  nav"; */
+    grid-template-areas: "brand user";
   }
   .brand {
     padding-left: var(--space-medium);
   }
-  /* .topbar nav {
-    width: minmax(fit-content, calc(fit-content * 1.5));
-    justify-content: end;
-  } */
   .user {
     padding-right: var(--space-medium);
     justify-content: end;
   }
-  .desktopNav,
   .desktopLogout {
     display: none;
+  }
+
+  .desktopNav {
+    position: absolute;
+    top: 100%;
+    right: var(--space-medium);
+    z-index: 10;
+    display: none;
+    flex-direction: column;
+    width: min(12rem, calc(100vw - 2rem));
+    background-color: var(--background);
+    border: 1px solid var(--light-gray);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  }
+
+  .desktopNav.mobileMenuOpen {
+    display: flex;
+  }
+
+  .desktopNav a {
+    height: auto;
+    flex-grow: 0;
+    padding: var(--space-medium);
+    border-top: 0;
+    border-bottom: 1px solid var(--light-gray);
+    text-align: left;
+  }
+
+  .desktopNav a:last-of-type {
+    border-bottom: 0;
+  }
+
+  .mobileLogout {
+    display: block;
+    width: 100%;
+    height: auto;
+    padding: var(--space-medium);
+    border-radius: 0;
+    border-top: 1px solid var(--light-gray);
+    border-bottom: 0;
+    /* background-color: var(--background);
+    color: var(--text-color-alt);
+    text-align: left; */
   }
 
   .hamburgerContainer {
