@@ -11,8 +11,6 @@ interface MockAccount {
   user: User;
 }
 
-// Mock av det som en riktig backend-databas skulle innehålla (se infra/seed.sql).
-// Byts ut mot ett riktigt API-anrop när backend har ett /api/auth/login-endpoint (se types/auth.ts).
 const MOCK_USERS: MockAccount[] = [
   {
     email: "anna@example.com",
@@ -26,7 +24,15 @@ const MOCK_USERS: MockAccount[] = [
   },
 ];
 
-const useMock = import.meta.env.VITE_USE_MOCK !== "false";
+// Require an explicit authentication mode to prevent
+// accidentally enabling mock authentication.
+const authMode = import.meta.env.VITE_USE_MOCK;
+
+if (authMode !== "true" && authMode !== "false") {
+  throw new Error("Invalid authentication configuration");
+}
+
+const useMock = authMode === "true";
 
 export async function login(
   email: string,

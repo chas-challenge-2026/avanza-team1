@@ -102,27 +102,50 @@ When the frontend calls the backend API, start the backend infrastructure separa
 
 The UI reads the portfolio through `src/api/portfolioApi.ts`.
 The default adapter returns `src/data/portfolio.json`.
-Switching `VITE_USE_MOCK=false` later uses `GET /api/portfolio` instead.
+Setting `VITE_USE_MOCK=false` selects the backend portfolio adapter.
 Change numbers in the JSON, not in the components.
-Environment flags, read by Vite from `frontend/.env.development`:
 
-- `VITE_API_BASE_URL` is the backend origin. Locally that is `http://localhost:8082`.
-- `VITE_USE_MOCK` defaults to `true`. The dashboard then keeps using `src/data/portfolio.json`.
-- Set `VITE_USE_MOCK=false` to turn on the HTTP adapter. That adapter is still a stub in this issue, so leave the flag on `true` until the login and portfolio issues land.
+## Authentication mode
 
-Restart `npm run dev` after changing either flag. Vite reads env files at startup, not when you save a component.
+Authentication is explicitly controlled through `VITE_USE_MOCK`
+in `frontend/.env.development`.
 
-Run against the backend:
+| Value | Behavior |
+|---|---|
+| `true` | Uses mock authentication |
+| `false` | Uses the backend authentication API |
+| Missing or invalid | Throws a configuration error |
 
-1. Start the backend so it listens on port 8082.
-2. In `frontend/.env.development`, set `VITE_USE_MOCK=false`.
-3. Restart `npm run dev`. Vite only reads env files at startup.
-4. Log in as `anna@example.com` / `password123`. The portfolio should come from `GET /api/portfolio`, not from `src/data/portfolio.json`.
-5. Set the flag back to `true` and restart to return to mock data.
+Example for demo mode:
+
+```env
+VITE_USE_MOCK=true
+```
+
+Example for backend mode:
+
+```env
+VITE_USE_MOCK=false
+VITE_API_BASE_URL=http://localhost:8082
+```
+
+Mock mode uses predefined test accounts and displays a visible
+"Demoläge aktivt" notice. Authentication is simulated in this mode.
+
+Backend mode sends login requests to `/api/auth/login`.
+Backend failures display an error instead of falling back to mock users.
+
+`VITE_USE_MOCK` also controls the portfolio data adapter.
+Switching to backend mode therefore affects both authentication
+and portfolio requests.
+
+Restart `npm run dev` after modifying environment variables.
+
+For automated tests, authentication mode is configured separately
+in `vite.config.ts`.
 
 ## Scope (current)
 
-- No login against the backend
 - No live FX
 - The pension account exists but has 0 SEK
 - Drift is computed in the UI (`src/lib/drift.ts`): `|actual − target| > thresholdPct` (5% in the mock). The JSON flag is not the source of truth for the banner.

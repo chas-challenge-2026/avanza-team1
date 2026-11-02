@@ -1,6 +1,7 @@
 import type { PortfolioApi } from "../portfolioApi";
 import type { Portfolio } from "../../types/portfolio";
 import type { StoredTarget } from "../../lib/targetAllocation";
+import type { HistoryRange, HistorySeries } from "../../types/history";
 import { apiFetch } from "../httpClient";
 
 function isPortfolio(value: unknown): value is Portfolio {
@@ -25,6 +26,16 @@ export const httpPortfolioApi: PortfolioApi = {
       throw new Error("GET /api/portfolio returned an unexpected shape");
     }
     return body;
+  },
+
+  async getHistory(
+    params: { key: string; range: HistoryRange },
+    signal?: AbortSignal,
+  ): Promise<HistorySeries> {
+    // TODO: Confirm the history endpoint contract with the Spring Boot backend and native back-testing module.
+    const query = new URLSearchParams({ key: params.key, range: params.range });
+    const response = await apiFetch(`/portfolio/history?${query.toString()}`, { signal });
+    return (await response.json()) as HistorySeries;
   },
 
   async saveAllocation(target: StoredTarget): Promise<void> {
