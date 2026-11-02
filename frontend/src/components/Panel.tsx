@@ -1,18 +1,19 @@
-import "./Panel.module.css";
+import styles from "./Panel.module.css";
 
 interface PanelProps {
   title: string;
   size?: 'small' | 'medium' | 'large';
+  titleColor?: string;
   children: React.ReactNode;
 }
 
-function Panel({ title, size = 'medium', children }: PanelProps) {
+function Panel({ title, size = 'medium', titleColor, children }: PanelProps) {
   return (
-    <section className={`panel ${size}`}>
-      <div className="panelHeader">
+    <section className={`${styles.panel} ${styles[size]}`}>
+      <div className={`${styles.panelHeader} ${titleColor ? styles[titleColor] : undefined}`}>
         <h3>{title}</h3>
       </div>
-      <div className="panelContent">
+      <div>
         {children}
       </div>
     </section>
