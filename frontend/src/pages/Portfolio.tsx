@@ -20,8 +20,8 @@ type HoldingsTab = "accounts" | "equities" | "stable";
 
 const holdingsTabs: { id: HoldingsTab; label: string }[] = [
   { id: "accounts", label: "Konton" },
-  { id: "equities", label: "Riskbetonade" },
-  { id: "stable", label: "Stabila" },
+  { id: "equities", label: "Aktier" },
+  { id: "stable", label: "Fonder" },
 ];
 
 function withDrift(allocation: Allocation): Allocation {
@@ -122,8 +122,8 @@ function Portfolio() {
       <div className="dashboardGrid">
         <div className="leftColumn">
           {drift.overThreshold && <WarningBanner message={drift.message} />}
-          <div className="allocationAndHoldings">
-            <div className="allocationPanel">
+          <section className="allocationAndHoldings">
+            <article className="allocationPanel">
               <AssetAllocation allocation={allocation} />
               <button className="setAllocationBtn"
                 type="button"
@@ -131,8 +131,8 @@ function Portfolio() {
               >
                 Ändra målallokering
               </button>
-            </div>
-            <section className="holdingsTabs" aria-label="Portföljinnehav">
+            </article>
+            <article className="holdingsTabs" aria-label="Portföljinnehav">
               <div className="holdingsTabList" role="tablist" aria-label="Visa innehav">
                 {holdingsTabs.map((tab, index) => (
                   <button
@@ -168,14 +168,14 @@ function Portfolio() {
                     <SmallHoldingsTable
                       holdings={portfolio.holdings}
                       assetClass={tab.id === "equities" ? "AKTIER" : "STABILT"}
-                      title={tab.id === "equities" ? "Riskbetonade innehav" : "Stabila innehav"}
+                      title={tab.id === "equities" ? "Aktier (riskbetonade innehav)" : "Fonder (stabila innehav)"}
                       histories={holdingHistories}
                     />
                   )}
                 </div>
               ))}
-            </section>
-          </div>
+            </article>
+          </section>
           <DriftInterpretationPanel allocation={allocation} />
           <dialog 
             ref={goalAllocationDialog} 

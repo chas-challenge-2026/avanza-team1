@@ -17,6 +17,11 @@
   padding: var(--space-small) 0;
   border-bottom: 1px solid #ddd;
 }
+
+.table th:first-child, .table td:first-child {
+  padding-left: var(--space-small);
+}
+
 .ticker {
   color: var(--primary-color);
   font-weight: 500;

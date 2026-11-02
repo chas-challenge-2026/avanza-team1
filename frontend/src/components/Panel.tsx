@@ -3,7 +3,8 @@ import styles from "./Panel.module.css";
 interface PanelProps {
   title: string;
   size?: 'small' | 'medium' | 'large';
-  titleColor?: string;
+  titleColor?: 'primaryLight' | 'primaryDark' | 'lightGray';
+  // titleColor?: string;
   children: React.ReactNode;
 }
 
@@ -13,9 +14,9 @@ function Panel({ title, size = 'medium', titleColor, children }: PanelProps) {
       <div className={`${styles.panelHeader} ${titleColor ? styles[titleColor] : undefined}`}>
         <h3>{title}</h3>
       </div>
-      <div>
+      {/* <div> */}
         {children}
-      </div>
+      {/* </div> */}
     </section>
   );
 }
