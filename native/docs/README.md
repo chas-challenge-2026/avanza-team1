@@ -15,11 +15,12 @@
     - [Logger](#logger)
   - [Documentation](#documentation)
   - [Testing](#testing)
+  - [Docs (Written in Swedish)](#docs-written-in-swedish)
   - [Collaborators](#collaborators)
   - [Resources](#resources)
 
 ## About
-* TODO
+* The Native part of the project, handles Risk Assessment, Currency-convertion and Backtesting on portfolio data. A part of Avanza Team 1s project.
 
 ## Tech stack
 * libcurl
@@ -51,6 +52,8 @@ cmake --build build
      |    ├── backtest.hpp
      |    ├── CMakeLists.txt
      ├── docs/
+     |    ├── v1-info/
+     |    |    └── README.md (v1)
      |    ├── BESLUT.md
      |    ├── BIDRAG.md
      |    └── README.md
@@ -110,7 +113,25 @@ cmake --build build
 ## Testing
 * Risk Assessment Engine has extensive tests that run on expected values made through demo-runs of the functions. It also checks boundary issues and edge cases to make sure that it provides the correct information. Still a Work in progress.
 * FX Conversion Module has extensive tests that run on expected values made through demo-runs of the functions. It also checks boundary issues and edge cases to make sure that it provides the correct information. Still a Work in progress.
-* Backtest currently does not have any testing, will be added later.
+* Backtest currently does not have any testing, may be added later.
+* Example from risk-module:
+```bash
+[PASS] sharpe with exactly three prices (got 2229.621440)
+[PASS] volatility on flat prices is 0 (got 0.000000)
+[PASS] sharpe on flat prices avoids divide-by-zero
+[PASS] rising prices produce low volatility (0.002413)
+[PASS] rising prices produce a positive sharpe ratio (1011.616981)
+[PASS] max drawdown on known price series (got 0.043026)
+[PASS] max drawdown with fewer than 2 prices returns insufficient data
+[PASS] max drawdown with exactly two prices (got 0.100000)
+[PASS] max drawdown on rising prices is 0 (got 0.000000)
+[PASS] max drawdown on falling prices matches first-to-last drop (got 0.066667)
+
+10/10 tests passed
+```
+## Docs (Written in Swedish)
+* BIDRAG(Contributions): https://github.com/chas-challenge-2026/avanza-team1/blob/develop/native/docs/BIDRAG.md
+* BESLUT(Decisions): https://github.com/chas-challenge-2026/avanza-team1/blob/develop/native/docs/BESLUT.md
 
 ## Collaborators
 * [Henrik Westerlund](https://github.com/Henrik-Westerlund)
