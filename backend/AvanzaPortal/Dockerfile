@@ -1,5 +1,5 @@
 # ----------------------------------------
-# Stage 0: Build React frontend
+# Stage 1: Build React frontend
 # ----------------------------------------
 FROM node:24-alpine AS frontend-build
 WORKDIR /app/frontend
@@ -10,7 +10,7 @@ RUN npm ci
 COPY frontend/ ./
 RUN npm run build
 # ----------------------------------------
-# Stage 1: Build Java Application
+# Stage 2: Build Java Application
 # ----------------------------------------
 FROM maven:3.9-eclipse-temurin-21 AS java-build
 WORKDIR /app
@@ -25,7 +25,7 @@ COPY --from=frontend-build /app/frontend/dist/ ./src/main/resources/static/
 
 RUN mvn package -DskipTests -q
 # ----------------------------------------
-# Stage 2: Build C++ Native Library
+# Stage 3: Build C++ Native Library
 # ----------------------------------------
 FROM eclipse-temurin:21-jdk-jammy AS cpp-build
 WORKDIR /app/native
@@ -43,7 +43,7 @@ RUN cd backtest && \
     cmake --build build
 
 # ----------------------------------------
-# Stage 3: Final Runtime Image
+# Stage 4: Final Runtime Image
 # ----------------------------------------
 FROM eclipse-temurin:21-jre-jammy
 WORKDIR /app
