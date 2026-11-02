@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, type KeyboardEvent } from "react";
 import PageHeader from "../components/Dashboard/PageHeader";
 import WarningBanner from "../components/Dashboard/WarningBanner";
 import { InfoAside } from "../components/Dashboard/InfoAside";
@@ -15,6 +15,14 @@ import { computeDrift } from "../lib/drift";
 import { usePortfolio } from "../hooks/usePortfolio";
 import { useHistory } from "../hooks/useHistory";
 import { useHistories } from "../hooks/useHistories";
+
+type HoldingsTab = "accounts" | "equities" | "stable";
+
+const holdingsTabs: { id: HoldingsTab; label: string }[] = [
+  { id: "accounts", label: "Konton" },
+  { id: "equities", label: "Riskbetonade" },
+  { id: "stable", label: "Stabila" },
+];
 
 function withDrift(allocation: Allocation): Allocation {
   const { overThreshold } = computeDrift(allocation);
@@ -35,6 +43,9 @@ function Portfolio() {
     "1M",
   );
   const goalAllocationDialog = useRef<HTMLDialogElement>(null);
+  const holdingsTabRefs = useRef<Array<HTMLButtonElement | null>>([]);
+  const [selectedHoldingsTab, setSelectedHoldingsTab] =
+    useState<HoldingsTab>("accounts");
 
   const [targetOverride, setTargetOverride] = useState<{
     targetAktierPct: number;
@@ -74,6 +85,35 @@ function Portfolio() {
     goalAllocationDialog.current?.close();
   }
 
+  function handleHoldingsTabKeyDown(event: KeyboardEvent<HTMLButtonElement>) {
+    const currentIndex = holdingsTabs.findIndex(
+      (tab) => tab.id === selectedHoldingsTab,
+    );
+    let nextIndex: number;
+
+    switch (event.key) {
+      case "ArrowRight":
+        nextIndex = (currentIndex + 1) % holdingsTabs.length;
+        break;
+      case "ArrowLeft":
+        nextIndex = (currentIndex - 1 + holdingsTabs.length) % holdingsTabs.length;
+        break;
+      case "Home":
+        nextIndex = 0;
+        break;
+      case "End":
+        nextIndex = holdingsTabs.length - 1;
+        break;
+      default:
+        return;
+    }
+
+    event.preventDefault();
+    const nextTab = holdingsTabs[nextIndex];
+    setSelectedHoldingsTab(nextTab.id);
+    holdingsTabRefs.current[nextIndex]?.focus();
+  }
+
   const drift = computeDrift(allocation);
 
   return (
@@ -82,13 +122,60 @@ function Portfolio() {
       <div className="dashboardGrid">
         <div className="leftColumn">
           {drift.overThreshold && <WarningBanner message={drift.message} />}
-          <AssetAllocation allocation={allocation} />
-          <button className="setAllocationBtn"
-            type="button"
-            onClick={() => goalAllocationDialog.current?.showModal()}
-          >
-            Ändra målallokering
-          </button>
+          <div className="allocationAndHoldings">
+            <div className="allocationPanel">
+              <AssetAllocation allocation={allocation} />
+              <button className="setAllocationBtn"
+                type="button"
+                onClick={() => goalAllocationDialog.current?.showModal()}
+              >
+                Ändra målallokering
+              </button>
+            </div>
+            <section className="holdingsTabs" aria-label="Portföljinnehav">
+              <div className="holdingsTabList" role="tablist" aria-label="Visa innehav">
+                {holdingsTabs.map((tab, index) => (
+                  <button
+                    key={tab.id}
+                    ref={(element) => { holdingsTabRefs.current[index] = element; }}
+                    id={`holdings-tab-${tab.id}`}
+                    className="holdingsTab"
+                    type="button"
+                    role="tab"
+                    aria-selected={selectedHoldingsTab === tab.id}
+                    aria-controls={`holdings-panel-${tab.id}`}
+                    tabIndex={selectedHoldingsTab === tab.id ? 0 : -1}
+                    onClick={() => setSelectedHoldingsTab(tab.id)}
+                    onKeyDown={handleHoldingsTabKeyDown}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
+              </div>
+              {holdingsTabs.map((tab) => (
+                <div
+                  key={tab.id}
+                  id={`holdings-panel-${tab.id}`}
+                  className="holdingsTabPanel"
+                  role="tabpanel"
+                  aria-labelledby={`holdings-tab-${tab.id}`}
+                  tabIndex={0}
+                  hidden={selectedHoldingsTab !== tab.id}
+                >
+                  {tab.id === "accounts" ? (
+                    <AccountsTable accounts={portfolio.accounts} />
+                  ) : (
+                    <SmallHoldingsTable
+                      holdings={portfolio.holdings}
+                      assetClass={tab.id === "equities" ? "AKTIER" : "STABILT"}
+                      title={tab.id === "equities" ? "Riskbetonade innehav" : "Stabila innehav"}
+                      histories={holdingHistories}
+                    />
+                  )}
+                </div>
+              ))}
+            </section>
+          </div>
           <DriftInterpretationPanel allocation={allocation} />
           <dialog 
             ref={goalAllocationDialog} 
@@ -119,21 +206,6 @@ function Portfolio() {
               onTargetSaved={handleTargetSaved}
             />
           </dialog>
-          <div className="smallTables">
-            <SmallHoldingsTable
-              holdings={portfolio.holdings}
-              assetClass="AKTIER"
-              title="Riskbetonade innehav"
-              histories={holdingHistories}
-            />
-            <SmallHoldingsTable
-              holdings={portfolio.holdings}
-              assetClass="STABILT"
-              title="Stabila innehav"
-              histories={holdingHistories}
-            />
-          </div>
-          <AccountsTable accounts={portfolio.accounts} />
           <NoticesEmpty alerts={driftAlerts(allocation)} />
         </div>
         <div className={"rightColumn"}>
