@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 project(native_modules LANGUAGES C CXX)
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
-set(CMAKE_POLICY_VERSION_MINIMUM 3.5) # Needed for newer cmake versions as Jansson is about to be deprecated. - Svartakatten
+set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
 
 if(WIN32)
     set(CURL_USE_OPENSSL OFF CACHE BOOL "" FORCE)
@@ -14,14 +14,16 @@ endif()
 
 #Jansson - Automatic installation from github to run tests - Svartakatten
 include(FetchContent)
+
 FetchContent_Declare(
     jansson
     GIT_REPOSITORY https://github.com/akheron/jansson.git
     GIT_TAG        v2.14
-    FIND_PACKAGE_ARGS NAMES jansson
 )
 set(JANSSON_BUILD_DOCS OFF CACHE BOOL "" FORCE)
-set(JANSSON_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(JANSSON_WITHOUT_TESTS ON CACHE BOOL "" FORCE)
+set(JANSSON_EXAMPLES OFF CACHE BOOL "" FORCE)
+
 FetchContent_MakeAvailable(jansson)
 
 #libcurl - Automatic installation from github to run tests - Svartakatten
@@ -29,11 +31,13 @@ FetchContent_Declare(
     curl
     GIT_REPOSITORY https://github.com/curl/curl.git
     GIT_TAG        curl-8_5_0
-    FIND_PACKAGE_ARGS NAMES CURL
 )
 set(BUILD_TESTING OFF CACHE BOOL "" FORCE)
 set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
+set(BUILD_STATIC_LIBS ON CACHE BOOL "" FORCE)
+set(BUILD_CURL_EXE OFF CACHE BOOL "" FORCE)
 set(HTTP_ONLY ON CACHE BOOL "" FORCE)
+
 FetchContent_MakeAvailable(curl)
 #
 
