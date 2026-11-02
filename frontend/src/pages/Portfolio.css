@@ -4,22 +4,43 @@
   gap: 1rem;
 }
 
+.leftColumn {
+  width: 100%;
+  display: grid;
+  gap: var(--space-medium);
+}
+/* .rightColumn {
+} */
+
+.smallTables {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-medium);
+  > * {
+    flex-grow: 1;
+  }
+}
+
 /* Tablet */
 @media (min-width: 768px) {
   .dashboardGrid {
-    grid-template-columns: repeat(2, 1fr);  /* 📱→ 2 kolumner */
-    gap: 1.5rem;
+    grid-template-columns: 1fr var(--aside-width);  /* 📱→ 2 kolumner */
+    gap: clamp(1rem, 5vw, 5rem);    
+    width: 100%;
+    max-width: var(--max-width);
   }
 }
 
 /* Desktop */
-@media (min-width: 1024px) {
+/* @media (min-width: 1024px) {
   .dashboardGrid {
-    grid-template-columns: repeat(3, 1fr);  /* 🖥️ 3 kolumner */
+    grid-template-columns: repeat(3, 1fr);  /* 🖥️ 3 kolumner 
     max-width: 1200px;
     margin: 0 auto;
   }
-}
+} */
 
 table {
   width: 100%;
@@ -40,19 +61,31 @@ td {
   border-bottom: 1px solid #f0f0f0;
 }
 
-button {
-  padding: 0.5rem 1rem;
-  background-color: var(--primary-color);
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: 500;
-  transition: background-color 0.2s ease;
+
+.setAllocationBtn {
+  margin-top: -1.5rem;
 }
 
-button:hover {
-  background-color: #008a42;
+
+.goalAllocationDialog {
+  width: min(90vw, 400px);
+  max-height: 90vh;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  overflow: auto;
+}
+
+.goalAllocationDialog::backdrop {
+  background-color: rgb(0 0 0 / 50%);
+}
+
+.goalAllocationDialogClose {
+  position: absolute;
+  right: 0;
+  /* display: flex; */
+  /* justify-content: flex-end; */
+  padding: var(--space-small) var(--space-small) 0;
 }
 
 input:disabled {

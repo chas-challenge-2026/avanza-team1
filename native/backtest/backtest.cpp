@@ -10,6 +10,60 @@ extern "C" {
 
 //--------------------------- Cut off here (from libraries). Makes readability nicer, you can choose whether you keep it ;)
 
+static bool build_portfolio(const double *prices, int instruments, int days, double *portfolio)
+{
+    /* TODO: Needs to add weights regarding the instruments to fully simulate "strategies". Right now they are all measured equally. */
+    if (prices == nullptr || portfolio == nullptr || instruments < 1 || days < 3)
+    {
+        return false;
+    }
+
+    for (int instrument = 0; instrument < instruments; instrument++)
+    {
+        const size_t offset = static_cast<size_t>(instrument) * days;
+        const double initial_price = prices[offset];
+
+        if (!std::isfinite(initial_price) || initial_price <= 0.0)
+        {
+            return false;
+        }
+
+        for (int day = 0; day < days; day++)
+        {
+            const double price = prices[offset + static_cast<size_t>(day)];
+
+            if (!std::isfinite(price) || price <= 0.0)
+            {
+                return false;
+            }
+        }
+    }
+
+    for (int day = 0; day < days; day++)
+    {
+        double portfolio_value = 0.0;
+
+        for (int instrument = 0; instrument < instruments; instrument++)
+        {
+            const size_t offset = static_cast<size_t>(instrument) * static_cast<size_t>(days);
+
+            const double price = prices[offset + static_cast<size_t>(day)];
+            const double initial_price = prices[offset];
+
+            portfolio_value += price / initial_price;
+        }
+
+        portfolio[static_cast<size_t>(day)] = portfolio_value / static_cast<double>(instruments);
+
+        if (!std::isfinite(portfolio[static_cast<size_t>(day)]) || portfolio[static_cast<size_t>(day)] <= 0.0)
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 void free_backtest_result(BacktestLibrary *result)
 {
     if (result != nullptr)
@@ -38,13 +92,6 @@ BacktestLibrary *run_backtest(const double *prices, int instruments, int days, c
     }
     result->currency = nullptr;
 
-    // Copies currency to heap so that JNA can read the string securely - Svartakatten
-#if defined(_WIN32)
-    result->currency = _strdup(currency);
-#else
-    result->currency = strdup(currency);
-#endif
-
     size_t size = static_cast<size_t>(days) * static_cast<size_t>(instruments);
 
     std::vector<double> working_prices(prices, prices + size);
@@ -71,13 +118,40 @@ BacktestLibrary *run_backtest(const double *prices, int instruments, int days, c
         }
     std::memcpy(result->currency, output_currency, curr_len);
 
+    // Build normalized, equally weighted portfolio
+    std::vector<double> portfolio(static_cast<size_t>(days));
+
+    if (!build_portfolio(working_prices.data(), instruments, days, portfolio.data()))
+    {
+        free_backtest_result(result);
+        return nullptr;
+    }
+
+    // Calculate portfolio performance
     double years = static_cast<double>(days - 1) / 252.0;
-    double growth_factor = working_prices[size - 1] / working_prices[0];
+    double growth_factor = portfolio.back() / portfolio.front();
 
     result->total_return = growth_factor - 1.0;
     result->annualized_return = std::pow(growth_factor, 1.0 / years) - 1.0;
 
-    RiskStatus status = calculate_max_drawdown(working_prices.data(), size, &result->max_drawdown);
+    // Calculate portfolio risk metrics
+    RiskStatus status = calculate_max_drawdown(portfolio.data(), static_cast<size_t>(days), &result->max_drawdown);
+
+    if (status != RISK_SUCCESS)
+    {
+        free_backtest_result(result);
+        return nullptr;
+    }
+    // ---
+
+    status = calculate_sharpe(portfolio.data(), static_cast<size_t>(days), risk_free_rate, &result->sharpe_ratio);
+
+    if (status != RISK_SUCCESS)
+    {
+        free_backtest_result(result);
+        return nullptr;
+    }
+
     if (status != RISK_SUCCESS)
     {
         free_backtest_result(result);

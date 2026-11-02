@@ -11,7 +11,7 @@
   width: 2.75rem;
   height: 2.75rem;
   padding: 0;
-  background-color: var(--white);
+  background-color: var(--background-alt);
   border: 1px solid var(--light-gray);
   border-radius: 0.25rem;
   cursor: pointer;
@@ -41,7 +41,7 @@
   display: flex;
   flex-direction: column;
   min-width: 12rem;
-  background-color: var(--white);
+  background-color: var(--background);
   border: 1px solid var(--light-gray);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
   z-index: 10;
@@ -51,7 +51,7 @@
 .logoutButton {
   width: 100%;
   padding: var(--space-medium);
-  background-color: var(--white);
+  background-color: var(--background);
   border: 0;
   border-bottom: 1px solid var(--light-gray);
   color: var(--text-color-alt);
