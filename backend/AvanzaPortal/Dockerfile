@@ -1,15 +1,29 @@
 # ----------------------------------------
+# Stage 0: Build React frontend
+# ----------------------------------------
+FROM node:24-alpine AS frontend-build
+WORKDIR /app/frontend
+
+COPY frontend/package*.json ./
+RUN npm ci
+
+COPY frontend/ ./
+RUN npm run build
+# ----------------------------------------
 # Stage 1: Build Java Application
 # ----------------------------------------
 FROM maven:3.9-eclipse-temurin-21 AS java-build
 WORKDIR /app
 
-# Copy from context root into the container
 COPY backend/AvanzaPortal/pom.xml .
 RUN mvn dependency:resolve -q
-COPY backend/AvanzaPortal/src ./src
-RUN mvn package -DskipTests -q
 
+COPY backend/AvanzaPortal/src ./src
+
+# Include React production build in Spring Boot
+COPY --from=frontend-build /app/frontend/dist/ ./src/main/resources/static/
+
+RUN mvn package -DskipTests -q
 # ----------------------------------------
 # Stage 2: Build C++ Native Library
 # ----------------------------------------
