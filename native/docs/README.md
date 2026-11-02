@@ -15,6 +15,8 @@
     - [Logger](#logger)
   - [Documentation](#documentation)
   - [Testing](#testing)
+    - [Test-examples:](#test-examples)
+  - [Known Issues/Limitations](#known-issueslimitations)
   - [Docs (Written in Swedish)](#docs-written-in-swedish)
   - [Collaborators](#collaborators)
   - [Resources](#resources)
@@ -114,7 +116,9 @@ cmake --build build
 * Risk Assessment Engine has extensive tests that run on expected values made through demo-runs of the functions. It also checks boundary issues and edge cases to make sure that it provides the correct information. Still a Work in progress.
 * FX Conversion Module has extensive tests that run on expected values made through demo-runs of the functions. It also checks boundary issues and edge cases to make sure that it provides the correct information. Still a Work in progress.
 * Backtest currently does not have any testing, may be added later.
-* Example from risk-module:
+
+### Test-examples:
+* Risk-module example of tests that have been run:
 ```bash
 [PASS] sharpe with exactly three prices (got 2229.621440)
 [PASS] volatility on flat prices is 0 (got 0.000000)
@@ -129,6 +133,55 @@ cmake --build build
 
 10/10 tests passed
 ```
+
+* Backtesting with increasing instruments over different periods of time:
+```bash
+[2026-11-02 13:18:13] INFO: Backtest completed successfully with 50 instrument(s) converted from SEK over a 1 year span.
+Total Return: 9.4660%
+Annualized return: 9.5055%
+Max Drawdown: 21.7673%
+Sharpe Ratio: 0.3815
+
+[2026-11-02 13:19:18] INFO: Backtest completed successfully with 200 instrument(s) converted from SEK over a 1 year span.
+Total Return: 9.4660%
+Annualized return: 9.5055%
+Max Drawdown: 21.7673%
+Sharpe Ratio: 0.3815
+
+[2026-11-02 13:19:51] INFO: Backtest completed successfully with 400 instrument(s) converted from SEK over a 1 year span.
+Total Return: 9.4660%
+Annualized return: 9.5055%
+Max Drawdown: 21.7673%
+Sharpe Ratio: 0.3815
+
+[2026-11-02 13:22:46] INFO: Backtest completed successfully with 500 instrument(s) converted from SEK over a 1 year span.
+Total Return: 9.4660%
+Annualized return: 9.5055%
+Max Drawdown: 21.7673%
+Sharpe Ratio: 0.3815
+
+[2026-11-02 13:26:15] INFO: Backtest completed successfully with 500 instrument(s) converted from SEK over a 5 year span.
+Total Return: 9.4660%
+Annualized return: 1.8268%
+Max Drawdown: 35.0484%
+Sharpe Ratio: 0.0752
+```
+
+* FX-test examples:
+```bash
+[PASS] Riksbank API, SEK to EUR GET request
+[PASS] Parse JSON string
+[PASS] Interval JSON parsing
+[PASS] Interval FX
+
+Tests passed: 4/4
+```
+
+## Known Issues/Limitations
+* We decided against using BLAS and SIMD for the risk module because we didn't have the time to fully implement it after getting the module to work properly.
+* Strategies are not fully implemented, we only have one standard strategy as of now as the program simulates BUY & HOLD (inital purchase and then sticks to the investment over time). This is because of a time-restraint issue. We prioritized getting the backtest-function operational before exploring extensive functionality, which took longer than anticipated.
+* We didn't have time to implement caching of the fx-data, so this is currently a risk of exhausting the Riksbank-API when making extensive calls.
+
 ## Docs (Written in Swedish)
 * BIDRAG(Contributions): https://github.com/chas-challenge-2026/avanza-team1/blob/develop/native/docs/BIDRAG.md
 * BESLUT(Decisions): https://github.com/chas-challenge-2026/avanza-team1/blob/develop/native/docs/BESLUT.md
