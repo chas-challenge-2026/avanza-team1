@@ -17,7 +17,7 @@ FROM eclipse-temurin:21-jdk-jammy AS cpp-build
 WORKDIR /app/native
 
 # Install Linux build tools
-RUN apt-get update && apt-get install -y cmake g++ build-essential
+RUN apt-get update && apt-get install -y git cmake g++ build-essential libssl-dev
 
 # Copy the native source code from the context root
 COPY native/ ./
