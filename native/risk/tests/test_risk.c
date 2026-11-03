@@ -7,6 +7,7 @@
  *
  * Run with:
  *      gcc -Wall -Wextra -Werror -o test_risk risk.c helpers/helpers.c tests/test_risk.c -lm
+ *      ./test_risk
  */
 
 #include <stdio.h>
