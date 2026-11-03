@@ -20,7 +20,7 @@ public class HoldingController {
         this.holdingService = holdingService;
     }
 
-    @GetMapping("/holdings")
+    @GetMapping("/legacy/holdings")
     public String listHoldings(Model model) {
 
 

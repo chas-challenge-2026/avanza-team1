@@ -49,7 +49,14 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(auth -> auth
                         // Allow unauthenticated access to authentication REST endpoints
-                        .requestMatchers("/api/auth/**", "/api/backtest/metrics").permitAll()
+                        // Tillåt Reacts publika resurser och frontend-rutter
+                        .requestMatchers("/api/auth/**", "/api/backtest/metrics", "/",
+                                "/index.html",
+                                "/login",
+                                "/holdings",
+                                "/alerts",
+                                "/assets/**",
+                                "/favicon.ico").permitAll()
                         // Require JWT authentication for all other endpoints
                         .anyRequest().authenticated()
                 )
