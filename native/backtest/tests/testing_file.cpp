@@ -19,6 +19,7 @@
  *  * 
  * @note Run with:
  *      g++ -Wall -Werror -Wextra -o testing ../risk/risk.c ../risk/helpers/helpers.c tests/testing_file.cpp backtest.cpp ../logger/logger.cpp ../fx/fx.cpp -lm -lcurl -ljansson
+ *      ./testing
  */
 
 namespace
