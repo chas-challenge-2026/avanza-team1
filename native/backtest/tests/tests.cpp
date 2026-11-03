@@ -17,6 +17,7 @@
  * 
  * Run with:
  *      g++ -Wall -Werror -Wextra -o test_back ../risk/risk.c ../risk/helpers/helpers.c tests/tests.cpp backtest.cpp ../logger/logger.cpp ../fx/fx.cpp -lm -lcurl -ljansson
+ *      ./test_back
  */
 
 int main()
