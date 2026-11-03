@@ -8,6 +8,7 @@
   width: 100%;
   display: grid;
   gap: var(--space-medium);
+  padding-top: var(--space-medium);
 }
 /* .rightColumn {
 } */
