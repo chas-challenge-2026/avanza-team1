@@ -1,23 +1,41 @@
 # ----------------------------------------
-# Stage 1: Build Java Application
+# Stage 1: Build React frontend
+# ----------------------------------------
+FROM node:24-alpine AS frontend-build
+WORKDIR /app/frontend
+
+COPY frontend/package*.json ./
+RUN npm ci
+
+COPY frontend/ ./
+
+ENV VITE_USE_MOCK=false
+ENV VITE_API_BASE_URL=
+
+RUN npm run build
+# ----------------------------------------
+# Stage 2: Build Java Application
 # ----------------------------------------
 FROM maven:3.9-eclipse-temurin-21 AS java-build
 WORKDIR /app
 
-# Copy from context root into the container
 COPY backend/AvanzaPortal/pom.xml .
 RUN mvn dependency:resolve -q
-COPY backend/AvanzaPortal/src ./src
-RUN mvn package -DskipTests -q
 
+COPY backend/AvanzaPortal/src ./src
+
+# Include React production build in Spring Boot
+COPY --from=frontend-build /app/frontend/dist/ ./src/main/resources/static/
+
+RUN mvn package -DskipTests -q
 # ----------------------------------------
-# Stage 2: Build C++ Native Library
+# Stage 3: Build C++ Native Library
 # ----------------------------------------
 FROM eclipse-temurin:21-jdk-jammy AS cpp-build
 WORKDIR /app/native
 
 # Install Linux build tools
-RUN apt-get update && apt-get install -y cmake g++ build-essential
+RUN apt-get update && apt-get install -y git cmake g++ build-essential libssl-dev
 
 # Copy the native source code from the context root
 COPY native/ ./
@@ -29,7 +47,7 @@ RUN cd backtest && \
     cmake --build build
 
 # ----------------------------------------
-# Stage 3: Final Runtime Image
+# Stage 4: Final Runtime Image
 # ----------------------------------------
 FROM eclipse-temurin:21-jre-jammy
 WORKDIR /app

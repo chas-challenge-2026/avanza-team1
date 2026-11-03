@@ -25,7 +25,7 @@ public class HoldingController {
         this.alphaVantageService = alphaVantageService;
     }
 
-    @GetMapping("/holdings")
+    @GetMapping("/legacy/holdings")
     public String listHoldings(Model model) {
 
 

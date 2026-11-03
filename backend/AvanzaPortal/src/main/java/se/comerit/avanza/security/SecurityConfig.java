@@ -49,16 +49,15 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(auth -> auth
                         // Allow unauthenticated access to authentication REST endpoints
-                        .requestMatchers("/","/api/auth/**", "/api/backtest/**").permitAll()
+                        .requestMatchers("/", "/index.html", "/login", "/holdings", "/alerts", "/assets/**", "/favicon.ico", "/api/auth/**").permitAll()
+
                         // Require JWT authentication for all other endpoints
-                        // !! Opening all Endpoints to make it easier to help all teams in developing further
-                        .anyRequest().permitAll()
+                        .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
-
     /**
      * CORS configuration allowing the React frontend (localhost:5173)
      * to access REST endpoints without browser cross-origin blocking.

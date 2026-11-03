@@ -3,7 +3,7 @@
   border: 1px solid #ffc107;
   border-radius: 4px;
   padding: var(--space-medium);
-  margin-bottom: var(--space-medium);
+  margin-top: var(--space-medium);
   color: #856404;
   font-weight: 600;
   display: flex;
