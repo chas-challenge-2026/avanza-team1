@@ -3,12 +3,13 @@ import type { StoredTarget } from "../../lib/targetAllocation";
 import { mockPortfolio } from "../../types/portfolio";
 import { saveStoredTarget } from "../../lib/targetAllocation";
 import type { HistoryRange, HistorySeries } from "../../types/history";
+import type { Currency } from "../../types/portfolio";
 
 const rangeDays: Record<HistoryRange, number> = {
   "1M": 30,
   "6M": 180,
   "1Y": 365,
-  ALL: 1825,
+  "10Y": 3650,
 };
 
 const RAMP_TICKER = "INVE-B";
@@ -31,16 +32,33 @@ function randomGenerator(seed: number): () => number {
   };
 }
 
-function getCurrentValue(ticker: string): number {
-  if (ticker === "TOTAL") return mockPortfolio.totalValueSek;
-  return mockPortfolio.holdings.find((holding) => holding.ticker === ticker)?.valueSek ?? 0;
+function getCurrentPrice(ticker: string): { value: number; currency: Currency } {
+  if (ticker === "TOTAL") {
+    return { value: mockPortfolio.totalValueSek, currency: "SEK" };
+  }
+
+  const holdings = mockPortfolio.holdings.filter((holding) => holding.ticker === ticker);
+  const quantity = holdings.reduce((total, holding) => total + holding.quantity, 0);
+  const valueSek = holdings.reduce((total, holding) => total + holding.valueSek, 0);
+  const currency = holdings[0]?.currency ?? "SEK";
+  const sekPerUnit = currency === "USD"
+    ? mockPortfolio.fx.usdSek
+    : currency === "EUR"
+      ? mockPortfolio.fx.eurSek
+      : 1;
+
+  return {
+    value: quantity > 0 ? valueSek / quantity / sekPerUnit : 0,
+    currency,
+  };
 }
 
 function createHistory({ ticker, range }: { ticker: string; range: HistoryRange }): HistorySeries {
   const days = rangeDays[range];
   const endDate = new Date();
   endDate.setUTCHours(0, 0, 0, 0);
-  const startValue = getCurrentValue(ticker);
+  const currentPrice = getCurrentPrice(ticker);
+  const startValue = currentPrice.value;
   const random = randomGenerator(seedFor(ticker));
   const values = [startValue];
 
@@ -90,7 +108,8 @@ function createHistory({ ticker, range }: { ticker: string; range: HistoryRange 
   return {
     ticker,
     range,
-    label: ticker === "TOTAL" ? "Totalt" : ticker,
+    label: ticker,
+    currency: currentPrice.currency,
     points,
   };
 }

@@ -13,7 +13,7 @@ import styles from "./HistoryChart.module.css";
 
 interface HistoryChartProps {
   series: HistorySeries[];
-  valueFormat?: "sek" | "percent";
+  valueFormat?: "currency" | "percent";
 }
 
 const numberFormat = new Intl.NumberFormat("sv-SE", { maximumFractionDigits: 0 });
@@ -31,7 +31,17 @@ function formatDate(value: string): string {
   return shortDateFormat.format(new Date(`${value}T00:00:00`));
 }
 
-function HistoryChart({ series, valueFormat = "sek" }: HistoryChartProps): JSX.Element | null {
+function formatCurrency(value: number, currency: string): string {
+  return new Intl.NumberFormat("sv-SE", {
+    style: "currency",
+    currency,
+    currencyDisplay: "narrowSymbol",
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2,
+  }).format(value);
+}
+
+function HistoryChart({ series, valueFormat = "currency" }: HistoryChartProps): JSX.Element | null {
   const data = useMemo(() => {
     const rows = new Map<string, Record<string, string | number>>();
     for (const item of series) {
@@ -61,7 +71,9 @@ function HistoryChart({ series, valueFormat = "sek" }: HistoryChartProps): JSX.E
             />
             <YAxis
               domain={valueFormat === "percent" ? [0, 100] : ["auto", "auto"]}
-              tickFormatter={(value: number) => `${numberFormat.format(value)}${valueFormat === "percent" ? "%" : ""}`}
+              tickFormatter={(value: number) => valueFormat === "percent"
+                ? `${numberFormat.format(value)}%`
+                : formatCurrency(value, series[0]?.currency ?? "SEK")}
               width={76}
             />
             <Tooltip
@@ -69,7 +81,7 @@ function HistoryChart({ series, valueFormat = "sek" }: HistoryChartProps): JSX.E
               formatter={(value) =>
                 valueFormat === "percent"
                   ? `${numberFormat.format(Number(value))}%`
-                  : `${numberFormat.format(Number(value))} kr`
+                  : formatCurrency(Number(value), series[0]?.currency ?? "SEK")
               }
             />
             {series.map((item, index) => (
