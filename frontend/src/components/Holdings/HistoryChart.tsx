@@ -37,7 +37,7 @@ function HistoryChart({ series, valueFormat = "sek" }: HistoryChartProps): JSX.E
     for (const item of series) {
       for (const point of item.points) {
         const row = rows.get(point.date) ?? { date: point.date };
-        row[item.key] = point.value;
+        row[item.ticker] = point.value;
         rows.set(point.date, row);
       }
     }
@@ -74,9 +74,9 @@ function HistoryChart({ series, valueFormat = "sek" }: HistoryChartProps): JSX.E
             />
             {series.map((item, index) => (
               <Line
-                key={item.key}
+                key={item.ticker}
                 type="monotone"
-                dataKey={item.key}
+                dataKey={item.ticker}
                 name={item.label}
                 stroke={item.color ?? lineColors[index % lineColors.length]}
                 dot={false}
