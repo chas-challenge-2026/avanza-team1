@@ -8,8 +8,6 @@ extern "C" {
 #include <cmath>
 #include <vector>
 
-//--------------------------- Cut off here (from libraries). Makes readability nicer, you can choose whether you keep it ;)
-
 static bool build_portfolio(const double *prices, int instruments, int days, double *portfolio)
 {
     /* TODO: Needs to add weights regarding the instruments to fully simulate "strategies". Right now they are all measured equally. */
@@ -83,7 +81,7 @@ BacktestLibrary *run_backtest(const double *prices, int instruments, int days, c
         return nullptr;
     }
 
-    double risk_free_rate = 0.03;
+    const double risk_free_rate = DEFAULT_RISK_FREE_RATE;
 
     BacktestLibrary *result = static_cast<BacktestLibrary*>(malloc(sizeof(BacktestLibrary)));
     if (result == nullptr)
@@ -92,7 +90,16 @@ BacktestLibrary *run_backtest(const double *prices, int instruments, int days, c
     }
     result->currency = nullptr;
 
-    size_t size = static_cast<size_t>(days) * static_cast<size_t>(instruments);
+    const size_t instrument_count = static_cast<size_t>(instruments);
+    const size_t day_count = static_cast<size_t>(days);
+
+    if (instrument_count > static_cast<size_t>(-1) / day_count)
+    {
+        free_backtest_result(result);
+        return nullptr;
+    }
+
+    size_t size = instrument_count * day_count;
 
     std::vector<double> working_prices(prices, prices + size);
     if (std::strcmp(currency, "SEK") != 0)
@@ -128,7 +135,7 @@ BacktestLibrary *run_backtest(const double *prices, int instruments, int days, c
     }
 
     // Calculate portfolio performance
-    double years = static_cast<double>(days - 1) / 252.0;
+    double years = static_cast<double>(days - 1) / ANNUAL_TRADING_DAYS;
     double growth_factor = portfolio.back() / portfolio.front();
 
     result->total_return = growth_factor - 1.0;
@@ -142,23 +149,14 @@ BacktestLibrary *run_backtest(const double *prices, int instruments, int days, c
         free_backtest_result(result);
         return nullptr;
     }
-    // ---
 
-    status = calculate_sharpe(portfolio.data(), static_cast<size_t>(days), risk_free_rate, &result->sharpe_ratio);
+    status = calculate_sharpe(
+        portfolio.data(),
+        static_cast<size_t>(days),
+        risk_free_rate,
+        &result->sharpe_ratio
+    );
 
-    if (status != RISK_SUCCESS)
-    {
-        free_backtest_result(result);
-        return nullptr;
-    }
-
-    if (status != RISK_SUCCESS)
-    {
-        free_backtest_result(result);
-        return nullptr;
-    }
-
-    status = calculate_sharpe(working_prices.data(), size, risk_free_rate, &result->sharpe_ratio);
     if (status != RISK_SUCCESS)
     {
         free_backtest_result(result);
