@@ -33,7 +33,7 @@ Backend är en Spring Boot-applikation med både äldre MVC-flöden och nyare RE
 
 Backend innehåller bland annat:
 
-- REST-endpoints för login, portfolio och allocation
+- REST-endpoints för login, logout, portfolio och allocation
 - MVC-vyer för äldre flöden
 - service-klasser för affärslogik
 - JPA-entiteter och repository-gränssnitt
@@ -97,27 +97,6 @@ mvn spring-boot:run
 Applikationen lyssnar på port `8082`.
 
 Vid direktkörning behöver databasinställningarna passa din lokala miljö. Standard-URL:en i `application.properties` använder värdnamnet `db`, vilket normalt fungerar i Compose-nätverket men inte nödvändigtvis direkt från datorn. Konfigurera i så fall `SPRING_DATASOURCE_URL`, `SPRING_DATASOURCE_USERNAME` och `SPRING_DATASOURCE_PASSWORD`.
-
-### Frontend
-
-Frontend körs separat från backend. Från repots rot:
-
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
-Vite skriver ut adressen till utvecklingsservern, normalt `http://localhost:5173`.
-
-I den aktuella repokonfigurationen används mockläge som standard:
-
-```env
-VITE_API_BASE_URL=http://localhost:8082
-VITE_USE_MOCK=true
-```
-
-För att prova backendintegration behöver frontend konfigureras med `VITE_USE_MOCK=false`. Starta om Vite efter ändring av miljövariabler.
 
 ## API-översikt
 
@@ -213,8 +192,7 @@ en rekommenderad reservplan, inte en automatisk funktion i projektet.
 ## Relaterad dokumentation
 
 - [architecture-v2.md](../../backend/docs/architecture-v2.md)
-- [Arkitekturöversikt](../../docs/architecture.md) – beskriver den ursprungliga v1-arkitekturen och bör läsas som historisk bakgrund.
-- [Kända v1-problem](../../docs/known-bugs.md) – pedagogiska problem från utgångskoden; alla punkter ska inte antas vara kvar oförändrade.
+- [Kända v1- problem  och status i v2](../../backend/docs/known-bugs.md) 
 
 
 ## Sammanfattning
