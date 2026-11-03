@@ -3,12 +3,12 @@ import PageHeader from "../components/Dashboard/PageHeader";
 import WarningBanner from "../components/Dashboard/WarningBanner";
 import { InfoAside } from "../components/Dashboard/InfoAside";
 import AssetAllocation from "../components/Dashboard/AssetAllocation";
-import GoalAllocation from "../components/Dashboard/GoalAllocation";
+import SetTargetAllocation from "../components/Dashboard/SetTargetAllocation";
 import AccountsTable from "../components/Dashboard/AccountsTable";
 import SmallHoldingsTable from "../components/Dashboard/SmallHoldingsTable";
 import DriftInterpretationPanel from "../components/Dashboard/DriftInterpretationPanel";
 import NoticesEmpty from "../components/Dashboard/NoticesEmpty";
-import "./Portfolio.css";
+import styles from "./Dashboard.module.css";
 import type { Alert, Allocation } from "../types/portfolio";
 import { readStoredTarget } from "../lib/targetAllocation";
 import { computeDrift } from "../lib/drift";
@@ -119,27 +119,27 @@ function Portfolio() {
   return (
     <>
       <PageHeader totalValueSek={portfolio.totalValueSek} history={history} />
-      <div className="dashboardGrid">
-        <div className="leftColumn">
+      <div className={styles.dashboardGrid}>
+        <div className={styles.leftColumn}>
           {drift.overThreshold && <WarningBanner message={drift.message} />}
-          <section className="allocationAndHoldings">
-            <article className="allocationPanel">
+          <section className={styles.allocationAndHoldings}>
+            <article className={styles.allocationPanel}>
               <AssetAllocation allocation={allocation} />
-              <button className="setAllocationBtn"
+              <button className={styles.setAllocationBtn}
                 type="button"
                 onClick={() => goalAllocationDialog.current?.showModal()}
               >
                 Ändra målallokering
               </button>
             </article>
-            <article className="holdingsTabs" aria-label="Portföljinnehav">
-              <div className="holdingsTabList" role="tablist" aria-label="Visa innehav">
+            <article className={styles.holdingsTabs} aria-label="Portföljinnehav">
+              <div className={styles.holdingsTabList} role="tablist" aria-label="Visa innehav">
                 {holdingsTabs.map((tab, index) => (
                   <button
                     key={tab.id}
                     ref={(element) => { holdingsTabRefs.current[index] = element; }}
                     id={`holdings-tab-${tab.id}`}
-                    className="holdingsTab"
+                    className={styles.holdingsTab}
                     type="button"
                     role="tab"
                     aria-selected={selectedHoldingsTab === tab.id}
@@ -156,7 +156,7 @@ function Portfolio() {
                 <div
                   key={tab.id}
                   id={`holdings-panel-${tab.id}`}
-                  className="holdingsTabPanel"
+                  className={styles.holdingsTabPanel}
                   role="tabpanel"
                   aria-labelledby={`holdings-tab-${tab.id}`}
                   tabIndex={0}
@@ -179,7 +179,7 @@ function Portfolio() {
           <DriftInterpretationPanel allocation={allocation} />
           <dialog 
             ref={goalAllocationDialog} 
-            className="goalAllocationDialog"
+            className={styles.goalAllocationDialog}
             onClick={(event) => {
               const dialog = event.currentTarget;
               const rect = dialog.getBoundingClientRect();
@@ -193,14 +193,14 @@ function Portfolio() {
               if (outside) dialog.close();
             }}
           >
-            <form method="dialog" className="goalAllocationDialogClose">
+            <form method="dialog" className={styles.goalAllocationDialogClose}>
               <button type="submit" aria-label="Stäng målallokering">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
               </button>
             </form>
-            <GoalAllocation
+            <SetTargetAllocation
               targetAktierPct={allocation.targetAktierPct}
               targetStabiltPct={allocation.targetStabiltPct}
               onTargetSaved={handleTargetSaved}
@@ -208,7 +208,7 @@ function Portfolio() {
           </dialog>
           <NoticesEmpty alerts={driftAlerts(allocation)} />
         </div>
-        <div className={"rightColumn"}>
+        <div className={styles.rightColumn}>
           <InfoAside />
         </div>
       </div>

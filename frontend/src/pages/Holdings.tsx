@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
-import HistoryChart from "../components/Dashboard/HistoryChart";
-import HoldingsTable from "../components/Dashboard/HoldingsTable";
+import HistoryChart from "../components/Holdings/HistoryChart";
+import HoldingsTable from "../components/Holdings/HoldingsTable";
 import { useHistory } from "../hooks/useHistory";
 import { usePortfolio } from "../hooks/usePortfolio";
 import { useHistories } from "../hooks/useHistories";
