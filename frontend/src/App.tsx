@@ -1,7 +1,7 @@
 // import { useState } from 'react'
 import { Routes, Route } from 'react-router-dom';
 import Topbar from "./components/Topbar/Topbar";
-import Portfolio from './pages/Portfolio';
+import Dashboard from './pages/Dashboard';
 import Holdings from './pages/Holdings';
 import Alerts from './pages/Alerts';
 import Login from './pages/Login';
@@ -22,7 +22,7 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route element={<ProtectedRoute />}>
-            <Route path="/" element={<Portfolio />} />
+            <Route path="/" element={<Dashboard />} />
             <Route path="/holdings" element={<Holdings />} />
             <Route path="/alerts" element={<Alerts />} />
           </Route>

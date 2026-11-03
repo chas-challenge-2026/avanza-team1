@@ -5,8 +5,13 @@
   width: 100%;
 }
 
-.container p {
-  margin: 0;
+.container {
+  h2 {
+    margin-bottom: 0;
+  }
+    p {
+    margin: 0;
+  }
 }
 
 .colorExplanation {

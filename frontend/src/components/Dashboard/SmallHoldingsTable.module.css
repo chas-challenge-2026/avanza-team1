@@ -1,7 +1,7 @@
 .row {
   display: flex;
   justify-content: space-between;
-  padding-inline: var(--space-xsmall);
+  /* padding-inline: var(--space-xsmall); */
   padding-block: var(--space-xxsmall);
   &:last-child {
     padding-bottom: var(--space-medium);
