@@ -10,7 +10,14 @@
 #define LOG_FILE "testfile.log"
 
 /**
- * Run with:
+ * @file testing_file.cpp
+ * @brief Edge-case tests for the native portfolio backtesting library.
+ * 
+ * @details Tests input validation, portfolio calculations, risk metrics, currency conversion, and memory management.
+ * 
+ * @note Writes the results into a log-file with the use of the logger-functionality to store the test-results.
+ *  * 
+ * @note Run with:
  *      g++ -Wall -Werror -Wextra -o testing ../risk/risk.c ../risk/helpers/helpers.c tests/testing_file.cpp backtest.cpp ../logger/logger.cpp ../fx/fx.cpp -lm -lcurl -ljansson
  */
 

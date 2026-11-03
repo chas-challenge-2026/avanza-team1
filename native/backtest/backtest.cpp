@@ -11,7 +11,9 @@ extern "C"
 
 //=============================================
 
-/* Helper to build an equally weighted, normalized portfolio from the input price data. */
+/**
+ * Helper to build an equally weighted, normalized portfolio from the input price data.
+ */
 static bool build_portfolio(const double *prices, int instruments, int days, double *portfolio)
 {
     /* TODO: Needs to add weights regarding the instruments to fully simulate "strategies". Right now they are all measured equally. */
@@ -97,6 +99,8 @@ BacktestLibrary *run_backtest(const double *prices, int instruments, int days, c
 
     const size_t instrument_count = static_cast<size_t>(instruments);
     const size_t day_count = static_cast<size_t>(days);
+
+    // Prevents overflow when calculating the total number of price values.
     if (instrument_count > static_cast<size_t>(-1) / day_count)
     {
         free_backtest_result(result);
@@ -106,6 +110,7 @@ BacktestLibrary *run_backtest(const double *prices, int instruments, int days, c
     const size_t size = instrument_count * day_count;
 
     std::vector<double> working_prices(prices, prices + size);
+    // Convert each instruments price series individually to SEK if a foreign currency is identified.
     if (std::strcmp(currency, "SEK") != 0)
     {
         for (int instrument = 0; instrument < instruments; instrument++)
@@ -129,7 +134,8 @@ BacktestLibrary *run_backtest(const double *prices, int instruments, int days, c
 
     std::memcpy(result->currency, output_currency, currency_length);
     
-    // Building a normalized, equally weighted portfolio
+    // Build an equally weighted portfolio with each instrument normalized to its initial price.
+    // This prevents differences in share prices from affecting the instruments portfolio weight.
     std::vector<double> portfolio(day_count);
     if (!build_portfolio(working_prices.data(), instruments, days, portfolio.data()))
     {
@@ -147,7 +153,6 @@ BacktestLibrary *run_backtest(const double *prices, int instruments, int days, c
         return nullptr;
     }
     
-
     RiskStatus status = calculate_max_drawdown(portfolio.data(), day_count, &result->max_drawdown);
     if (status != RISK_SUCCESS)
     {
@@ -155,6 +160,7 @@ BacktestLibrary *run_backtest(const double *prices, int instruments, int days, c
         return nullptr;
     }
 
+    // A zero-volatility portfolio has no defined Sharpe ratio.
     status = calculate_sharpe(portfolio.data(), day_count, risk_free_rate, &result->sharpe_ratio);
     if (status != RISK_SUCCESS)
     {

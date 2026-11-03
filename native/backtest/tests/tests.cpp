@@ -7,6 +7,14 @@
 #define LOG_FILE "backtest.log"
 
 /**
+ * @file tests.cpp
+ * @brief Demonstrates the use of the native portfolio backtesting library.
+ * 
+ * @details Creates sample historical price data, executes a portfolio backtest,
+ * and displays the resulting performance and risk metrics.
+ * 
+ * @note Writes the results into a log-file with the use of the logger-functionality to store the results.
+ * 
  * Run with:
  *      g++ -Wall -Werror -Wextra -o test_back ../risk/risk.c ../risk/helpers/helpers.c tests/tests.cpp backtest.cpp ../logger/logger.cpp ../fx/fx.cpp -lm -lcurl -ljansson
  */
