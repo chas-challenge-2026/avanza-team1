@@ -111,7 +111,11 @@ void log_create_dir()
     struct stat sb;
     if (stat("logs", &sb) != 0)
     {
+#if defined(_WIN32) || defined(_WIN64)
+        if (mkdir("logs") == -1)
+#else
         if (mkdir("logs", 0777) == -1)
+#endif
         {
             std::cout << "Unable to create folder \"logs\"\r\n";
         }
