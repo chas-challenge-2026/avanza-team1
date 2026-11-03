@@ -72,7 +72,7 @@ void free_backtest_result(BacktestLibrary *result)
 {
     if (result != nullptr)
     {
-        if(result->currency != nullptr)
+        if (result->currency != nullptr)
         {
             free(result->currency);
         }
