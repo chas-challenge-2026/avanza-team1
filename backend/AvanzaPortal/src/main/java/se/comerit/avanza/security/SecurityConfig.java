@@ -49,7 +49,7 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(auth -> auth
                         // Allow unauthenticated access to authentication REST endpoints
-                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/auth/**", "/api/backtest/metrics").permitAll()
                         // Require JWT authentication for all other endpoints
                         .anyRequest().authenticated()
                 )
