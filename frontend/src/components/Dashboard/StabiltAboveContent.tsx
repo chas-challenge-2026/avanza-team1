@@ -1,6 +1,9 @@
-import type { DriftContentProps } from "./DriftInterpretationPanel";
+// When functionality for more data analysis is implemented, this prop below will likely be used in this component. See next comment with the commented out function signature for a hint of what that might look like. For now, this component is just a static information panel.
 
-export function StabiltAboveContent({ allocation }: DriftContentProps) {
+// import type { DriftContentProps } from "./DriftInterpretationPanel";
+
+export function StabiltAboveContent() {
+// export function StabiltAboveContent({ allocation }: DriftContentProps) {
   return (
     <>
       <h4>Analysrapport:</h4>

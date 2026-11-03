@@ -16,11 +16,11 @@ const contentByStatus: Record<DriftStatus, ComponentType<DriftContentProps>> = {
   stabiltAbove: StabiltAboveContent,
 };
 
-interface DriftInterpretationPanelProps {
-  allocation: Allocation;
-}
+// interface DriftInterpretationPanelProps {
+//   allocation: Allocation;
+// }
 
-function DriftInterpretationPanel({ allocation }: DriftInterpretationPanelProps) {
+function DriftInterpretationPanel({ allocation }: DriftContentProps) {
   const status = getDriftStatus(allocation);
   const Content = contentByStatus[status];
 
