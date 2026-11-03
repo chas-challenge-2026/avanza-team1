@@ -63,7 +63,7 @@ RiskStatus calculate_sharpe(const double prices[], size_t size, double risk_free
         return RISK_ZERO_VOLATILITY;
     }
 
-    /* A geometric recalculation of the annual risk-free rate to an equivalent daily rate. */
+    /* Convert the annual risk-free rate to its equivalent daily rate using compounding. */
     double daily_risk_free_rate = pow(1.0 + risk_free_rate, 1.0 / ANNUAL_TRADING_DAYS) - 1.0;
 
     /* Calculate excess return per unit of daily risk. */
@@ -97,7 +97,7 @@ RiskStatus calculate_max_drawdown(const double prices[], size_t size, double *re
     {
         if (prices[i] > peak)
         {
-            /* Drawdown is measured from the running peak. */
+            /* Drawdown is measured relative to the highest previously observed price. */
             peak = prices[i];
         }
 

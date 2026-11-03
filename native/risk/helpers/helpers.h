@@ -7,6 +7,7 @@
 
 
 /**
+ * @file helpers.h
  * @brief Validate a price series.
  * 
  * @details Checks that the price array is non-null, non-empty and contains only finite positive values.
@@ -32,9 +33,9 @@ bool valid_price_series(const double prices[], size_t size);
  * 
  * @pre mean and variance must point to separate writable memory locations.
  * 
- * @return RISK_SUCCESS on success.
+ * @return RISK_SUCCESS Calculation completed successfully.
  * @return RISK_INVALID_INPUT if prices, mean or variance is invalid.
- * @return RISK_INSUFFICIENT_DATA if fewer than 3 prices are provided.
+ * @return RISK_INSUFFICIENT_DATA if fewer than 3 valid prices are provided.
  */
 RiskStatus calculate_return_statistics(const double prices[], size_t size, double *mean, double *variance);
 

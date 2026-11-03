@@ -32,7 +32,7 @@ extern "C" {
 #define DEFAULT_EWMA_LAMBDA     0.94
 
 /**
- * @brief Status returned by risk calculation functions.
+ * @brief Status codes returned by risk calculation functions.
  */
 typedef enum
 {
@@ -51,7 +51,7 @@ typedef enum
  * @param size Number of prices. Must be at least 3.
  * @param result Output annualized volatility as a decimal fraction (e.g. 0.35 == 35%).
  * 
- * @return RISK_SUCCESS on success.
+ * @return RISK_SUCCESS Calculation completed successfully.
  * @return RISK_INVALID_INPUT if prices, size or result is invalid.
  * @return RISK_INSUFFICIENT_DATA if fewer than 3 prices are provided.
  * 
@@ -69,12 +69,13 @@ RiskStatus calculate_annual_volatility(const double prices[], size_t size, doubl
  * @param risk_free_rate Annual risk-free rate, e.g. DEFAULT_RISK_FREE_RATE
  * @param result Output annualized Sharpe ratio.
  * 
- * @return RISK_SUCCESS on success.
+ * @return RISK_SUCCESS Calculation completed successfully.
  * @return RISK_INVALID_INPUT if prices, size, result or risk_free_rate is invalid.
  * @return RISK_INSUFFICIENT_DATA if fewer than 3 prices are provided.
  * @return RISK_ZERO_VOLATILITY if the return volatility is below 1e-12. 
  * 
  * @note The output value is valid only when RISK_SUCCESS is returned.
+ * @note A zero-volatility result is initialized to 0.0 before the zero-volatility status is returned.
  */
 RiskStatus calculate_sharpe(const double prices[], size_t size, double risk_free_rate, double *result);
 
@@ -87,7 +88,7 @@ RiskStatus calculate_sharpe(const double prices[], size_t size, double risk_free
  * @param size Number of prices. Must be at least 2.
  * @param result Output drawdown as a positive decimal fraction (e.g. 0.05 == 5%).
  * 
- * @return RISK_SUCCESS on success.
+ * @return RISK_SUCCESS Calculation completed successfully.
  * @return RISK_INVALID_INPUT if price, size or result is invalid.
  * @return RISK_INSUFFICIENT_DATA if fewer than 2 prices are provided.
  * 
@@ -108,7 +109,7 @@ RiskStatus calculate_max_drawdown(const double prices[], size_t size, double *re
  * @param lambda EWMA decay factor strictly in the range (0, 1). Higher values give more weight to older observations.
  * @param result Output annualized EWMA volatility as a decimal fraction.
  * 
- * @return RISK_SUCCESS on success.
+ * @return RISK_SUCCESS Calculation completed successfully.
  * @return RISK_INVALID_INPUT if prices, size, result or lambda is invalid.
  * @return RISK_INSUFFICIENT_DATA if fewer than 2 prices are provided.
  * 

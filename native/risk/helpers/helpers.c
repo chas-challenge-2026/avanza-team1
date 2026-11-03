@@ -37,7 +37,7 @@ RiskStatus calculate_return_statistics(const double prices[], size_t size, doubl
     double sum_squared_deviation = 0.0;
     size_t return_count = 0;
 
-    /* Calculate daily returns and update the mean and variance using Welford's online algorithm for improved numerical stability. */
+    /* Calculate daily returns and update the mean and variance using Welford's online algorithm for numerical stability. */
     for (size_t i = 1; i < size; i++)
     {
         double daily_return = (prices[i] - prices[i - 1]) / prices[i - 1];
