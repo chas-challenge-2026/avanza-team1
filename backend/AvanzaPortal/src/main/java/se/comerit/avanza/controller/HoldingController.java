@@ -94,4 +94,15 @@ public class HoldingController {
         return ResponseEntity.ok(data);
     }
 
+    // --- NY ENDPOINT FÖR HISTORIK ---
+    @GetMapping("/api/holdings/history")
+    public ResponseEntity<List<DailyPriceDto>> getHoldingHistory(
+            @RequestParam String ticker,
+            @RequestParam(defaultValue = "1Y") String range) {
+
+
+        List<DailyPriceDto> history = alphaVantageService.getHistoryForRange(ticker, range);
+        return ResponseEntity.ok(history);
+    }
+
 }
