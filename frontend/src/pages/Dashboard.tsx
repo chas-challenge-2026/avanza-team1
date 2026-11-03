@@ -37,7 +37,7 @@ function driftAlerts(allocation: Allocation): Alert[] {
 
 function Portfolio() {
   const { portfolio, isPending, isError } = usePortfolio();
-  const { series: history } = useHistory({ key: "TOTAL", range: "1M" });
+  const { series: history } = useHistory({ ticker: "TOTAL", range: "1M" });
   const { histories: holdingHistories } = useHistories(
     portfolio?.holdings.map((holding) => holding.ticker) ?? [],
     "1M",

@@ -6,7 +6,8 @@ export interface HistoryPoint {
 }
 
 export interface HistorySeries {
-  key: string;
+  ticker: string;
+  range: string;
   label: string;
   points: HistoryPoint[];
   color?: string;

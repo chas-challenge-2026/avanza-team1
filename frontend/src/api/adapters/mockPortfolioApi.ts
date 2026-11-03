@@ -15,10 +15,10 @@ const RAMP_TICKER = "INVE-B";
 const RAMP_DAYS = 30;
 const RAMP_START_FACTOR = 0.6;
 
-function seedFor(key: string): number {
+function seedFor(ticker: string): number {
   let seed = 2166136261;
-  for (let index = 0; index < key.length; index += 1) {
-    seed = Math.imul(seed ^ key.charCodeAt(index), 16777619);
+  for (let index = 0; index < ticker.length; index += 1) {
+    seed = Math.imul(seed ^ ticker.charCodeAt(index), 16777619);
   }
   return seed >>> 0;
 }
@@ -31,17 +31,17 @@ function randomGenerator(seed: number): () => number {
   };
 }
 
-function getCurrentValue(key: string): number {
-  if (key === "TOTAL") return mockPortfolio.totalValueSek;
-  return mockPortfolio.holdings.find((holding) => holding.ticker === key)?.valueSek ?? 0;
+function getCurrentValue(ticker: string): number {
+  if (ticker === "TOTAL") return mockPortfolio.totalValueSek;
+  return mockPortfolio.holdings.find((holding) => holding.ticker === ticker)?.valueSek ?? 0;
 }
 
-function createHistory({ key, range }: { key: string; range: HistoryRange }): HistorySeries {
+function createHistory({ ticker, range }: { ticker: string; range: HistoryRange }): HistorySeries {
   const days = rangeDays[range];
   const endDate = new Date();
   endDate.setUTCHours(0, 0, 0, 0);
-  const startValue = getCurrentValue(key);
-  const random = randomGenerator(seedFor(key));
+  const startValue = getCurrentValue(ticker);
+  const random = randomGenerator(seedFor(ticker));
   const values = [startValue];
 
   for (let index = 1; index < days; index += 1) {
@@ -53,11 +53,11 @@ function createHistory({ key, range }: { key: string; range: HistoryRange }): Hi
   const scale = finalValue === 0 ? 0 : startValue / finalValue;
   const normalizedValues = values.map((value) => value * scale);
 
-  if (key === RAMP_TICKER) {
+  if (ticker === RAMP_TICKER) {
     const rampStartIndex = Math.max(0, days - RAMP_DAYS);
     const rampStartValue = startValue * RAMP_START_FACTOR;
     const rampSpan = days - rampStartIndex - 1;
-    const rampRandom = randomGenerator(seedFor(`${key}-ramp`));
+    const rampRandom = randomGenerator(seedFor(`${ticker}-ramp`));
 
     // Rebase the pre-ramp history so it reaches the lower pivot naturally.
     const pivotScale = normalizedValues[rampStartIndex] === 0
@@ -88,8 +88,9 @@ function createHistory({ key, range }: { key: string; range: HistoryRange }): Hi
   });
 
   return {
-    key,
-    label: key === "TOTAL" ? "Totalt" : key,
+    ticker,
+    range,
+    label: ticker === "TOTAL" ? "Totalt" : ticker,
     points,
   };
 }

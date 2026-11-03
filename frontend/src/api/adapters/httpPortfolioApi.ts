@@ -29,12 +29,12 @@ export const httpPortfolioApi: PortfolioApi = {
   },
 
   async getHistory(
-    params: { key: string; range: HistoryRange },
+    params: { ticker: string; range: HistoryRange },
     signal?: AbortSignal,
   ): Promise<HistorySeries> {
     // TODO: Confirm the history endpoint contract with the Spring Boot backend and native back-testing module.
-    const query = new URLSearchParams({ key: params.key, range: params.range });
-    const response = await apiFetch(`/portfolio/history?${query.toString()}`, { signal });
+    const query = new URLSearchParams({ ticker: params.ticker, range: params.range });
+    const response = await apiFetch(`/api/holdings/history?${query.toString()}`, { signal });
     return (await response.json()) as HistorySeries;
   },
 

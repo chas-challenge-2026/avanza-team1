@@ -29,6 +29,7 @@ function buildAllocationSeries(
   targetAktierPct: number,
   targetStabiltPct: number,
   selected: Exclude<AllocationView, "none">,
+  range: HistoryRange,
 ): HistorySeries[] {
   const assetClassByTicker = new Map<string, AssetClass>();
   for (const holding of holdings) assetClassByTicker.set(holding.ticker, holding.assetClass);
@@ -77,13 +78,15 @@ function buildAllocationSeries(
   return classes.flatMap((assetClass) => {
     const colors = allocationColors[assetClass];
     const actual: HistorySeries = {
-      key: `${assetClass}-actual`,
+      ticker: `${assetClass}-actual`,
+      range,
       label: `${assetClass} faktiskt`,
       points: pointsByClass[assetClass],
       color: colors.actual,
     };
     const target: HistorySeries = {
-      key: `${assetClass}-target`,
+      ticker: `${assetClass}-target`,
+      range,
       label: `${assetClass} mål`,
       points: pointsByClass[assetClass].map(({ date }) => ({
         date,
@@ -101,7 +104,7 @@ function Holdings() {
   const [range, setRange] = useState<HistoryRange>("1Y");
   const [allocationView, setAllocationView] = useState<AllocationView>("none");
   const { series, isFetching, isError: isHistoryError } = useHistory({
-    key: allocationView === "none" ? selectedKey : "",
+    ticker: allocationView === "none" ? selectedKey : "",
     range,
   });
   const { histories, isFetching: isAllocationFetching, isError: isAllocationError } =
@@ -120,8 +123,9 @@ function Holdings() {
       target?.targetAktierPct ?? portfolio.allocation.targetAktierPct,
       target?.targetStabiltPct ?? portfolio.allocation.targetStabiltPct,
       allocationView,
+      range,
     );
-  }, [allocationView, histories, portfolio, target]);
+  }, [allocationView, histories, portfolio, range, target]);
 
   if (isPending) {
     return <p>Laddar innehav…</p>;

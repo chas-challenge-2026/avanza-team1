@@ -7,7 +7,7 @@ import type { StoredTarget } from "../lib/targetAllocation";
 export interface PortfolioApi {
   getPortfolio: () => Promise<Portfolio>;
   getHistory: (
-    params: { key: string; range: HistoryRange },
+    params: { ticker: string; range: HistoryRange },
     signal?: AbortSignal,
   ) => Promise<HistorySeries>;
   saveAllocation: (target: StoredTarget) => Promise<void>;

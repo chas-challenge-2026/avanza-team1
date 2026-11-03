@@ -18,7 +18,7 @@ export function useHistories(
     queries: uniqueKeys.map((key) => ({
       queryKey: ["history", key, range],
       queryFn: ({ signal }: { signal: AbortSignal }) =>
-        portfolioApi.getHistory({ key, range }, signal),
+        portfolioApi.getHistory({ ticker: key, range }, signal),
       placeholderData: keepPreviousData,
       enabled: enabled && Boolean(key),
     })),

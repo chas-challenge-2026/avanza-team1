@@ -20,7 +20,7 @@ public class HoldingController {
         this.holdingService = holdingService;
     }
 
-    @GetMapping("/holdings")
+    @GetMapping("/legacy/holdings")
     public String listHoldings(Model model) {
 
 
@@ -92,6 +92,17 @@ public class HoldingController {
         Map<String, Object> data = holdingService.buildHoldingData(uid);
 
         return ResponseEntity.ok(data);
+    }
+
+    // --- NY ENDPOINT FÖR HISTORIK ---
+    @GetMapping("/api/holdings/history")
+    public ResponseEntity<List<DailyPriceDto>> getHoldingHistory(
+            @RequestParam String ticker,
+            @RequestParam(defaultValue = "1Y") String range) {
+
+
+        List<DailyPriceDto> history = alphaVantageService.getHistoryForRange(ticker, range);
+        return ResponseEntity.ok(history);
     }
 
 }
