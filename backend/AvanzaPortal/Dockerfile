@@ -8,6 +8,10 @@ COPY frontend/package*.json ./
 RUN npm ci
 
 COPY frontend/ ./
+
+ENV VITE_USE_MOCK=false
+ENV VITE_API_BASE_URL=
+
 RUN npm run build
 # ----------------------------------------
 # Stage 2: Build Java Application
