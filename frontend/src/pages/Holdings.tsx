@@ -5,7 +5,7 @@ import { useHistory } from "../hooks/useHistory";
 import { usePortfolio } from "../hooks/usePortfolio";
 import { useHistories } from "../hooks/useHistories";
 import type { HistoryRange, HistorySeries } from "../types/history";
-import type { AssetClass, Holding } from "../types/portfolio";
+import type { AssetClass, Fx, Holding } from "../types/portfolio";
 import { readStoredTarget } from "../lib/targetAllocation";
 import styles from "./Holdings.module.css";
 
@@ -13,7 +13,7 @@ const ranges: { key: HistoryRange; label: string }[] = [
   { key: "1M", label: "1M" },
   { key: "6M", label: "6M" },
   { key: "1Y", label: "1Y" },
-  { key: "ALL", label: "Allt" },
+  { key: "10Y", label: "10Y" },
 ];
 
 type AllocationView = "none" | AssetClass | "ALL";
@@ -26,13 +26,23 @@ const allocationColors: Record<AssetClass, { actual: string; target: string }> =
 function buildAllocationSeries(
   holdings: Holding[],
   histories: Record<string, HistorySeries | undefined>,
+  fx: Fx,
   targetAktierPct: number,
   targetStabiltPct: number,
   selected: Exclude<AllocationView, "none">,
   range: HistoryRange,
 ): HistorySeries[] {
   const assetClassByTicker = new Map<string, AssetClass>();
-  for (const holding of holdings) assetClassByTicker.set(holding.ticker, holding.assetClass);
+  const quantityByTicker = new Map<string, number>();
+  const currencyByTicker = new Map<string, Holding["currency"]>();
+  for (const holding of holdings) {
+    assetClassByTicker.set(holding.ticker, holding.assetClass);
+    quantityByTicker.set(
+      holding.ticker,
+      (quantityByTicker.get(holding.ticker) ?? 0) + holding.quantity,
+    );
+    currencyByTicker.set(holding.ticker, holding.currency);
+  }
 
   const tickers = [...assetClassByTicker.keys()];
   const pointsByTicker = new Map(tickers.map((ticker) => [
@@ -56,7 +66,12 @@ function buildAllocationSeries(
       const points = pointsByTicker.get(ticker) ?? [];
       let index = pointIndexes.get(ticker) ?? 0;
       while (index < points.length && points[index].date <= date) {
-        valuesByTicker.set(ticker, points[index].value);
+        const currency = currencyByTicker.get(ticker);
+        const fxRate = currency === "USD" ? fx.usdSek : currency === "EUR" ? fx.eurSek : 1;
+        valuesByTicker.set(
+          ticker,
+          points[index].value * (quantityByTicker.get(ticker) ?? 0) * fxRate,
+        );
         index += 1;
       }
       pointIndexes.set(ticker, index);
@@ -100,7 +115,7 @@ function buildAllocationSeries(
 
 function Holdings() {
   const { portfolio, isPending, isError } = usePortfolio();
-  const [selectedKey, setSelectedKey] = useState("TOTAL");
+  const [selectedKey, setSelectedKey] = useState("");
   const [range, setRange] = useState<HistoryRange>("1Y");
   const [allocationView, setAllocationView] = useState<AllocationView>("none");
   const { series, isFetching, isError: isHistoryError } = useHistory({
@@ -120,12 +135,17 @@ function Holdings() {
     return buildAllocationSeries(
       portfolio.holdings,
       histories,
+      portfolio.fx,
       target?.targetAktierPct ?? portfolio.allocation.targetAktierPct,
       target?.targetStabiltPct ?? portfolio.allocation.targetStabiltPct,
       allocationView,
       range,
     );
   }, [allocationView, histories, portfolio, range, target]);
+
+  const selectedCurrency = portfolio?.holdings.find(
+    (holding) => holding.ticker === selectedKey,
+  )?.currency;
 
   if (isPending) {
     return <p>Laddar innehav…</p>;
@@ -146,7 +166,6 @@ function Holdings() {
             onChange={(event) => setSelectedKey(event.target.value)}
           >
             <option value="">Välj innehav…</option>
-            <option value="TOTAL">Totalt</option>
             {portfolio.holdings.map((holding) => (
               <option key={`${holding.ticker}-${holding.account}`} value={holding.ticker}>
                 {holding.ticker} – {holding.name}
@@ -198,10 +217,14 @@ function Holdings() {
         <p className={styles.placeholder}>Ingen komplett allokeringshistorik finns för perioden.</p>
       ) : !selectedKey ? (
         <p className={styles.placeholder}>Välj ett innehav för att visa historik.</p>
-      ) : series ? (
+      ) : series && series.points.length > 0 ? (
         <div className={isFetching ? styles.fetching : undefined}>
-          <HistoryChart series={[series]} />
+          <HistoryChart
+            series={[{ ...series, currency: selectedCurrency ?? series.currency }]}
+          />
         </div>
+      ) : series ? (
+        <p className={styles.placeholder}>Ingen historik finns för denna period.</p>
       ) : !isHistoryError ? (
         <p className={styles.placeholder}>Laddar historisk utveckling…</p>
       ) : null}

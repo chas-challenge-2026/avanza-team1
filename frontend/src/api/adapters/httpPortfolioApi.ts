@@ -18,6 +18,26 @@ function isPortfolio(value: unknown): value is Portfolio {
   );
 }
 
+interface DailyPrice {
+  date: string;
+  close: number;
+}
+
+function isDailyPrice(value: unknown): value is DailyPrice {
+  if (!value || typeof value !== "object") return false;
+  const price = value as Partial<DailyPrice>;
+  return (
+    typeof price.date === "string" &&
+    /^\d{4}-\d{2}-\d{2}$/.test(price.date) &&
+    typeof price.close === "number" &&
+    Number.isFinite(price.close)
+  );
+}
+
+function isDailyPriceList(value: unknown): value is DailyPrice[] {
+  return Array.isArray(value) && value.every(isDailyPrice);
+}
+
 export const httpPortfolioApi: PortfolioApi = {
   async getPortfolio(): Promise<Portfolio> {
     const response = await apiFetch("/api/portfolio");
@@ -32,10 +52,19 @@ export const httpPortfolioApi: PortfolioApi = {
     params: { ticker: string; range: HistoryRange },
     signal?: AbortSignal,
   ): Promise<HistorySeries> {
-    // TODO: Confirm the history endpoint contract with the Spring Boot backend and native back-testing module.
     const query = new URLSearchParams({ ticker: params.ticker, range: params.range });
     const response = await apiFetch(`/api/holdings/history?${query.toString()}`, { signal });
-    return (await response.json()) as HistorySeries;
+    const body: unknown = await response.json();
+    if (!isDailyPriceList(body)) {
+      throw new Error("GET /api/holdings/history returned an unexpected shape");
+    }
+
+    return {
+      ticker: params.ticker,
+      range: params.range,
+      label: params.ticker,
+      points: body.map(({ date, close }) => ({ date, value: close })),
+    };
   },
 
   async saveAllocation(target: StoredTarget): Promise<void> {
