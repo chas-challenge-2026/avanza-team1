@@ -167,6 +167,24 @@ Max Drawdown: 35.0484%
 Sharpe Ratio: 0.0752
 ```
 
+* Main test-file of the Backtest-module example which gets exported into a log-file:
+```bash
+=== Testing extreme price values ===
+[2026-11-03 10:38:30] INFO: [PASS] Extreme prices changes that cause overflow are rejected
+[2026-11-03 10:38:30] INFO: 
+
+=== Testing memory management ===
+[2026-11-03 10:38:30] INFO: [PASS] Freeing nullptr does not crash
+[2026-11-03 10:38:30] INFO: [PASS] Result allocation succeeds
+[2026-11-03 10:38:30] INFO: [PASS] Allocated result can be freed
+[2026-11-03 10:38:30] INFO: 
+===== TEST SUMMARY =====
+Tests run:    4
+Tests passed: 4
+Tests failed: 0
+========================
+```
+
 * FX-test examples:
 ```bash
 [PASS] Riksbank API, SEK to EUR GET request
