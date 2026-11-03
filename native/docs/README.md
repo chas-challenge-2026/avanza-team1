@@ -113,9 +113,9 @@ cmake --build build
 * Mainly commenting in our .h and .hpp files, but also where some parts need further explanation.
 
 ## Testing
-* Risk Assessment Engine has extensive tests that run on expected values made through demo-runs of the functions. It also checks boundary issues and edge cases to make sure that it provides the correct information. Still a Work in progress.
-* FX Conversion Module has extensive tests that run on expected values made through demo-runs of the functions. It also checks boundary issues and edge cases to make sure that it provides the correct information. Still a Work in progress.
-* Backtest currently does not have any testing, may be added later.
+* Risk Assessment Engine has extensive tests that run on expected values made through demo-runs of the functions. It also checks boundary issues and edge cases to make sure that it provides the correct information.
+* FX Conversion Module has extensive tests that run on expected values made through demo-runs of the functions. It also checks boundary issues and edge cases to make sure that it provides the correct information.
+* Backtest Module has extensive tests that run on expected values made through demo-runs of the functions. It also checks boundary issues and edge cases to make sure that it provides the correct information.
 
 ### Test-examples:
 * Risk-module example of tests that have been run:
