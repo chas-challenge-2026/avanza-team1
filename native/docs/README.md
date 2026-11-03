@@ -55,7 +55,7 @@ cmake --build build
      |    ├── CMakeLists.txt
      ├── docs/
      |    ├── v1-info/
-     |    |    └── README.md (v1)
+     |    |    └── README.md ← Start-infon för Native modulen (v1).
      |    ├── BESLUT.md
      |    ├── BIDRAG.md
      |    └── README.md

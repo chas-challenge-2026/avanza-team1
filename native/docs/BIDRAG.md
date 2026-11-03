@@ -65,3 +65,5 @@ inte i en separat logg.
 | 2026-11-02 | Pär | Uppdaterade BIDRAG.md och README.md igen med lite mer information. | - | #172 |
 | 2026-11-03 | Pär | Uppdaterade Backtest så att det mer närmare återspeglar det som vi kommit överens om med JAVA-teamet, samt att det inkluderar min nya helperfunktion för att hantera portföljdata, samt fler safeguard-kontroller av den inkommande datan. La även till mer information i tests.cpp (demofilen) där det nu testar 5 instrument över ett år. | - | #123 |
 | 2026-11-03 | Pär | Skapade en testfil för Backtest, så att vi nu har tester för alla tre moduler som kontrollerar edge cases och förväntade värden och statusar från de olika funktionerna. Uppdaterat README och BIDRAG igen med ytterligare info. | - | #163 #172|
+| 2026-11-03 | Pär | Dokumentation i backtest-filerna enligt doxygen standard. | - | #168 |
+| 2026-11-03 | Pär | Slutpolerat all dokumentation och alla filer inför merge till develop. | - | #172 |
