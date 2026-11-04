@@ -1,13 +1,12 @@
 # Avanza Portföljhälsa
 
-Pedagogisk kodbas för kursen "Java Backend-utveckling med Spring Boot".
-v1 innehåller avsiktliga antipatterns — er uppgift är att refaktorera till v2.
-
-<<<<<<< HEAD
-## Snabbstart
-
-=======
-**v2-frontend (React) ligger i [frontend/](frontend/README.md).** Den körs separat från Spring.
+## Innehållsförteckning
+- [Avanza Portföljhälsa](#avanza-portföljhälsa)
+  - [Innehållsförteckning](#innehållsförteckning)
+  - [Snabbstart](#snabbstart)
+  - [Mappstruktur](#mappstruktur)
+  - [README för varje enskilt team.](#readme-för-varje-enskilt-team)
+  - [Bearbetning av Specialisternas Feed-Forward](#bearbetning-av-specialisternas-feed-forward)
 
 ## Snabbstart
 
@@ -15,15 +14,12 @@ Backend (v1):
 
 >>>>>>> develop
 ```bash
-cd infra && docker compose up
+cd infra && docker compose up --build
 ```
 
 Öppna: http://localhost:8082
 
-<<<<<<< HEAD
-**Testanvändare:**
-=======
-Frontend (mockad data, ingen Java krävs):
+Frontend:
 
 ```bash
 cd frontend && npm install && npm run dev
@@ -38,52 +34,19 @@ cd frontend && npm install && npm run dev
 - `erik@example.com` / `password123`
 
 ## Mappstruktur
+* Vi valde att lägga detta som ett separat dokument:
+[Mappstruktur](docs/Mappstruktur.md)
 
-```
-chas-avanza/
-├── backend/
-│   └── AvanzaPortal/          ← Spring Boot 2.7 Maven-projekt
-│       ├── pom.xml
-│       ├── Dockerfile
-│       └── src/main/java/se/comerit/avanza/
-│           ├── AvanzaPortalApplication.java
-│           └── controller/
-│               ├── AuthController.java
-│               ├── DashboardController.java
-│               ├── HoldingController.java
-│               └── AlertController.java
-<<<<<<< HEAD
-=======
-├── frontend/                  ← React 18 + Vite + TypeScript (v2)
-│   └── README.md
->>>>>>> develop
-├── infra/
-│   ├── docker-compose.yml
-│   └── seed.sql
-├── docs/
-│   ├── architecture.md        ← Systembeskrivning
-│   ├── known-bugs.md          ← Kända fel (er uppgiftslista)
-│   ├── README-pain-points.md  ← Vad som spricker vid skala
-│   └── v2-targets.md          ← Målarkitektur för v2
-└── native/
-    └── README.md              ← Planerade C/C++-moduler för v2
-```
+## README för varje enskilt team.
+* I följande dokument går vi igenom på djupet kring varje dels funktionalitet, körning, tester och teststatus, beslutsloggar, kända brister och avgränsningar. Bredvid länkarna framgår det huruvida dokumentationen är på svenska eller engelska.
 
-## Kända problem
 
-Se [`docs/known-bugs.md`](docs/known-bugs.md) för fullständig lista. Höjdpunkter:
+[Frontend README](frontend/docs/README-frontend.md) ← All dokumentation på svenska.
 
-- **SQL-injektion** i login-formuläret (`AuthController.java`)
-- **MD5-lösenord** utan salt
-- **IDOR** — valfri inloggad användare kan ta bort andras innehav
-- **Hårdkodad FX-kurs** USD/SEK = 10.45 (tre ställen i koden)
-- **Inkonsekvent drifttröskel** — 5% i dashboard, 7% i notissidan
-- **Ingen pagination** — alla innehav laddas till minnet varje request
-- **Affärslogik direkt i controllers** — inget servicelager
+[Backend README](backend/docs/README.md) ← All dokumentation på svenska.
 
-## Vad ska ni bygga
+[Native README](native/docs/README_NATIVE.md) ← README skriven på engelska enligt branchstandard, medans BIDRAG och BESLUT är skrivet på svenska.
 
-Se [`docs/v2-targets.md`](docs/v2-targets.md) för fullständig kravspec och acceptanskriterier.
-
-Sammanfattning: Spring Boot 3.2, Java 21, Spring Data JPA, Flyway, Spring Security + JWT,
-React 18-frontend, och minst ett nativt C/C++-riskmått via JNA.
+## Bearbetning av Specialisternas Feed-Forward
+* To be filled later...
+*

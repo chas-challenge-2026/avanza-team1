@@ -11,7 +11,7 @@
 
 - `src/App.css`: App countainer layout
     
-    Put styles that are specific to the main application layout and here.
+    Put styles that are specific to the main application layout here.
     - page sections placing
     - responsive handling for page sections
 

@@ -1,12 +1,8 @@
 .pageContent {
-  background-color: #f5f5f5;
+  width: 100%;
   min-height: calc(100vh - 80px);
   height: 100%;
-  padding: 1rem;
-}
-
-.table th {
-  background-color: #f0f0f0;
+  /* padding: 1rem; */
 }
 
 .labelInfo {
@@ -14,13 +10,13 @@
 }
 
 /* Make drift warnings more visible */
-tr.danger td {
+/* tr.danger td {
   color: #721c24;
 }
 
 tr.success td {
   color: #155724;
-}
+} */
 
 /* Mock mode indicator */
 .mockModeBanner {
@@ -43,20 +39,19 @@ tr.success td {
   min-height: 100dvh;
 }
 
-.appShell .pageContent {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  min-height: 0;
-  height: auto;
-}
-
 /* Media queries */
 
 @media (min-width: 768px) {
   .pageContent {
-    padding: 2rem;
-    max-width: 1200px;
+    /* padding: 2rem; */
+    width: 100%;
     margin: 0 auto;
+    justify-items: center;
   }
+
+  /* .pageContent > * {
+    max-width: 1024px;
+  } */
+
+  
 }

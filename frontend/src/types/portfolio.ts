@@ -4,6 +4,7 @@ import portfolioJson from "../data/portfolio.json";
 export type AccountType = "ISK" | "KF" | "DEPA" | "PENSION";
 export type AssetClass = "AKTIER" | "STABILT";
 export type Currency = "SEK" | "USD" | "EUR";
+export type DriftStatus = "withinThreshold" | "aktierAbove" | "stabiltAbove";
 
 export interface Fx {
   usdSek: number;

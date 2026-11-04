@@ -4,6 +4,8 @@ import type { Holding } from "../../types/portfolio";
 
 interface HoldingsTableProps {
   holdings: Holding[];
+  selectedKey?: string;
+  onSelect?: (key: string) => void;
 }
 
 function formatSek(value: number): string {
@@ -15,7 +17,7 @@ function formatReturnPct(value: number): string {
   return `${sign}${value.toLocaleString("sv-SE")} %`;
 }
 
-function HoldingsTable({ holdings }: HoldingsTableProps): JSX.Element {
+function HoldingsTable({ holdings, selectedKey, onSelect }: HoldingsTableProps): JSX.Element {
   return (
     <Panel title="Innehav" size="large">
       <table className={styles.table}>
@@ -30,14 +32,16 @@ function HoldingsTable({ holdings }: HoldingsTableProps): JSX.Element {
               Värde SEK
             </th>
             <th className={styles.right}>
-              Ändring
+              Avskastning
             </th>
+            <th>Historik</th>
           </tr>
         </thead>
         <tbody>
           {holdings.map((holding) => (
             <tr
               key={`${holding.ticker}-${holding.account}`}
+              className={selectedKey === holding.ticker ? styles.selectedRow : undefined}
             >
               <td className={styles.ticker}>
                 {holding.ticker}
@@ -56,16 +60,21 @@ function HoldingsTable({ holdings }: HoldingsTableProps): JSX.Element {
               >
                 {formatReturnPct(holding.returnPct)}
               </td>
+              <td>
+                <button
+                  type="button"
+                  className={styles.historyButton}
+                  aria-pressed={selectedKey === holding.ticker}
+                  onClick={() => onSelect?.(holding.ticker)}
+                >
+                  Visa
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
 
-      <div className={styles.footer}>
-        <a href="/holdings" className={styles.viewLink}>
-          Visa innehav
-        </a>
-      </div>
     </Panel>
   );
 }

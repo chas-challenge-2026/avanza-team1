@@ -2,7 +2,7 @@
 """Kontrollerar att infra/docker-compose.yml följer deploy-plattformens kontrakt.
 
 Rött X från denna kontroll betyder: er deploy skulle gå sönder om ändringen
-rullas ut. Se DRIFT.md i repo-roten för detaljer.
+rullas ut. Se docs/DRIFT.md för detaljer.
 """
 import os
 import sys
@@ -50,7 +50,7 @@ def main() -> int:
         )
 
     if errors:
-        print("Plattformskontraktet bryts: er deploy skulle gå sönder. Se DRIFT.md.\n")
+        print("Plattformskontraktet bryts: er deploy skulle gå sönder. Se docs/DRIFT.md.\n")
         for e in errors:
             print(f" - {e}")
         return 1

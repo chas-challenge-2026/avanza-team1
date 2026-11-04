@@ -4,27 +4,30 @@
 
     /* sizes */
     --max-width: 1200px;
+    --aside-width: 200px;
 
     /* spacing */
-    --space-xlarge: 2.25rem;
-    --space-large: 1.5rem;
-    --space-medium: 1rem;
-    --space-small: 0.75rem;
-    --space-xsmall: 0.5rem;
+    --space-xlarge: 4rem;
+    --space-large: 2.5rem;
+    --space-medium: 1.6rem;
+    --space-small: 1rem;
+    --space-xsmall: 0.6rem;
+    --space-xxsmall: 0.3rem;
 
     /* colors */
     --white: #ffffff;
     --off-white: #f4f6f9;
-    --light-gray: #f0f0f0;
-    --gray: #808080;
+    --light-gray: #e0e0e0;
+    --gray: #989898;
     --dark-gray: #333333;
     --black: #202020;
     
-    --primary-color: rgb(3, 168, 80);
-    --green: #00a651;
+    --primary-color: hsl(148, 96%, 34%);
+    --primary-color-dark: hsl(148, 97%, 31%);
+    --primary-color-light: hsl(115, 53%, 75%);
 
-    --background: var(--off-white);
-    --background-alt: var(--light-gray);
+    --background: var(--white);
+    --background-alt: var(--off-white);
 
     --text-color: var(--black);
     --text-color-alt: var(--dark-gray);
@@ -50,4 +53,46 @@ body {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: var(--font-size-normal);
     color: var(--text-color);
+}
+
+h1, h2, h3 {
+    margin: 1lh 0;
+}
+
+a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+button {
+    width: max-content;
+    justify-self: end;
+    padding: 0.5rem 1rem;
+    background-color: var(--light-gray);
+    color: var(--text-color-alt);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s ease;
+}
+button:hover {
+    background-color: var(--gray);
+    color: var(--white);
+}
+
+button.green {
+    background-color: var(--primary-color);
+    color: var(--white);
+}
+button.green:hover {
+    background-color: var(--primary-color-dark);
+    /* background-color: #008a42; */
+}
+
+button:disabled {
+    background-color: var(--light-gray);
+    color: var(--gray);
+    cursor: not-allowed;
+    opacity: 0.7;
 }

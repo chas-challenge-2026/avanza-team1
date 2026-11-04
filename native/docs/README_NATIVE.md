@@ -15,11 +15,14 @@
     - [Logger](#logger)
   - [Documentation](#documentation)
   - [Testing](#testing)
+    - [Test-examples:](#test-examples)
+  - [Known Issues/Limitations](#known-issueslimitations)
+  - [Docs (Written in Swedish)](#docs-written-in-swedish)
   - [Collaborators](#collaborators)
   - [Resources](#resources)
 
 ## About
-* TODO
+* The Native part of the project, handles Risk Assessment, Currency-convertion and Backtesting on portfolio data. A part of Avanza Team 1s project.
 
 ## Tech stack
 * libcurl
@@ -51,6 +54,8 @@ cmake --build build
      |    ├── backtest.hpp
      |    ├── CMakeLists.txt
      ├── docs/
+     |    ├── v1-info/
+     |    |    └── README.md ← Start-infon för Native modulen (v1).
      |    ├── BESLUT.md
      |    ├── BIDRAG.md
      |    └── README.md
@@ -108,9 +113,96 @@ cmake --build build
 * Mainly commenting in our .h and .hpp files, but also where some parts need further explanation.
 
 ## Testing
-* Risk Assessment Engine has extensive tests that run on expected values made through demo-runs of the functions. It also checks boundary issues and edge cases to make sure that it provides the correct information. Still a Work in progress.
-* FX Conversion Module has extensive tests that run on expected values made through demo-runs of the functions. It also checks boundary issues and edge cases to make sure that it provides the correct information. Still a Work in progress.
-* Backtest currently does not have any testing, will be added later.
+* Risk Assessment Engine has extensive tests that run on expected values made through demo-runs of the functions. It also checks boundary issues and edge cases to make sure that it provides the correct information.
+* FX Conversion Module has extensive tests that run on expected values made through demo-runs of the functions. It also checks boundary issues and edge cases to make sure that it provides the correct information.
+* Backtest Module has extensive tests that run on expected values made through demo-runs of the functions. It also checks boundary issues and edge cases to make sure that it provides the correct information.
+
+### Test-examples:
+* Risk-module example of tests that have been run:
+```bash
+[PASS] sharpe with exactly three prices (got 2229.621440)
+[PASS] volatility on flat prices is 0 (got 0.000000)
+[PASS] sharpe on flat prices avoids divide-by-zero
+[PASS] rising prices produce low volatility (0.002413)
+[PASS] rising prices produce a positive sharpe ratio (1011.616981)
+[PASS] max drawdown on known price series (got 0.043026)
+[PASS] max drawdown with fewer than 2 prices returns insufficient data
+[PASS] max drawdown with exactly two prices (got 0.100000)
+[PASS] max drawdown on rising prices is 0 (got 0.000000)
+[PASS] max drawdown on falling prices matches first-to-last drop (got 0.066667)
+
+10/10 tests passed
+```
+
+* Backtesting with increasing instruments over different periods of time:
+```bash
+[2026-11-02 13:18:13] INFO: Backtest completed successfully with 50 instrument(s) converted from SEK over a 1 year span.
+Total Return: 9.4660%
+Annualized return: 9.5055%
+Max Drawdown: 21.7673%
+Sharpe Ratio: 0.3815
+
+[2026-11-02 13:19:18] INFO: Backtest completed successfully with 200 instrument(s) converted from SEK over a 1 year span.
+Total Return: 9.4660%
+Annualized return: 9.5055%
+Max Drawdown: 21.7673%
+Sharpe Ratio: 0.3815
+
+[2026-11-02 13:19:51] INFO: Backtest completed successfully with 400 instrument(s) converted from SEK over a 1 year span.
+Total Return: 9.4660%
+Annualized return: 9.5055%
+Max Drawdown: 21.7673%
+Sharpe Ratio: 0.3815
+
+[2026-11-02 13:22:46] INFO: Backtest completed successfully with 500 instrument(s) converted from SEK over a 1 year span.
+Total Return: 9.4660%
+Annualized return: 9.5055%
+Max Drawdown: 21.7673%
+Sharpe Ratio: 0.3815
+
+[2026-11-02 13:26:15] INFO: Backtest completed successfully with 500 instrument(s) converted from SEK over a 5 year span.
+Total Return: 9.4660%
+Annualized return: 1.8268%
+Max Drawdown: 35.0484%
+Sharpe Ratio: 0.0752
+```
+
+* Main test-file of the Backtest-module example which gets exported into a log-file:
+```bash
+=== Testing extreme price values ===
+[2026-11-03 10:38:30] INFO: [PASS] Extreme prices changes that cause overflow are rejected
+[2026-11-03 10:38:30] INFO: 
+
+=== Testing memory management ===
+[2026-11-03 10:38:30] INFO: [PASS] Freeing nullptr does not crash
+[2026-11-03 10:38:30] INFO: [PASS] Result allocation succeeds
+[2026-11-03 10:38:30] INFO: [PASS] Allocated result can be freed
+[2026-11-03 10:38:30] INFO: 
+===== TEST SUMMARY =====
+Tests run:    4
+Tests passed: 4
+Tests failed: 0
+========================
+```
+
+* FX-test examples:
+```bash
+[PASS] Riksbank API, SEK to EUR GET request
+[PASS] Parse JSON string
+[PASS] Interval JSON parsing
+[PASS] Interval FX
+
+Tests passed: 4/4
+```
+
+## Known Issues/Limitations
+* We decided against using BLAS and SIMD for the risk module because we didn't have the time to fully implement it after getting the module to work properly.
+* Strategies are not fully implemented, we only have one standard strategy as of now as the program simulates BUY & HOLD (inital purchase and then sticks to the investment over time). This is because of a time-restraint issue. We prioritized getting the backtest-function operational before exploring extensive functionality, which took longer than anticipated.
+* We didn't have time to implement caching of the fx-data, so this is currently a risk of exhausting the Riksbank-API when making extensive calls.
+
+## Docs (Written in Swedish)
+* [BIDRAG(Contributions)](BIDRAG.md)
+* [BESLUT(Decisions)](BESLUT.md)
 
 ## Collaborators
 * [Henrik Westerlund](https://github.com/Henrik-Westerlund)

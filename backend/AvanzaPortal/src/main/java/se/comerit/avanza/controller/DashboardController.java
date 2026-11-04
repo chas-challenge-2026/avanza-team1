@@ -191,7 +191,7 @@ public class DashboardController {
         this.portfolioService = portfolioService;
     }
 
-    @GetMapping("/")
+    @GetMapping("/legacy/dashboard")
     public String dashboard(Model model) {
 
         // Read userId from SecurityContext (v2)

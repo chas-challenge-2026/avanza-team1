@@ -1,0 +1,48 @@
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tableHead {
+  border-bottom: 2px solid var(--light-gray);
+}
+.table th {
+  background: var(--background);
+  padding: var(--space-small) 0;
+  font-weight: 600;
+  color: #666;
+}
+
+.table td {
+  padding: var(--space-small) 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.table th:first-child, .table td:first-child {
+  padding-left: var(--space-small);
+}
+
+.ticker {
+  color: var(--primary-color);
+  font-weight: 500;
+}
+.change {
+  color: var(--primary-color);
+}
+
+.right {
+  text-align: right;
+}
+
+.historyButton {
+  padding: var(--space-xxsmall) var(--space-xsmall);
+  border: 1px solid var(--primary-color);
+  border-radius: 4px;
+  background: var(--white);
+  color: var(--primary-color-dark);
+  cursor: pointer;
+}
+
+.selectedRow {
+  background: var(--background-alt);
+}
