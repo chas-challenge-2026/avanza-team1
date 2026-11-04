@@ -1,21 +1,27 @@
 # Avanza Portföljhälsa
 
-Pedagogisk kodbas för kursen "Java Backend-utveckling med Spring Boot".
-v1 innehåller avsiktliga antipatterns — er uppgift är att refaktorera till v2.
-
-**v2-frontend (React) ligger i [frontend/](frontend/README.md).** Den körs separat från Spring.
+## Innehållsförteckning
+- [Avanza Portföljhälsa](#avanza-portföljhälsa)
+  - [Innehållsförteckning](#innehållsförteckning)
+  - [Snabbstart](#snabbstart)
+  - [Mappstruktur](#mappstruktur)
+  - [README för varje enskilt team.](#readme-för-varje-enskilt-team)
+    - [Frontend](#frontend)
+    - [Backend:](#backend)
+    - [Native:](#native)
+  - [Bearbetning av Specialisternas Feed-Forward](#bearbetning-av-specialisternas-feed-forward)
 
 ## Snabbstart
 
 Backend (v1):
 
 ```bash
-cd infra && docker compose up
+cd infra && docker compose up --build
 ```
 
 Öppna: http://localhost:8082
 
-Frontend (mockad data, ingen Java krävs):
+Frontend:
 
 ```bash
 cd frontend && npm install && npm run dev
@@ -29,49 +35,20 @@ cd frontend && npm install && npm run dev
 - `erik@example.com` / `password123`
 
 ## Mappstruktur
+* Link to the other file will be placed here...
 
-```
-chas-avanza/
-├── backend/
-│   └── AvanzaPortal/          ← Spring Boot 2.7 Maven-projekt
-│       ├── pom.xml
-│       ├── Dockerfile
-│       └── src/main/java/se/comerit/avanza/
-│           ├── AvanzaPortalApplication.java
-│           └── controller/
-│               ├── AuthController.java
-│               ├── DashboardController.java
-│               ├── HoldingController.java
-│               └── AlertController.java
-├── frontend/                  ← React 18 + Vite + TypeScript (v2)
-│   └── README.md
-├── infra/
-│   ├── docker-compose.yml
-│   └── seed.sql
-├── docs/
-│   ├── architecture.md        ← Systembeskrivning
-│   ├── known-bugs.md          ← Kända fel (er uppgiftslista)
-│   ├── README-pain-points.md  ← Vad som spricker vid skala
-│   └── v2-targets.md          ← Målarkitektur för v2
-└── native/
-    └── README.md              ← Planerade C/C++-moduler för v2
-```
+## README för varje enskilt team.
+* I följande dokument går vi igenom på djupet kring varje dels funktionalitet, körning, tester och teststatus, beslutsloggar, kända brister och avgränsningar. Bredvid länkarna framgår det huruvida dokumentationen är på svenska eller engelska.
+ 
+### Frontend
+https://github.com/chas-challenge-2026/avanza-team1/blob/develop/docs/frontend/README.md ← All dokumentation på svenska.
+ 
+### Backend: 
+https://github.com/chas-challenge-2026/avanza-team1/blob/Java-Development-Environment/backend/docs/README.md ← All dokumentation på svenska.
 
-## Kända problem
+### Native: 
+https://github.com/chas-challenge-2026/avanza-team1/blob/develop/native/docs/README.md ← README skriven på engelska enligt branchstandard, medans BIDRAG och BESLUT är skrivet på svenska.
 
-Se [`docs/known-bugs.md`](docs/known-bugs.md) för fullständig lista. Höjdpunkter:
-
-- **SQL-injektion** i login-formuläret (`AuthController.java`)
-- **MD5-lösenord** utan salt
-- **IDOR** — valfri inloggad användare kan ta bort andras innehav
-- **Hårdkodad FX-kurs** USD/SEK = 10.45 (tre ställen i koden)
-- **Inkonsekvent drifttröskel** — 5% i dashboard, 7% i notissidan
-- **Ingen pagination** — alla innehav laddas till minnet varje request
-- **Affärslogik direkt i controllers** — inget servicelager
-
-## Vad ska ni bygga
-
-Se [`docs/v2-targets.md`](docs/v2-targets.md) för fullständig kravspec och acceptanskriterier.
-
-Sammanfattning: Spring Boot 3.2, Java 21, Spring Data JPA, Flyway, Spring Security + JWT,
-React 18-frontend, och minst ett nativt C/C++-riskmått via JNA.
+## Bearbetning av Specialisternas Feed-Forward
+* To be filled later...
+* 
