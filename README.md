@@ -38,7 +38,6 @@ cd frontend && npm install && npm run dev
 ## README för varje enskilt team.
 * I följande dokument går vi igenom på djupet kring varje dels funktionalitet, körning, tester och teststatus, beslutsloggar, kända brister och avgränsningar. Bredvid länkarna framgår det huruvida dokumentationen är på svenska eller engelska.
 
-
 [Frontend README](frontend/docs/README-frontend.md) ← All dokumentation på svenska.
 
 [Backend README](backend/docs/README.md) ← All dokumentation på svenska.
@@ -46,9 +45,10 @@ cd frontend && npm install && npm run dev
 [Native README](native/docs/README_NATIVE.md) ← README skriven på engelska enligt branchstandard, medans BIDRAG och BESLUT är skrivet på svenska.
 
 ## Bearbetning av Specialisternas Feed-Forward
-* To be filled later...
-*
+* Vi fick feed-forward på att dashboarden kunde vara tydligare och förklara för användaren genom att lägga till textblock som förklarar vad t.ex. målallokering innebär utifrån hur situationen för användaren ser ut just nu.
+* Vi adresserade de synpunkter på UI som framkom tidigare såsom beteendet på stängknappen i dialogrutan bland annat.
 
+## Fallback
 Länkar till demo-backup:
 https://drive.google.com/file/d/1iSRV4S1MrRSVSN5F8Nbwjksni0ayd8Sm
 https://drive.google.com/file/d/1eifqneo_NWVMQB18e4OKb3BJFED2-poT
