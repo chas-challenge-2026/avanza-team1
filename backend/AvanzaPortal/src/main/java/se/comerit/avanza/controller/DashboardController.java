@@ -1,5 +1,6 @@
 package se.comerit.avanza.controller;
 
+<<<<<<< HEAD
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
@@ -10,11 +11,20 @@ import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+=======
+
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import se.comerit.avanza.service.PortfolioService;
+>>>>>>> develop
 import java.util.Map;
 
 @Controller
 public class DashboardController {
 
+<<<<<<< HEAD
     // TODO: fetch from API someday
     private static final double USD_TO_SEK = 10.45;
 
@@ -174,7 +184,40 @@ public class DashboardController {
         model.addAttribute("recentAlerts", recentAlerts);
         model.addAttribute("anyDrift", anyDrift);
         model.addAttribute("usdToSek", USD_TO_SEK);
+=======
+    private final PortfolioService portfolioService;
+
+    public DashboardController(PortfolioService portfolioService) {
+        this.portfolioService = portfolioService;
+    }
+
+    @GetMapping("/")
+    public String dashboard(Model model) {
+
+        // Read userId from SecurityContext (v2)
+        String userId = (String) SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getPrincipal();
+
+        Long uid = Long.valueOf(userId);
+
+        Map<String, Object> data = portfolioService.buildDashboardData(uid);
+
+        // Lägg in allt i model (exakt som v1)
+        model.addAttribute("accounts", data.get("accounts"));
+        model.addAttribute("holdings", data.get("holdings"));
+        model.addAttribute("allocationRows", data.get("allocationRows"));
+        model.addAttribute("totalPortfolioValue", data.get("totalPortfolioValue"));
+        model.addAttribute("recentAlerts", data.get("recentAlerts"));
+        model.addAttribute("anyDrift", data.get("anyDrift"));
+        model.addAttribute("usdToSek", data.get("usdToSek"));
+>>>>>>> develop
 
         return "dashboard";
     }
 }
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> develop

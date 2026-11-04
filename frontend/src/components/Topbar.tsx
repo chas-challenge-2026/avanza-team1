@@ -1,0 +1,59 @@
+import { NavLink, useNavigate } from "react-router-dom";
+import { useAuth } from "../auth/useAuth";
+import styles from "./Topbar.module.css";
+import logo from "../assets/logo.webp";
+import HamburgerMenu from "./Dashboard/HamburgerMenu";
+
+function Topbar() {
+  const navigate = useNavigate();
+  const { user, logout } = useAuth();
+
+  async function handleLogout(): Promise<void> {
+    await logout();
+    navigate("/login");
+  }
+
+  return (
+    <header className={styles.topbar}>
+      <div className={styles.brand}>
+        <img src={logo} alt="Logo" className={styles.logo} />
+        <h1>PORTFÖLJHÄLSA</h1>
+      </div>
+      <nav className={styles.desktopNav}>
+        <NavLink
+          to="/"
+          end
+          className={({ isActive }) => (isActive ? styles.active : "")}
+        >
+          Portfolio
+        </NavLink>
+        <NavLink
+          to="/holdings"
+          className={({ isActive }) => (isActive ? styles.active : "")}
+        >
+          Innehav
+        </NavLink>
+        <NavLink
+          to="/alerts"
+          className={({ isActive }) => (isActive ? styles.active : "")}
+        >
+          Notiser
+        </NavLink>
+      </nav>
+      <div className={styles.user}>
+        <span className={styles.userName}>{user?.name ?? ""}</span>
+        <button
+          className={`${styles.logoutButton} ${styles.desktopLogout}`}
+          onClick={handleLogout}
+        >
+          Logga ut
+        </button>
+        <div className={styles.hamburgerContainer}>
+          <HamburgerMenu />
+        </div>
+      </div>
+    </header>
+  );
+}
+
+export default Topbar;

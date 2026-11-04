@@ -1,0 +1,88 @@
+import { useState, useRef, type FormEvent } from "react";
+import { useNavigate } from "react-router-dom";
+import styles from "./Login.module.css";
+import { useAuth } from "../auth/useAuth";
+import { ApiError } from "../api/httpClient";
+
+function Login(): JSX.Element {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const { login } = useAuth();
+  const navigate = useNavigate();
+  const passwordInputRef = useRef<HTMLInputElement>(null);
+
+  async function handleSubmit(event: FormEvent): Promise<void> {
+    event.preventDefault();
+    setError(null);
+
+    try {
+      const success = await login(email, password);
+
+      if (success) {
+        navigate("/");
+      } else {
+        setError("Fel e-post eller lösenord.");
+        passwordInputRef.current?.focus();
+      }
+    } catch (error) {
+      if (error instanceof ApiError) {
+        if (error.status === 401) {
+          setError("Fel e-post eller lösenord.");
+          passwordInputRef.current?.focus();
+        } else if (error.status >= 500) {
+          setError("Ett serverfel uppstod. Försök igen senare.");
+        } else {
+          setError("Något gick fel. Försök igen.");
+        }
+      } else if (error instanceof TypeError) {
+        setError(
+          "Det gick inte att ansluta till tjänsten. Kontrollera din anslutning och försök igen.",
+        );
+      } else {
+        setError("Något gick fel. Försök igen.");
+      }
+    }
+  }
+
+  return (
+    <div className={styles.page}>
+      <form className={styles.form} onSubmit={handleSubmit}>
+        <h1 className={styles.title}>Avanza</h1>
+        {error && (
+          // role="alert" gör att skärmläsare läser upp felet automatiskt
+          // så fort det renderas, utan att användaren behöver leta efter det.
+          <p id="login-error" role="alert" className={styles.error}>
+            {error}
+          </p>
+        )}
+        <label className={styles.field}>
+          E-post
+          <input
+            type="email"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+            required
+            aria-describedby={error ? "login-error" : undefined}
+          />
+        </label>
+        <label className={styles.field}>
+          Lösenord
+          <input
+            ref={passwordInputRef}
+            type="password"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+            required
+            aria-describedby={error ? "login-error" : undefined}
+          />
+        </label>
+        <button type="submit" className={styles.button}>
+          Logga in
+        </button>
+      </form>
+    </div>
+  );
+}
+
+export default Login;

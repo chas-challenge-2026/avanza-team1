@@ -1,0 +1,44 @@
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tableHead {
+  border-bottom: 2px solid var(--light-gray);
+}
+.table th {
+  padding: var(--space-small);
+  font-weight: 600;
+  color: #666;
+}
+
+.table td {
+  padding: var(--space-small);
+  border-bottom: 1px solid #ddd;
+}
+.ticker {
+  color: var(--primary-color);
+  font-weight: 500;
+}
+.change {
+  color: var(--primary-color);
+}
+
+.footer {
+  margin-top: var(--space-medium);
+  text-align: right;
+}
+
+.right {
+  text-align: right;
+}
+
+/* TODO: move this styling to global style for "a" links and remove this class */
+.viewLink {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+.viewLink:hover {
+  text-decoration: underline;
+}

@@ -1,20 +1,31 @@
 package se.comerit.avanza.controller;
 
+<<<<<<< HEAD
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+=======
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+>>>>>>> develop
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+<<<<<<< HEAD
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
+=======
+import se.comerit.avanza.service.HoldingService;
+>>>>>>> develop
 import java.util.Map;
 
 @Controller
 public class HoldingController {
 
+<<<<<<< HEAD
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
@@ -71,6 +82,30 @@ public class HoldingController {
 
         model.addAttribute("holdings", holdings);
         model.addAttribute("accounts", accounts);
+=======
+    private final HoldingService holdingService;
+
+    public HoldingController(HoldingService holdingService) {
+        this.holdingService = holdingService;
+    }
+
+    @GetMapping("/holdings")
+    public String listHoldings(Model model) {
+
+
+        // Read userId from SecurityContext (v2)
+        String userId = (String) SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getPrincipal();
+
+        Long uid = Long.valueOf(userId);
+
+        // Logic moved to service layer
+        Map<String, Object> data = holdingService.buildHoldingData(uid);
+
+        model.addAttribute("holdings", data.get("holdings"));
+        model.addAttribute("accounts",data.get("accounts"));
+>>>>>>> develop
         return "holdings";
     }
 
@@ -81,6 +116,7 @@ public class HoldingController {
                              @RequestParam String quantity,
                              @RequestParam String avgBuyPrice,
                              @RequestParam(defaultValue = "SEK") String currency,
+<<<<<<< HEAD
                              HttpSession session,
                              Model model) {
 
@@ -96,11 +132,26 @@ public class HoldingController {
                 quantity + ", " + avgBuyPrice + ", '" + currency + "')";
 
         jdbcTemplate.execute(sql);
+=======
+                             @RequestParam String assetCategory,
+                             Model model) {
+
+        // Read userId from SecurityContext (v2)
+        String userId = (String) SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getPrincipal();
+
+        Long uid = Long.valueOf(userId);
+
+        // Add holding (userId not needed here yet, but available if needed later)
+        holdingService.addHolding(accountId, ticker, instrumentName, quantity, avgBuyPrice, currency, assetCategory);
+>>>>>>> develop
 
         return "redirect:/holdings";
     }
 
     @PostMapping("/holdings/delete")
+<<<<<<< HEAD
     public String deleteHolding(@RequestParam Integer holdingId,
                                 HttpSession session) {
 
@@ -117,4 +168,37 @@ public class HoldingController {
 
         return "redirect:/holdings";
     }
+=======
+    public String deleteHolding(@RequestParam Integer holdingId) {
+
+
+        // Read userId from SecurityContext (v2)
+        String userId = (String) SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getPrincipal();
+
+        Long uid = Long.valueOf(userId);
+
+        // Pass userId for IDOR protection
+        holdingService.deleteHolding(holdingId, uid);
+
+        return "redirect:/holdings";
+    }
+    @GetMapping("/api/holdings")
+    public ResponseEntity<?> apiHoldings() {
+
+        // Read userId from JWT (SecurityContext)
+        String userId = (String) SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getPrincipal();
+
+        Long uid = Long.valueOf(userId);
+
+        // Fetch holdings for logged-in user
+        Map<String, Object> data = holdingService.buildHoldingData(uid);
+
+        return ResponseEntity.ok(data);
+    }
+
+>>>>>>> develop
 }

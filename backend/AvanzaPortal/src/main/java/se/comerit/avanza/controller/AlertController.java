@@ -1,22 +1,32 @@
 package se.comerit.avanza.controller;
 
+<<<<<<< HEAD
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+=======
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+>>>>>>> develop
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+<<<<<<< HEAD
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+=======
+import se.comerit.avanza.service.AlertService;
+>>>>>>> develop
 import java.util.Map;
 
 @Controller
 public class AlertController {
 
+<<<<<<< HEAD
     // NOTE: This is 0.07 but DashboardController uses 0.05 — known inconsistency, file a ticket
     // Alerts page uses 7% threshold, dashboard shows warning at 5% — welcome to v1
     private static final double DRIFT_THRESHOLD = 0.07;
@@ -120,10 +130,34 @@ public class AlertController {
         model.addAttribute("storedAlerts", storedAlerts);
         model.addAttribute("liveAlerts", liveAlerts);
         model.addAttribute("driftThreshold", (int)(DRIFT_THRESHOLD * 100));
+=======
+    private final AlertService alertService;
+
+    public AlertController(AlertService alertService) {
+        this.alertService = alertService;
+    }
+
+    @GetMapping("/alerts")
+    public String listAlerts(Model model) {
+
+        // Read userId from SecurityContext (v2)
+        String userId = (String) SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getPrincipal();
+
+        Long uid = Long.valueOf(userId);
+
+        Map<String, Object> alerts = alertService.getAlerts(uid);
+
+        model.addAttribute("storedAlerts", alerts.get("storedAlerts"));
+        model.addAttribute("liveAlerts", alerts.get("liveAlerts"));
+        model.addAttribute("driftThreshold", alerts.get("driftThreshold"));
+>>>>>>> develop
         return "alerts";
     }
 
     @PostMapping("/alerts/dismiss")
+<<<<<<< HEAD
     public String dismissAlert(@RequestParam Integer alertId,
                                HttpSession session) {
 
@@ -139,4 +173,35 @@ public class AlertController {
 
         return "redirect:/alerts";
     }
+=======
+    public String dismissAlert(@RequestParam Integer alertId) {
+
+
+        // Read userId from SecurityContext (v2)
+        String userId = (String) SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getPrincipal();
+
+        Long uid = Long.valueOf(userId);
+
+        // Pass userId for IDOR protection
+        alertService.dismissAlert(alertId, uid);
+
+        return "redirect:/alerts";
+    }
+    @GetMapping("/api/alerts")
+    public ResponseEntity<?> apiAlerts() {
+
+        String userId = (String) SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getPrincipal();
+
+        Long uid = Long.valueOf(userId);
+
+        Map<String, Object> alerts = alertService.getAlerts(uid);
+
+        return ResponseEntity.ok(alerts);
+    }
+
+>>>>>>> develop
 }
