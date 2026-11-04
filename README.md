@@ -3,7 +3,6 @@
 ## Innehållsförteckning
 - [Avanza Portföljhälsa](#avanza-portföljhälsa)
   - [Innehållsförteckning](#innehållsförteckning)
-  - [Instruktioner från Daniel (ska tas bort senare)](#instruktioner-från-daniel-ska-tas-bort-senare)
   - [Snabbstart](#snabbstart)
   - [Mappstruktur](#mappstruktur)
   - [README för varje enskilt team.](#readme-för-varje-enskilt-team)
@@ -11,11 +10,6 @@
     - [Backend:](#backend)
     - [Native:](#native)
   - [Bearbetning av Specialisternas Feed-Forward](#bearbetning-av-specialisternas-feed-forward)
-
-## Instruktioner från Daniel (ska tas bort senare)
-Allt innehåll ska ligga i repot: 
-* README med installation, körning och testning, beslutslogg, teststatus, kända brister och avgränsningar, fallback för demon och en kort beskrivning av hur specialisternas feed forward har bearbetats. 
-* I Canvas lämnar teamet länken till repot 5/11 kl. 15:00.
 
 ## Snabbstart
 
