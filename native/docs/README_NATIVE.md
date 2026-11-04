@@ -201,8 +201,8 @@ Tests passed: 4/4
 * We didn't have time to implement caching of the fx-data, so this is currently a risk of exhausting the Riksbank-API when making extensive calls.
 
 ## Docs (Written in Swedish)
-* BIDRAG(Contributions): https://github.com/chas-challenge-2026/avanza-team1/blob/develop/native/docs/BIDRAG.md
-* BESLUT(Decisions): https://github.com/chas-challenge-2026/avanza-team1/blob/develop/native/docs/BESLUT.md
+* [BIDRAG(Contributions)](BIDRAG.md)
+* [BESLUT(Decisions)](BESLUT.md)
 
 ## Collaborators
 * [Henrik Westerlund](https://github.com/Henrik-Westerlund)
