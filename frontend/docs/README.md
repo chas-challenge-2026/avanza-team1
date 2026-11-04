@@ -77,7 +77,7 @@ http://localhost:4173
 
 Preview-servern ersätter inte Spring Boot-backend.
 
-För mer information om drift och backendmiljö, se [DRIFT.md](../DRIFT.md).
+För mer information om drift och backendmiljö, se [DRIFT.md](../../DRIFT.md).
 
 ## Available npm scripts
 
@@ -149,7 +149,7 @@ TanStack Query används för asynkron datahantering.
 
 API-lagret är utformat för att separera gränssnittet från datakällorna. Det har gjort det möjligt att utveckla frontend parallellt med backend.
 
-Arkitekturella vägval dokumenteras i [BESLUT.md](../docs/frontend/BESLUT.md).
+Arkitekturella vägval dokumenteras i [BESLUT.md](BESLUT.md).
 
 ## Implemented functionality
 
@@ -295,7 +295,7 @@ Frontendteamet fokuserar därför på:
 
 Ofullständiga integrationer dokumenteras som kvarstående arbete.
 
-Beslutets motivering och konsekvenser ska även dokumenteras i [BESLUT.md](../docs/frontend/BESLUT.md).
+Beslutets motivering och konsekvenser ska även dokumenteras i [BESLUT.md](BESLUT.md).
 
 ## Testing
 
@@ -353,14 +353,14 @@ Se [STYLING.md](STYLING.md) för utförligare riktlinjer.
 
 Följande områden har medvetet avgränsats från slutleveransen:
 
-- Ytterligare backendintegration.
+- Full integration av historisk data uteblev p.g.a ofullständigt API-kontrakt.
 - Analys av hur utländska valutor påverkar hela portföljen.
 - Fullständig anpassning till mycket små mobilskärmar.
 - Native-baserad backtesting i frontend.
 - Individuella native-riskvärden per aktie.
 - Avancerade strategijämförelser.
 
-Fortsatt utveckling kan även krävas för historik-API, sessionshantering och ytterligare integrationsverifiering.
+Historik-API:et (`/api/holdings/history`) är implementerat i både frontend och backend men är ännu inte fullständigt verifierat end-to-end. Fortsatt utveckling kan även krävas för sessionshantering och ytterligare integrationsverifiering.
 
 Dessa avgränsningar är en del av teamets prioriteringsbeslut och dokumenteras för att underlätta fortsatt utveckling.
 
@@ -370,9 +370,9 @@ Frontendteamet har dokumenterat tekniska beslut och individuella bidrag under pr
 
 | Dokument | Innehåll |
 |---|---|
-| [BESLUT.md](../docs/frontend/BESLUT.md) | Tekniska beslut, motiveringar och avgränsningar |
-| [BIDRAG.md](../docs/frontend/BIDRAG.md) | Individuella bidrag, AI-användning och koppling till issues/PR |
-| [Frontend-dokumentation](../docs/frontend/README.md) | Översikt över dokumentationsstrukturen |
+| [BESLUT.md](BESLUT.md) | Tekniska beslut, motiveringar och avgränsningar |
+| [BIDRAG.md](BIDRAG.md) | Individuella bidrag, AI-användning och koppling till issues/PR |
+| [Frontend-dokumentation](README.md) | Översikt över dokumentationsstrukturen |
 | [STYLING.md](STYLING.md) | Stylingregler och komponentkonventioner |
 
 Beslutsloggen omfattar bland annat CSS-struktur, datahantering, API-adaptrar, driftberäkning, autentisering och testverktyg.
@@ -395,4 +395,4 @@ Syftet med överlämningen är att nästa utvecklare eller team ska kunna:
 - Se vad som implementerats och verifierats.
 - Identifiera kvarstående begränsningar och möjliga nästa utvecklingssteg.
 
-För projektets övergripande dokumentation, se [README i repositoryts rot](../README.md).
+För projektets övergripande dokumentation, se [README i repositoryts rot](../../README.md).
