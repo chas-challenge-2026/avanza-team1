@@ -1,0 +1,57 @@
+.pageContent {
+  width: 100%;
+  min-height: calc(100vh - 80px);
+  height: 100%;
+  /* padding: 1rem; */
+}
+
+.labelInfo {
+  background-color: #17a2b8;
+}
+
+/* Make drift warnings more visible */
+/* tr.danger td {
+  color: #721c24;
+}
+
+tr.success td {
+  color: #155724;
+} */
+
+/* Mock mode indicator */
+.mockModeBanner {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-xsmall);
+  padding: var(--space-small) var(--space-medium);
+
+  background-color: #fff3cd;
+  color: #664d03;
+  font-size: var(--font-size-normal);
+  text-align: center;
+}
+
+.appShell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+}
+
+/* Media queries */
+
+@media (min-width: 768px) {
+  .pageContent {
+    /* padding: 2rem; */
+    width: 100%;
+    margin: 0 auto;
+    justify-items: center;
+  }
+
+  /* .pageContent > * {
+    max-width: 1024px;
+  } */
+
+  
+}

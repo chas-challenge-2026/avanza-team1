@@ -1,0 +1,42 @@
+#ifndef HELPERS_H
+#define HELPERS_H
+
+#include "../risk.h"
+
+#include <stdbool.h>
+
+
+/**
+ * @file helpers.h
+ * @brief Validate a price series.
+ * 
+ * @details Checks that the price array is non-null, non-empty and contains only finite positive values.
+ * Minimum series length required by specific calculations are checked by those calculations separately.
+ * 
+ * @param prices Price array to validate.
+ * @param size Number of prices.
+ * 
+ * @return true if all prices are valid, otherwise false.
+ */
+bool valid_price_series(const double prices[], size_t size);
+
+/**
+ * @brief Calculate the mean and sample variance of daily returns.
+ * 
+ * @details Calculates simple daily returns directly from the price series and uses Welford's online algorithm to calculate their mean and sample variance.
+ * Welford's algorithm provides improved numerical stability compared with directly calculating variance from sums.
+ * 
+ * @param prices Price array in chronological order.
+ * @param size Number of prices. Must be at least 3.
+ * @param mean Output mean daily return.
+ * @param variance Output sample variance of daily returns.
+ * 
+ * @pre mean and variance must point to separate writable memory locations.
+ * 
+ * @return RISK_SUCCESS Calculation completed successfully.
+ * @return RISK_INVALID_INPUT if prices, mean or variance is invalid.
+ * @return RISK_INSUFFICIENT_DATA if fewer than 3 valid prices are provided.
+ */
+RiskStatus calculate_return_statistics(const double prices[], size_t size, double *mean, double *variance);
+
+#endif

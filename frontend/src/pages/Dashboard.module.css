@@ -1,0 +1,133 @@
+.dashboardGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+.leftColumn {
+  display: grid;
+  gap: var(--space-medium);
+  width: 100%;
+  padding-top: var(--space-medium);
+}
+
+.allocationAndHoldings {
+  display: grid;
+  gap: var(--space-medium);
+}
+
+.holdingsTabs {
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  height: 100%;
+}
+
+.holdingsTabs > :not(:first-child) {
+  flex-grow: 1;
+}
+
+.allocationPanel {
+  display: grid;
+  align-content: start;
+  gap: var(--space-medium);
+  min-width: 0;
+}
+
+.holdingsTabList {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.holdingsTab {
+  width: 100%;
+  min-width: 0;
+  margin-bottom: -1rem;
+  padding: var(--space-xxsmall) var(--space-xsmall) 1.2rem;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  background: transparent;
+  color: var(--text-color);
+  font-size: 0.8rem;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+
+.holdingsTab[aria-selected="true"] {
+  border: 1px solid var(--light-gray);
+  background-color: var(--light-gray);
+  color: var(--text-color);
+  font-weight: 600;
+}
+
+.holdingsTab:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: -2px;
+}
+
+.holdingsTabPanel :global(table) {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.holdingsTabPanel :global(th) {
+  padding: 0.75rem;
+  border-bottom: 2px solid #e0e0e0;
+  background-color: #f9f9f9;
+  text-align: left;
+  font-weight: 600;
+}
+
+.holdingsTabPanel :global(td) {
+  padding: 0.75rem;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.setAllocationBtn {
+  margin-top: -1.5rem;
+}
+
+.goalAllocationDialog {
+  width: min(90vw, 400px);
+  max-height: 90vh;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  overflow: auto;
+}
+
+.goalAllocationDialog::backdrop {
+  background-color: rgb(0 0 0 / 50%);
+}
+
+.goalAllocationDialogClose {
+  position: absolute;
+  right: 0;
+  padding: var(--space-small) var(--space-small) 0;
+}
+
+.goalAllocationDialog :global(input:disabled) {
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #f5f5f5;
+}
+
+@media (min-width: 768px) {
+  .dashboardGrid {
+    grid-template-columns: 1fr var(--aside-width);
+    gap: clamp(1rem, 5vw, 5rem);
+    width: 100%;
+    max-width: var(--max-width);
+  }
+}
+
+@media (min-width: 1024px) {
+  .allocationAndHoldings {
+    grid-template-columns: minmax(0, 2fr) minmax(320px, 1fr);
+    align-items: start;
+  }
+}
