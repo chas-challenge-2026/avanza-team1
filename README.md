@@ -48,3 +48,8 @@ cd frontend && npm install && npm run dev
 ## Bearbetning av Specialisternas Feed-Forward
 * To be filled later...
 *
+
+Länkar till demo-backup:
+https://drive.google.com/file/d/1iSRV4S1MrRSVSN5F8Nbwjksni0ayd8Sm
+https://drive.google.com/file/d/1eifqneo_NWVMQB18e4OKb3BJFED2-poT
+https://drive.google.com/file/d/1CBVa26ygXk6T8MDEq76ehm_TnVT3vtHe
