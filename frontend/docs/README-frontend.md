@@ -351,6 +351,8 @@ Se [STYLING.md](STYLING.md) för utförligare riktlinjer.
 
 ## Known limitations
 
+JWT token som används för autentiseringen (inloggning av användare) sparas för närvarande i localStorage. Detta är inte ett säkert förfarande utan den borde sparas som en HttpOnly cookie. Tyvärr hann det inte åtgärdas.
+
 Följande områden har medvetet avgränsats från slutleveransen:
 
 - Full integration av historisk data uteblev p.g.a ofullständigt API-kontrakt.
