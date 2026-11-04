@@ -1,21 +1,33 @@
 # Avanza Portföljhälsa
 
-Pedagogisk kodbas för kursen "Java Backend-utveckling med Spring Boot".
-v1 innehåller avsiktliga antipatterns — er uppgift är att refaktorera till v2.
+## Innehållsförteckning
+- [Avanza Portföljhälsa](#avanza-portföljhälsa)
+  - [Innehållsförteckning](#innehållsförteckning)
+  - [Instruktioner från Daniel (ska tas bort senare)](#instruktioner-från-daniel-ska-tas-bort-senare)
+  - [Snabbstart](#snabbstart)
+  - [Mappstruktur](#mappstruktur)
+  - [README för varje enskilt team.](#readme-för-varje-enskilt-team)
+    - [Frontend](#frontend)
+    - [Backend:](#backend)
+    - [Native:](#native)
+  - [Bearbetning av Specialisternas Feed-Forward](#bearbetning-av-specialisternas-feed-forward)
 
-**v2-frontend (React) ligger i [frontend/](frontend/README.md).** Den körs separat från Spring.
+## Instruktioner från Daniel (ska tas bort senare)
+Allt innehåll ska ligga i repot: 
+* README med installation, körning och testning, beslutslogg, teststatus, kända brister och avgränsningar, fallback för demon och en kort beskrivning av hur specialisternas feed forward har bearbetats. 
+* I Canvas lämnar teamet länken till repot 5/11 kl. 15:00.
 
 ## Snabbstart
 
 Backend (v1):
 
 ```bash
-cd infra && docker compose up
+cd infra && docker compose up --build
 ```
 
 Öppna: http://localhost:8082
 
-Frontend (mockad data, ingen Java krävs):
+Frontend:
 
 ```bash
 cd frontend && npm install && npm run dev
@@ -30,48 +42,253 @@ cd frontend && npm install && npm run dev
 
 ## Mappstruktur
 
-```
+```bash
 chas-avanza/
 ├── backend/
-│   └── AvanzaPortal/          ← Spring Boot 2.7 Maven-projekt
+│   └── AvanzaPortal/          ← Spring Boot 3.2 / Java 21 Maven-projekt
 │       ├── pom.xml
 │       ├── Dockerfile
-│       └── src/main/java/se/comerit/avanza/
-│           ├── AvanzaPortalApplication.java
-│           └── controller/
-│               ├── AuthController.java
-│               ├── DashboardController.java
-│               ├── HoldingController.java
-│               └── AlertController.java
-├── frontend/                  ← React 18 + Vite + TypeScript (v2)
-│   └── README.md
-├── infra/
-│   ├── docker-compose.yml
-│   └── seed.sql
+│       └── src/
+│           ├── main/java/se/comerit/avanza/
+│           │   ├── api/
+│           │   │   ├── BacktestLibrary.java
+│           │   │   ├── exception/
+│           │   │   │   └── JnaBridgeException.java
+│           │   │   └── factory/
+│           │   │   │   ├── BacktestinputData.java
+│           │   │   │   └── ManufacturingTestRunner.java
+│           │   ├── AvanzaPortalApplication.java
+│           │   ├── controller/
+│           │   │   ├── AlertController.java
+│           │   │   ├── AllocationController.java
+│           │   │   ├── AuthController.java
+│           │   │   ├── BacktestController.java
+│           │   │   ├── DashboardController.java
+│           │   │   ├── exception/
+│           │   │   │   ├── DataTransferCompleteException.java
+│           │   │   │   └── EndpointReadyException.java
+│           │   │   ├── HoldingController.java
+│           │   │   └── PortfolioRestController.java
+│           │   ├── dto/
+│           │   │   ├── AccountDto.java
+│           │   │   ├── AlertDto.java
+│           │   │   ├── AllocationDto.java
+│           │   │   ├── AuthResponse.java
+│           │   │   ├── BacktestMetricsDto.java
+│           │   │   ├── CreateHoldingRequest.java
+│           │   │   ├── FxDto.java
+│           │   │   ├── HoldingDto.java
+│           │   │   ├── LoginRequest.java
+│           │   │   ├── PortfolioResponse.java
+│           │   │   ├── UpdateAllocationRequest.java
+│           │   │   └── UserDto.java
+│           │   ├── entity/
+│           │   │   ├── Account.java
+│           │   │   ├── Alert.java
+│           │   │   ├── AssetCategory.java
+│           │   │   ├── Holding.java
+│           │   │   ├── TargetAllocation.java
+│           │   │   └── User.java
+│           │   ├── repository/
+│           │   │   ├── AccountRepository.java
+│           │   │   ├── AlertRepository.java
+│           │   │   ├── HoldingRepository.java
+│           │   │   ├── TargetAllocationRepository.java
+│           │   │   └── UserRepository.java
+│           │   ├── security/
+│           │   │   ├── JwtAuthenticationFilter.java
+│           │   │   ├── JwtService.java
+│           │   │   ├── PasswordEncoderConfig.java
+│           │   │   └── SecurityConfig.java
+│           │   └── service/               ← Påbörjad utflyttning av affärslogik
+│           │       ├── AlertService.java
+│           │       ├── AllocationService.java
+│           │       ├── AuthService.java
+│           │       ├── BacktestService.java
+│           │       ├── HoldingService.java
+│           │       └── PortfolioService.java
+│           └── main/resources/
+│           │   ├── db/
+│           │   │   └── migration/
+│           │   │   │   ├── V1_init.sql
+│           │   │   │   ├── V2_add_bcrypt_column.sql
+│           │   │   │   ├── V3_migrate_users_to_bcrypt.sql
+│           │   │   │   └── V4_add_asset_category.sql
+│           │   ├── static/
+│           │   │   └── images/
+│           │   │   │   └── logo.png
+│           │   │   └── style.css
+│           │   └── templates/
+│           │       ├── alerts.html
+│           │       ├── dashboard.html
+│           │       ├── holdings.html
+│           │       ├── layout.html
+│           │       └── login.html
+│           └── test/java/se/comerit/avanza/service/
+│               └── PortfolioServiceTest.java
 ├── docs/
+│   ├── frontend/
+│   │   ├── BESLUT.md
+│   │   ├── BIDRAG.md
+│   │   └── README.md
 │   ├── architecture.md        ← Systembeskrivning
 │   ├── known-bugs.md          ← Kända fel (er uppgiftslista)
 │   ├── README-pain-points.md  ← Vad som spricker vid skala
 │   └── v2-targets.md          ← Målarkitektur för v2
-└── native/
-    └── README.md              ← Planerade C/C++-moduler för v2
+├── DRIFT.md                   ← Drift, deploy och plattformskontrakt
+├── frontend/                  ← React 18 + Vite + TypeScript (v2)
+│   ├── .env.development
+│   ├── .gitignore
+│   ├── eslint.config.js
+│   ├── index.html
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── README.md
+│   ├── STYLING.md
+│   ├── tsconfig.app.json
+│   ├── tsconfig.json
+│   ├── tsconfig.node.json
+│   ├── vite.config.ts
+│   └── src/
+│       ├── main.tsx
+│       ├── api/
+│       │   ├──adapters/
+│       │   │   ├── httpPortfolioApi.ts
+│       │   │   └── mockPortfolioApi.ts
+│       │   ├── httpClient.test.ts
+│       │   ├── httpClient.ts
+│       │   └── portfolioApi.ts
+│       ├── App.css
+│       ├── App.tsx
+│       ├── assets/
+│       │   ├── logo_bars.svg
+│       │   ├── logo.png
+│       │   └── logo.webp
+│       ├── auth/
+│       │   ├── auth.test.ts
+│       │   ├── auth.ts
+│       │   ├── authContext.ts
+│       │   ├── AuthProvider.tsx
+│       │   └── useAuth.ts
+│       ├── components/
+│       │   └── Dashboard/
+│       │   │   ├── AccountsTable.module.css
+│       │   │   ├── AccountsTable.tsx
+│       │   │   ├── AllocationPieChart.module.css
+│       │   │   ├── AllocationPieChart.tsx
+│       │   │   ├── AssetAllocation.module.css
+│       │   │   ├── AssetAllocation.tsx
+│       │   │   ├── GoalAllocation.module.css
+│       │   │   ├── GoalAllocation.test.tsx
+│       │   │   ├── GoalAllocation.tsx
+│       │   │   ├── HistoryChart.module.css
+│       │   │   ├── HistoryChart.tsx
+│       │   │   ├── HoldingsTable.module.css
+│       │   │   ├── HoldingsTable.tsx
+│       │   │   ├── InfoAside.module.css
+│       │   │   ├── InfoAside.tsx
+│       │   │   ├── NoticesEmpty.module.css
+│       │   │   ├── NoticesEmpty.tsx
+│       │   │   ├── PageHeader.module.css
+│       │   │   ├── PageHeader.tsx
+│       │   │   ├── SmallHoldingsTable.module.css
+│       │   │   ├── SmallHoldingsTable.tsx
+│       │   │   ├── WarningBanner.module.css
+│       │   │   └── WarningBanner.tsx
+│       │   └── Topbar/
+│       │   │   ├── HamburgerMenu.module.css
+│       │   │   ├── HamburgerMenu.tsx
+│       │   │   ├── Topbar.module.css
+│       │   │   └── Topbar.tsx
+│       │   ├── MockModeBanner.test.tsx
+│       │   ├── MockModeBanner.tsx
+│       │   ├── Panel.module.css
+│       │   ├── Panel.test.tsx
+│       │   ├── Panel.tsx
+│       │   └── ProtectedRoute.tsx
+│       ├── data/
+│       │   └── portfolio.json              ← Mockad portföljdata
+│       ├── hooks/
+│       │   ├── useHistories.ts
+│       │   ├── useHistory.ts
+│       │   ├── usePortfolio.ts
+│       │   └── useSaveAllocation.ts
+│       ├── index.css
+│       ├── lib/
+│       │   ├── drift.test.ts
+│       │   ├── drift.ts
+│       │   └── targetAllocation.ts
+│       ├── main.tsx
+│       ├── pages/
+│       │   ├── Alerts.tsx
+│       │   ├── Holdings.module.css
+│       │   ├── Holdings.tsx
+│       │   ├── Login.errors.test.tsx
+│       │   ├── Login.module.css
+│       │   ├── Login.test.tsx
+│       │   ├── Login.tsx
+│       │   ├── Portfolio.css
+│       │   └── Portfolio.tsx
+│       ├── test/
+│       │   └── setup.ts
+│       ├── types/
+│       │   ├── auth.ts
+│       │   ├── history.ts
+│       │   └── portfolio.ts
+│       └── vite-env.d.ts
+├── infra/
+│   ├── docker-compose.override.yml
+│   ├── docker-compose.yml
+│   └── seed.sql
+├── native/
+│   ├── backtest/
+│   │   ├── tests/
+│   │   │   ├── testing_file.cpp
+│   │   │   └── tests.cpp
+│   │   ├── backtest.cpp
+│   │   ├── backtest.hpp
+│   │   ├── CMakeLists.txt
+│   ├── docs/
+│   │   ├── v1-info/
+│   │   │   └── README.md ← Start-infon för Native modulen (v1).
+│   │   ├── BESLUT.md
+│   │   ├── BIDRAG.md
+│   │   ├── README.md ← Natives main README
+│   ├── fx/
+│   │   ├── test/
+│   │   │   └── test_fx.cpp
+│   │   ├── fx.cpp
+│   │   ├── fx.hpp
+│   ├── logger/
+│   │   ├── test/
+│   │   │   └── test_logger.cpp
+│   │   ├── logger.cpp
+│   │   └── logger.hpp
+│   ├── risk/
+│   │   ├── helpers/
+│   │   │   ├── helpers.c
+│   │   │   └── helpers.h
+│   │   ├── tests/
+│   │   │   └── test_risk.c
+│   │   ├── risk.c
+│   │   └── risk.h
+│   └── .gitignore
+├── .gitignore
+└── README.md ← Huvud-README för hela projektet, länkar till teamens individuella README's
 ```
 
-## Kända problem
+## README för varje enskilt team.
+* I följande dokument går vi igenom på djupet kring varje dels funktionalitet, körning, tester och teststatus, beslutsloggar, kända brister och avgränsningar. Bredvid länkarna framgår det huruvida dokumentationen är på svenska eller engelska.
+ 
+### Frontend
+https://github.com/chas-challenge-2026/avanza-team1/blob/develop/docs/frontend/README.md ← All dokumentation på svenska.
+ 
+### Backend: 
+https://github.com/chas-challenge-2026/avanza-team1/blob/Java-Development-Environment/backend/docs/README.md ← All dokumentation på svenska.
 
-Se [`docs/known-bugs.md`](docs/known-bugs.md) för fullständig lista. Höjdpunkter:
+### Native: 
+https://github.com/chas-challenge-2026/avanza-team1/blob/develop/native/docs/README.md ← README skriven på engelska enligt branchstandard, medans BIDRAG och BESLUT är skrivet på svenska.
 
-- **SQL-injektion** i login-formuläret (`AuthController.java`)
-- **MD5-lösenord** utan salt
-- **IDOR** — valfri inloggad användare kan ta bort andras innehav
-- **Hårdkodad FX-kurs** USD/SEK = 10.45 (tre ställen i koden)
-- **Inkonsekvent drifttröskel** — 5% i dashboard, 7% i notissidan
-- **Ingen pagination** — alla innehav laddas till minnet varje request
-- **Affärslogik direkt i controllers** — inget servicelager
-
-## Vad ska ni bygga
-
-Se [`docs/v2-targets.md`](docs/v2-targets.md) för fullständig kravspec och acceptanskriterier.
-
-Sammanfattning: Spring Boot 3.2, Java 21, Spring Data JPA, Flyway, Spring Security + JWT,
-React 18-frontend, och minst ett nativt C/C++-riskmått via JNA.
+## Bearbetning av Specialisternas Feed-Forward
+* To be filled later...
+* 
