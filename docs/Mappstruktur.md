@@ -85,24 +85,23 @@ chas-avanza/
 │           └── test/java/se/comerit/avanza/service/
 │               └── PortfolioServiceTest.java
 ├── docs/
-│   ├── frontend/
-│   │   ├── BESLUT.md
-│   │   ├── BIDRAG.md
-│   │   └── README.md
+│   ├── DRIFT.md               ← Drift, deploy och plattformskontrakt
 │   ├── architecture.md        ← Systembeskrivning
 │   ├── known-bugs.md          ← Kända fel (er uppgiftslista)
 │   ├── README-pain-points.md  ← Vad som spricker vid skala
 │   └── v2-targets.md          ← Målarkitektur för v2
-├── DRIFT.md                   ← Drift, deploy och plattformskontrakt
 ├── frontend/                  ← React 18 + Vite + TypeScript (v2)
 │   ├── .env.development
 │   ├── .gitignore
 │   ├── eslint.config.js
 │   ├── index.html
 │   ├── package-lock.json
+│   ├── docs/
+│   │   ├── BESLUT-frontend.md
+│   │   ├── BIDRAG-frontend.md
+│   │   ├── README-frontend.md
+│   │   └── STYLING.md
 │   ├── package.json
-│   ├── README.md
-│   ├── STYLING.md
 │   ├── tsconfig.app.json
 │   ├── tsconfig.json
 │   ├── tsconfig.node.json

@@ -1,5 +1,5 @@
 # =====================================================================
-# PLATTFORMSFIL: ändra denna fil med försiktighet. Se DRIFT.md.
+# PLATTFORMSFIL: ändra denna fil med försiktighet. Se docs/DRIFT.md.
 # Er deploy-miljö (stage/prod) kräver att:
 #   1. filen ligger kvar som infra/docker-compose.yml
 #   2. webbtjänsten heter "app"
