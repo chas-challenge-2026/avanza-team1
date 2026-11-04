@@ -35,19 +35,20 @@ cd frontend && npm install && npm run dev
 - `erik@example.com` / `password123`
 
 ## Mappstruktur
-* Link to the other file will be placed here...
+* Vi valde att lägga detta som ett separat dokument:
+[Mappstruktur](docs/Mappstruktur.md)
 
 ## README för varje enskilt team.
 * I följande dokument går vi igenom på djupet kring varje dels funktionalitet, körning, tester och teststatus, beslutsloggar, kända brister och avgränsningar. Bredvid länkarna framgår det huruvida dokumentationen är på svenska eller engelska.
  
-### Frontend
-https://github.com/chas-challenge-2026/avanza-team1/blob/develop/docs/frontend/README.md ← All dokumentation på svenska.
+### Frontend:
+[Frontend README](docs/frontend/README.md) ← All dokumentation på svenska.
  
 ### Backend: 
-https://github.com/chas-challenge-2026/avanza-team1/blob/Java-Development-Environment/backend/docs/README.md ← All dokumentation på svenska.
+[Backend README](backend/docs/README.md) ← All dokumentation på svenska.
 
 ### Native: 
-https://github.com/chas-challenge-2026/avanza-team1/blob/develop/native/docs/README.md ← README skriven på engelska enligt branchstandard, medans BIDRAG och BESLUT är skrivet på svenska.
+[Native README](native/docs/README.md) ← README skriven på engelska enligt branchstandard, medans BIDRAG och BESLUT är skrivet på svenska.
 
 ## Bearbetning av Specialisternas Feed-Forward
 * To be filled later...
