@@ -40,7 +40,7 @@ cd frontend && npm install && npm run dev
  
 [Frontend README](docs/frontend/README.md) ← All dokumentation på svenska.
 [Backend README](backend/docs/README.md) ← All dokumentation på svenska.
-[Native README](native/docs/README_Native.md) ← README skriven på engelska enligt branchstandard, medans BIDRAG och BESLUT är skrivet på svenska.
+[Native README](native/docs/README_NATIVE.md) ← README skriven på engelska enligt branchstandard, medans BIDRAG och BESLUT är skrivet på svenska.
 
 ## Bearbetning av Specialisternas Feed-Forward
 * To be filled later...
