@@ -55,11 +55,11 @@ public class HoldingController {
                              Model model) {
 
         // Read userId from SecurityContext (v2)
-        String userId = (String) SecurityContextHolder.getContext()
-                .getAuthentication()
-                .getPrincipal();
+        // String userId = (String) SecurityContextHolder.getContext()
+        //         .getAuthentication()
+        //         .getPrincipal();
 
-        Long uid = Long.valueOf(userId);
+        // Long uid = Long.valueOf(userId);
 
         // Add holding (userId not needed here yet, but available if needed later)
         holdingService.addHolding(accountId, ticker, instrumentName, quantity, avgBuyPrice, currency, assetCategory);

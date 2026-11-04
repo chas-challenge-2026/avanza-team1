@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 import se.comerit.avanza.dto.PortfolioResponse;
 import se.comerit.avanza.service.PortfolioService;
 
-import java.util.Map;
+// import java.util.Map;
 
 /**
  * REST controller for portfolio data.

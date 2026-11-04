@@ -2,7 +2,7 @@ package se.comerit.avanza.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import se.comerit.avanza.dto.AllocationDto;
+// import se.comerit.avanza.dto.AllocationDto;
 import se.comerit.avanza.dto.UpdateAllocationRequest;
 import se.comerit.avanza.entity.AssetCategory;
 import se.comerit.avanza.entity.TargetAllocation;
