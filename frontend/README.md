@@ -1,51 +1,53 @@
 # Avanza Frontend
 
-The frontend is a React 18 single-page application built with Vite and TypeScript. It is maintained separately from the Spring Boot backend.
+Frontendapplikationen för **Avanza Portföljhälsa v2** är utvecklad med React 18, TypeScript och Vite. Den underhålls separat från Spring Boot-backend.
 
 ## Environment
 
-Required tools:
+### Required tools
 
-- Node.js 22 LTS or newer
+- Node.js 22 LTS eller senare
 - npm
 
-Main frontend technologies:
+### Main frontend technologies
 
 - React 18
 - TypeScript
 - Vite
 - TanStack Query
+- React Router
+- Recharts
+- CSS Modules
+- Vitest och React Testing Library
 
-All frontend commands in this document must be run from the `frontend/` directory.
+Alla kommandon nedan körs från katalogen `frontend/`, om inget annat anges.
 
 ## Install dependencies
 
-From the repository root:
+Från repositoryts rot:
 
 ```powershell
 cd frontend
 npm install
 ```
 
-Run this again after pulling changes that modify `package.json` or `package-lock.json`.
+Kör `npm install` igen efter ändringar i `package.json` eller `package-lock.json`.
 
 ## Start the Vite development server
-
-From `frontend/`:
 
 ```powershell
 npm run dev
 ```
 
-Open the local URL printed by Vite, normally:
+Utvecklingsservern startas normalt på:
 
 ```text
 http://localhost:5173
 ```
 
-The development server supports hot module replacement. Keep it running while making UI changes and refresh the browser if the page does not update automatically.
+Vite stöder Hot Module Replacement, vilket gör att ändringar normalt visas direkt i webbläsaren.
 
-To make the server available to other devices on the local network:
+För att göra servern tillgänglig på det lokala nätverket:
 
 ```powershell
 npm run dev -- --host
@@ -53,114 +55,344 @@ npm run dev -- --host
 
 ## Build and preview the production bundle
 
-Build the frontend first:
+Bygg frontenden:
 
 ```powershell
 npm run build
 ```
 
-This runs the TypeScript check and creates the production bundle in `dist/`.
+Kommandot kontrollerar TypeScript och skapar produktionsfilerna i `dist/`.
 
-Preview that bundle locally:
+Förhandsgranska produktionsbygget:
 
 ```powershell
 npm run preview
 ```
 
-Open the URL printed by Vite, normally:
+Öppna normalt:
 
 ```text
 http://localhost:4173
 ```
 
-The preview server is useful for checking the built output before deployment. It is not the development server and does not replace the Spring Boot backend.
+Preview-servern ersätter inte Spring Boot-backend.
 
-## Visual testing workflow
-
-1. Start the development server with `npm run dev`.
-2. Open the Vite URL in a browser.
-3. Check the main views at both desktop and mobile viewport sizes.
-4. Test navigation, loading states, empty states, error states, forms, and interactive controls.
-5. Use `npm run build` to confirm the UI also compiles as a production bundle.
-6. Use `npm run preview` to inspect the production bundle locally.
-
-When the frontend calls the backend API, start the backend infrastructure separately according to the repository documentation in `../DRIFT.md`. The Vite server and Spring Boot server are separate processes.
+För mer information om drift och backendmiljö, se [DRIFT.md](../DRIFT.md).
 
 ## Available npm scripts
 
-| Command           | Purpose                                    |
-| ----------------- | ------------------------------------------ |
-| `npm run dev`     | Start the Vite development server          |
-| `npm run build`   | Type-check and build the production bundle |
-| `npm run preview` | Serve the production bundle locally        |
-| `npm run lint`    | Run ESLint                                 |
-| `npm run test`    | Run unit/component tests with Vitest       |
+| Kommando | Funktion |
+|---|---|
+| `npm run dev` | Startar utvecklingsservern |
+| `npm run build` | Kör TypeScript-kontroll och bygger applikationen |
+| `npm run preview` | Förhandsgranskar produktionsbygget |
+| `npm run lint` | Kontrollerar kodstandard |
+| `npm run test` | Kör automatiserade tester med Vitest |
 
----
+## Architecture
 
-## Mock portfolio data
+Frontenden är uppdelad i återanvändbara komponenter, sidor, hooks och ett separat API-lager.
 
-The UI reads the portfolio through `src/api/portfolioApi.ts`.
-The default adapter returns `src/data/portfolio.json`.
-Setting `VITE_USE_MOCK=false` selects the backend portfolio adapter.
-Change numbers in the JSON, not in the components.
+| Katalog | Ansvar |
+|---|---|
+| `src/pages/` | Applikationens sidor |
+| `src/components/` | Återanvändbara UI-komponenter |
+| `src/hooks/` | Datahämtning och återanvändbar logik |
+| `src/api/` | API-klient, kontrakt och adapters |
+| `src/auth/` | Autentiseringsfunktionalitet |
+| `src/types/` | TypeScript-typer |
+| `src/lib/` | Beräkningslogik och hjälpfunktioner |
+| `src/data/` | Lokal exempeldata |
+
+## Frontend component structure
+
+The diagram shows the application shell and route components, their main UI
+children, and the shared authentication and portfolio data layers.
+
+```mermaid
+flowchart TD
+    main[main.tsx] --> QueryProvider[QueryClientProvider]
+    QueryProvider --> Router[BrowserRouter]
+    Router --> AuthProvider[AuthProvider]
+    AuthProvider --> App[App]
+
+    App --> MockBanner[MockModeBanner]
+    App -->|authenticated| Topbar[Topbar]
+    App --> Routes[Routes]
+    Routes --> Login[Login]
+    Routes --> Protected[ProtectedRoute]
+    Protected --> Dashboard[Dashboard / Portfolio]
+    Protected --> Holdings[Holdings]
+    Protected --> Alerts[Alerts]
+
+    Topbar --> Hamburger[HamburgerMenu]
+    Dashboard --> DashComponents["PageHeader · WarningBanner · InfoAside"]
+    Dashboard --> Allocation["AssetAllocation · SetTargetAllocation"]
+    Dashboard --> HoldingsSummary["AccountsTable · SmallHoldingsTable"]
+    Dashboard --> Drift["DriftInterpretationPanel · NoticesEmpty"]
+    Holdings --> HistoryChart[HistoryChart]
+    Holdings --> HoldingsTable[HoldingsTable]
+
+    Login -. useAuth .-> AuthProvider
+    Topbar -. useAuth .-> AuthProvider
+    Protected -. useAuth .-> AuthProvider
+    Dashboard -. data hooks .-> DataHooks["usePortfolio · useHistory · useHistories"]
+    Holdings -. data hooks .-> DataHooks
+    DataHooks --> PortfolioApi[portfolioApi]
+    Dashboard -. save target .-> SaveHook[useSaveAllocation]
+    SaveHook --> PortfolioApi
+    PortfolioApi --> MockAdapter[mockPortfolioApi]
+    PortfolioApi --> HttpAdapter[httpPortfolioApi]
+```
+
+TanStack Query används för asynkron datahantering.
+
+API-lagret är utformat för att separera gränssnittet från datakällorna. Det har gjort det möjligt att utveckla frontend parallellt med backend.
+
+Arkitekturella vägval dokumenteras i [BESLUT.md](../docs/frontend/BESLUT.md).
+
+## Implemented functionality
+
+Frontendkoden innehåller följande funktioner:
+
+| Funktion | Beskrivning |
+|---|---|
+| Portföljöversikt | Visar portföljvärde, konton och tillgångsfördelning |
+| Målallokering | Användaren kan ange önskad fördelning mellan olika tillgångskategorier |
+| Driftberäkning | Beräknar avvikelsen mellan faktisk och önskad allokering |
+| Driftvarning | Visar information när avvikelsen överstiger definierad tröskel |
+| Innehav | Visar portföljens innehav |
+| Historik | Komponenter för visualisering av värdeutveckling |
+| Hjälpinformation | Förklarar riskallokering och närliggande begrepp |
+| Navigation | Sidnavigering och meny för mindre skärmar |
+| Autentisering | Inloggningsflöde och skyddade routes |
+
+Tabellen beskriver funktionalitet i frontendkoden och innebär inte att alla flöden är verifierade mot backend.
+
+## Portfolio data
+
+Portföljdata hanteras genom `src/api/portfolioApi.ts`.
+
+Kodbasen innehåller två adapters:
+
+- `mockPortfolioApi` – använder lokal exempeldata.
+- `httpPortfolioApi` – använder HTTP-anrop mot backend.
+
+Lokal portföljdata finns i:
+
+```text
+src/data/portfolio.json
+```
+
+Miljövariabeln `VITE_USE_MOCK` väljer vilken adapter som används.
+
+Denna konfiguration finns kvar som en del av kodbasen, men teamet planerar inte något nytt demoläge inför slutleveransen.
 
 ## Authentication mode
 
-Authentication is explicitly controlled through `VITE_USE_MOCK`
-in `frontend/.env.development`.
+Autentisering styrs av `VITE_USE_MOCK` i `frontend/.env.development`.
 
-| Value | Behavior |
+| Värde | Beteende |
 |---|---|
-| `true` | Uses mock authentication |
-| `false` | Uses the backend authentication API |
-| Missing or invalid | Throws a configuration error |
+| `true` | Använder lokal mockautentisering |
+| `false` | Använder backendens autentiserings-API |
+| Saknat eller ogiltigt | Ger ett konfigurationsfel |
 
-Example for demo mode:
-
-```env
-VITE_USE_MOCK=true
-```
-
-Example for backend mode:
+Exempel på backendkonfiguration:
 
 ```env
 VITE_USE_MOCK=false
 VITE_API_BASE_URL=http://localhost:8082
 ```
 
-Mock mode uses predefined test accounts and displays a visible
-"Demoläge aktivt" notice. Authentication is simulated in this mode.
+Backendläget skickar inloggningsanrop till `/api/auth/login`.
 
-Backend mode sends login requests to `/api/auth/login`.
-Backend failures display an error instead of falling back to mock users.
+Backendfel ska inte automatiskt leda till att mockautentisering aktiveras.
 
-`VITE_USE_MOCK` also controls the portfolio data adapter.
-Switching to backend mode therefore affects both authentication
-and portfolio requests.
+Observera att `VITE_USE_MOCK` påverkar både autentisering och portföljdata.
 
-Restart `npm run dev` after modifying environment variables.
+Starta om utvecklingsservern efter ändringar i miljövariablerna.
 
-For automated tests, authentication mode is configured separately
-in `vite.config.ts`.
+För automatiserade tester konfigureras autentiseringsläget separat i `vite.config.ts`.
 
 ## Scope (current)
 
-- No live FX
-- The pension account exists but has 0 SEK
-- Drift is computed in the UI (`src/lib/drift.ts`): `|actual − target| > thresholdPct` (5% in the mock). The JSON flag is not the source of truth for the banner.
+- Ingen live-FX-funktion i frontendens dokumenterade flöde.
+- Pensionskontot i lokal exempeldata har värdet 0 SEK.
+- Drift beräknas i frontend via `src/lib/drift.ts`.
+- Drifttröskeln är 5 % i lokal exempeldata.
+- Den förberäknade JSON-flaggan används inte som källa för driftvarningen.
 
-## Test status (#24)
+Drift beräknas enligt:
 
-| What                 | How                                    | Result             |
-| -------------------- | -------------------------------------- | ------------------ |
-| Type contracts       | `npx tsc -b` in `frontend/`            | Passed 2026-09-02  |
-| JSON shape           | Manual review against issue #24        | Passed             |
-| Automated unit tests | `npm run test` (Vitest + RTL), see #87 | Smoke test passing |
+```text
+|actual − target| > thresholdPct
+```
 
----
+## Customer feed forward
 
-## Team log
+Efter kunddemonstrationen fick teamet återkoppling om hur lösningen kunde förbättras.
 
-Decisions, AI use, and individual contributions:
-[docs/frontend/](../docs/frontend/).
+Återkopplingen sammanställdes i en omtagsplan som låg till grund för prioriteringen inför slutleveransen.
+
+### Förståelse för portföljinformationen
+
+Kunden efterfrågade tydligare förklaringar av:
+
+- Målallokering.
+- Skillnaden mellan aktiers och fonders risknivåer.
+- Riskspridning och dess praktiska betydelse.
+- Rebalansering.
+
+Frontendteamet prioriterade pedagogiskt innehåll och hjälpinformation i gränssnittet.
+
+Komponenten `InfoAside` innehåller information om riskallokering. Den slutliga omfattningen av övriga förklaringar behöver kontrolleras mot omtagsplanen.
+
+### Förbättrat modalbeteende
+
+Kunden efterfrågade att användaren skulle kunna stänga målallokeringsmodalen genom att klicka utanför den.
+
+Modalen skulle även stängas automatiskt när användaren sparat sitt mål.
+
+Båda beteendena finns implementerade i `Dashboard.tsx`.
+
+Modalen stängs efter ett lyckat sparande. Beteendet behöver funktionstestas i slutversionen.
+
+### Tydligare datakällor
+
+Kunden efterfrågade information om var extern data hämtas från.
+
+Det ska framgå vilka uppgifter som hämtas externt och vilka som kommer från lokal exempeldata eller beräkningar i frontend.
+
+Faktiska datakällor och eventuell kvarstående begränsning behöver redovisas vid överlämningen.
+
+## Integration and delivery scope
+
+Frontendteamet har utvecklat ett API-lager för kommunikation med backend.
+
+HTTP-adaptern innehåller bland annat anrop för:
+
+- Portföljinformation.
+- Historik.
+- Målallokering.
+- Autentisering.
+
+Alla dessa flöden är inte nödvändigtvis fullständigt verifierade mot backend.
+
+### Decision: No further backend integration
+
+Inför slutleveransen beslutade teamet att inte genomföra ytterligare backendberoende integrationer.
+
+Backendteamet har avslutat sitt utvecklingsarbete och ytterligare integration skulle medföra beroenden som inte kan hanteras inom återstående projekttid.
+
+Frontendteamet fokuserar därför på:
+
+- Verifiering av befintlig funktionalitet.
+- Testning och kvalitetssäkring.
+- Dokumentation av implementationen.
+- Redovisning av kända begränsningar.
+- Överlämning av kod och tekniska beslut.
+
+Ofullständiga integrationer dokumenteras som kvarstående arbete.
+
+Beslutets motivering och konsekvenser ska även dokumenteras i [BESLUT.md](../docs/frontend/BESLUT.md).
+
+## Testing
+
+Frontendteamet använder Vitest, React Testing Library och jsdom.
+
+Tester finns bland annat för:
+
+- Autentiseringslogik.
+- Inloggningsformulär.
+- Målallokering.
+- Driftberäkning.
+- Utvalda UI-komponenter.
+
+En GitHub Actions-workflow kör lint, tester och build vid pull requests mot `develop`.
+
+### Previously documented test results
+
+| Kontroll | Tidigare dokumenterat resultat |
+|---|---|
+| TypeScript-kontrakt | Godkänt 2026-09-02 |
+| JSON-struktur | Manuellt kontrollerad mot issue #24 |
+| Ursprungligt smoke-test | Dokumenterat som godkänt |
+
+Dessa resultat avser tidigare testtillfällen och ska inte förväxlas med en verifiering av den slutliga versionen.
+
+### Final verification
+
+Före överlämningen ska tillgängliga tester köras och resultaten dokumenteras.
+
+Rekommenderade kommandon:
+
+```powershell
+npm run lint
+npm run test
+npm run build
+```
+
+Manuell verifiering bör också omfatta navigation, målallokering, modalbeteende, felhantering och tillgänglighet.
+
+Funktioner som inte kan verifieras mot backend ska redovisas som ej verifierade.
+
+## Design system and styling
+
+Frontenden använder globala CSS-filer och komponentspecifika CSS Modules.
+
+- `src/index.css` innehåller globala stilar, resets och variabler.
+- `src/App.css` hanterar applikationens övergripande layout.
+- Komponentspecifika CSS-filer placeras tillsammans med respektive komponent.
+
+Dokumenterad namngivningskonvention är `camelCase` för CSS-klasser och identifierare.
+
+Se [STYLING.md](STYLING.md) för utförligare riktlinjer.
+
+## Known limitations
+
+Följande områden har medvetet avgränsats från slutleveransen:
+
+- Ytterligare backendintegration.
+- Analys av hur utländska valutor påverkar hela portföljen.
+- Fullständig anpassning till mycket små mobilskärmar.
+- Native-baserad backtesting i frontend.
+- Individuella native-riskvärden per aktie.
+- Avancerade strategijämförelser.
+
+Fortsatt utveckling kan även krävas för historik-API, sessionshantering och ytterligare integrationsverifiering.
+
+Dessa avgränsningar är en del av teamets prioriteringsbeslut och dokumenteras för att underlätta fortsatt utveckling.
+
+## Team decisions and contributions
+
+Frontendteamet har dokumenterat tekniska beslut och individuella bidrag under projektets gång.
+
+| Dokument | Innehåll |
+|---|---|
+| [BESLUT.md](../docs/frontend/BESLUT.md) | Tekniska beslut, motiveringar och avgränsningar |
+| [BIDRAG.md](../docs/frontend/BIDRAG.md) | Individuella bidrag, AI-användning och koppling till issues/PR |
+| [Frontend-dokumentation](../docs/frontend/README.md) | Översikt över dokumentationsstrukturen |
+| [STYLING.md](STYLING.md) | Stylingregler och komponentkonventioner |
+
+Beslutsloggen omfattar bland annat CSS-struktur, datahantering, API-adaptrar, driftberäkning, autentisering och testverktyg.
+
+För varje nytt betydande tekniskt beslut dokumenteras beslut, motivering, avgränsning och konsekvens.
+
+## Handover
+
+Frontendteamets slutleverans omfattar befintlig implementation, dokumentation, beslut och tillgängliga testunderlag.
+
+Efter kundens feed forward har teamet prioriterat förbättrad begriplighet, användarvänlighet och kvalitetssäkring.
+
+Eftersom backendteamet avslutat sitt arbete genomför frontendteamet inga ytterligare backendberoende integrationer.
+
+Syftet med överlämningen är att nästa utvecklare eller team ska kunna:
+
+- Installera och köra frontendprojektet.
+- Förstå applikationens arkitektur och komponentstruktur.
+- Följa tidigare tekniska beslut.
+- Se vad som implementerats och verifierats.
+- Identifiera kvarstående begränsningar och möjliga nästa utvecklingssteg.
+
+För projektets övergripande dokumentation, se [README i repositoryts rot](../README.md).

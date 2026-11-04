@@ -7,15 +7,21 @@
   border-bottom: 2px solid var(--light-gray);
 }
 .table th {
-  padding: var(--space-small);
+  background: var(--background);
+  padding: var(--space-small) 0;
   font-weight: 600;
   color: #666;
 }
 
 .table td {
-  padding: var(--space-small);
+  padding: var(--space-small) 0;
   border-bottom: 1px solid #ddd;
 }
+
+.table th:first-child, .table td:first-child {
+  padding-left: var(--space-small);
+}
+
 .ticker {
   color: var(--primary-color);
   font-weight: 500;

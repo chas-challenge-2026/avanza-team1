@@ -1,19 +1,19 @@
 import { useState, useEffect } from "react";
 import Panel from "../Panel";
-import styles from "./GoalAllocation.module.css";
+import styles from "./SetTargetAllocation.module.css";
 import { useSaveAllocation } from "../../hooks/useSaveAllocation";
 
-interface GoalAllocationProps {
+interface SetTargetAllocationProps {
   targetAktierPct: number;
   targetStabiltPct: number;
   onTargetSaved: (equities: number, funds: number) => void;
 }
 
-function GoalAllocation({
+function SetTargetAllocation({
   targetAktierPct,
   targetStabiltPct,
   onTargetSaved,
-}: GoalAllocationProps): JSX.Element {
+}: SetTargetAllocationProps): JSX.Element {
   const [equities, setEquities] = useState(targetAktierPct);
   const [funds, setFunds] = useState(targetStabiltPct);
   const [saved, setSaved] = useState(false);
@@ -105,4 +105,4 @@ function GoalAllocation({
   );
 }
 
-export default GoalAllocation;
+export default SetTargetAllocation;

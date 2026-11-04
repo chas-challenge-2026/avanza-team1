@@ -5,22 +5,18 @@
   /* padding: 1rem; */
 }
 
-.table th {
-  background-color: #f0f0f0;
-}
-
 .labelInfo {
   background-color: #17a2b8;
 }
 
 /* Make drift warnings more visible */
-tr.danger td {
+/* tr.danger td {
   color: #721c24;
 }
 
 tr.success td {
   color: #155724;
-}
+} */
 
 /* Mock mode indicator */
 .mockModeBanner {
@@ -41,14 +37,6 @@ tr.success td {
   display: flex;
   flex-direction: column;
   min-height: 100dvh;
-}
-
-.appShell .pageContent {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  min-height: 0;
-  height: auto;
 }
 
 /* Media queries */

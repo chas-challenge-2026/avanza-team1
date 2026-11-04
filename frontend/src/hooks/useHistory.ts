@@ -3,7 +3,7 @@ import { portfolioApi } from "../api/portfolioApi";
 import type { HistoryRange, HistorySeries } from "../types/history";
 
 interface UseHistoryParams {
-  key: string;
+  ticker: string;
   range: HistoryRange;
 }
 
@@ -14,12 +14,12 @@ export interface UseHistoryResult {
   isError: boolean;
 }
 
-export function useHistory({ key, range }: UseHistoryParams): UseHistoryResult {
+export function useHistory({ ticker, range }: UseHistoryParams): UseHistoryResult {
   const query = useQuery<HistorySeries>({
-    queryKey: ["history", key, range],
-    queryFn: ({ signal }) => portfolioApi.getHistory({ key, range }, signal),
+    queryKey: ["history", ticker, range],
+    queryFn: ({ signal }) => portfolioApi.getHistory({ ticker, range }, signal),
     placeholderData: keepPreviousData,
-    enabled: Boolean(key),
+    enabled: Boolean(ticker),
   });
 
   return {

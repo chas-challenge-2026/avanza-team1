@@ -8,8 +8,8 @@ interface AssetAllocationProps {
 function AssetAllocation({ allocation }: AssetAllocationProps): JSX.Element {
   return (
     <>
-      <h2>Din riskallokering</h2>
       <div className={styles.container}>
+      <h2>Din riskallokering</h2>
       <p>Hela portföljens fördelning av riskbetonade / stabila innehav</p>
       {/* Chart colors explained */}
       <div className={styles.colorExplanation}>

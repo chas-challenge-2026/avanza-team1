@@ -31,7 +31,7 @@ services:
   app:
     build:
       context: ..
-      dockerfile: /backend/AvanzaPortal/Dockerfile
+      dockerfile: backend/AvanzaPortal/Dockerfile
     expose:
       - "8082"
     environment:

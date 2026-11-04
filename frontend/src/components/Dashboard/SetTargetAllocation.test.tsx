@@ -2,7 +2,7 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import GoalAllocation from './GoalAllocation'
+import SetTargetAllocation from './SetTargetAllocation'
 
 // Skapar en ny React Query-klient för varje test
 const createTestQueryClient = () =>
@@ -29,13 +29,13 @@ beforeEach(() => {
   localStorage.clear()
 })
 
-describe('GoalAllocation', () => {
+describe('SetTargetAllocation', () => {
 
   it('saves when the initial sum is valid (100%)', async () => {
     const onTargetSaved = vi.fn()
 
     renderWithQueryClient(
-      <GoalAllocation
+      <SetTargetAllocation
         targetAktierPct={60}
         targetStabiltPct={40}
         onTargetSaved={onTargetSaved}
@@ -55,7 +55,7 @@ describe('GoalAllocation', () => {
     const onTargetSaved = vi.fn()
 
     renderWithQueryClient(
-      <GoalAllocation
+      <SetTargetAllocation
         targetAktierPct={70}
         targetStabiltPct={50}
         onTargetSaved={onTargetSaved}
@@ -75,7 +75,7 @@ describe('GoalAllocation', () => {
 
   it('shows "Spara mål" and is enabled before saving', () => {
     renderWithQueryClient(
-      <GoalAllocation
+      <SetTargetAllocation
         targetAktierPct={60}
         targetStabiltPct={40}
         onTargetSaved={vi.fn()}
@@ -92,7 +92,7 @@ describe('GoalAllocation', () => {
 
   it('shows "Mål sparat" and resets to "Spara mål" after 3 seconds', async () => {
     renderWithQueryClient(
-      <GoalAllocation
+      <SetTargetAllocation
         targetAktierPct={60}
         targetStabiltPct={40}
         onTargetSaved={vi.fn()}
@@ -118,7 +118,7 @@ describe('GoalAllocation', () => {
 
   it('re-enables "Spara mål" after editing a field again', async () => {
     renderWithQueryClient(
-      <GoalAllocation
+      <SetTargetAllocation
         targetAktierPct={60}
         targetStabiltPct={40}
         onTargetSaved={vi.fn()}

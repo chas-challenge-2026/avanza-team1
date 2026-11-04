@@ -1,6 +1,5 @@
 package se.comerit.avanza.controller;
 
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -8,19 +7,25 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import se.comerit.avanza.dto.DailyPriceDto;
+import se.comerit.avanza.service.AlphaVantageService;
 import se.comerit.avanza.service.HoldingService;
+
+import java.util.List;
 import java.util.Map;
 
 @Controller
 public class HoldingController {
 
     private final HoldingService holdingService;
+    private final AlphaVantageService alphaVantageService;
 
-    public HoldingController(HoldingService holdingService) {
+    public HoldingController(HoldingService holdingService, AlphaVantageService alphaVantageService) {
         this.holdingService = holdingService;
+        this.alphaVantageService = alphaVantageService;
     }
 
-    @GetMapping("/holdings")
+    @GetMapping("/legacy/holdings")
     public String listHoldings(Model model) {
 
 
@@ -94,4 +99,15 @@ public class HoldingController {
         return ResponseEntity.ok(data);
     }
 
+    // --- NY ENDPOINT FÖR HISTORIK ---
+    @GetMapping("/api/holdings/history")
+    public ResponseEntity<List<DailyPriceDto>> getHoldingHistory(
+            @RequestParam String ticker,
+            @RequestParam(defaultValue = "1Y") String range) {
+
+        List<DailyPriceDto> history = alphaVantageService.getHistoryForRange(ticker, range);
+        return ResponseEntity.ok(history);
+    }
 }
+
+

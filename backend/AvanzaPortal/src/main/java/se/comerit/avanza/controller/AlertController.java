@@ -19,7 +19,7 @@ public class AlertController {
         this.alertService = alertService;
     }
 
-    @GetMapping("/alerts")
+    @GetMapping("/legacy/alerts")
     public String listAlerts(Model model) {
 
         // Read userId from SecurityContext (v2)

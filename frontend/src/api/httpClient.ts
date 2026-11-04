@@ -12,10 +12,7 @@ export class ApiError extends Error {
 }
 
 function baseUrl(): string {
-  const url = import.meta.env.VITE_API_BASE_URL;
-  if (!url) {
-    throw new Error("VITE_API_BASE_URL is missing");
-  }
+  const url = import.meta.env.VITE_API_BASE_URL ?? "";
   return url.replace(/\/$/, "");
 }
 
