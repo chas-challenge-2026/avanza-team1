@@ -1,0 +1,161 @@
+.topbar {
+  position: relative;
+  width: 100%;
+  height: 80px;
+  background-color: var(--white);
+  border-bottom: 4px solid var(--primary-color);
+  display: grid;
+  grid-template-columns: auto auto auto;
+  grid-template-areas: "brand nav user";
+  align-items: center;
+}
+
+/* ▼▼▼ branding ▼▼▼ */
+.brand {
+  grid-area: brand;
+  padding-left: var(--space-large);
+  display: flex;
+  flex-direction: column;
+}
+.topbar img {
+  margin: auto 0;
+  aspect-ratio: 250/80;
+  height: 40px;
+  width: 125px;
+}
+.topbar h1 {
+  font-size: var(--font-size-normal);
+  font-weight: 700;
+  letter-spacing: 0.01rem;
+  margin: 0;
+}
+/* ▲▲▲ branding ▲▲▲ */
+
+/* ▼▼▼ navigation ▼▼▼ */
+.desktopNav {
+  grid-area: nav;
+  align-self: stretch;
+  display: flex;
+  flex-direction: row;
+  justify-content: stretch;
+  align-items: center;
+}
+
+.desktopNav a {
+  height: 100%;
+  flex-grow: 1;
+  align-content: center;
+  text-align: center;
+  text-decoration: none;
+  color: var(--text-color-alt);
+  font-size: var(--font-size-emphasis);
+  letter-spacing: 0.01rem;
+  border-top: 2px solid transparent;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.desktopNav a:hover {
+  color: var(--primary-color);
+}
+
+.desktopNav a.active {
+  color: var(--primary-color);
+  border-bottom-color: var(--primary-color);
+}
+/* ▲▲▲ navigation ▲▲▲ */
+
+/* ▼▼▼ user areas ▼▼▼ */
+.user {
+  grid-area: user;
+  padding-right: var(--space-large);
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: var(--space-medium);
+}
+.userName {
+  font-size: var(--font-size-emphasis);
+  font-weight: 600;
+  color: var(--text-color-alt);
+  min-width: fit-content;
+}
+.logoutButton {
+  margin: auto 0;
+  height: 2rem;
+  min-width: fit-content;
+  background-color: var(--primary-color);
+  color: var(--white);
+}
+
+.mobileLogout {
+  display: none;
+}
+/* ▲▲▲ user areas ▲▲▲ */
+
+.hamburgerContainer {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .topbar {
+    grid-template-columns: auto auto;
+    grid-template-areas: "brand user";
+  }
+  .brand {
+    padding-left: var(--space-medium);
+  }
+  .user {
+    padding-right: var(--space-medium);
+    justify-content: end;
+  }
+  .desktopLogout {
+    display: none;
+  }
+
+  .desktopNav {
+    position: absolute;
+    top: 100%;
+    right: var(--space-medium);
+    z-index: 10;
+    display: none;
+    flex-direction: column;
+    width: min(12rem, calc(100vw - 2rem));
+    background-color: var(--background);
+    border: 1px solid var(--light-gray);
+  }
+
+  .desktopNav.mobileMenuOpen {
+    display: flex;
+  }
+
+  .desktopNav a {
+    height: auto;
+    flex-grow: 0;
+    padding: var(--space-medium);
+    border-top: 0;
+    border-bottom: 1px solid var(--light-gray);
+    text-align: left;
+  }
+
+  .desktopNav a:last-of-type {
+    border-bottom: 0;
+  }
+
+  .mobileLogout {
+    display: block;
+    width: 100%;
+    height: auto;
+    padding: var(--space-medium);
+    border-radius: 0;
+    border-top: 1px solid var(--light-gray);
+    border-bottom: 0;
+    /* background-color: var(--background);
+    color: var(--text-color-alt);
+    text-align: left; */
+  }
+
+  .hamburgerContainer {
+    display: inline;
+  }
+}

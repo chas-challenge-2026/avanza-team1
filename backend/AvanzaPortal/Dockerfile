@@ -1,12 +1,62 @@
-FROM maven:3.8-openjdk-11 AS build
-WORKDIR /app
-COPY pom.xml .
-RUN mvn dependency:resolve -q
-COPY src ./src
-RUN mvn package -DskipTests -q
+# ----------------------------------------
+# Stage 1: Build React frontend
+# ----------------------------------------
+FROM node:24-alpine AS frontend-build
+WORKDIR /app/frontend
 
-FROM eclipse-temurin:11-jre-jammy
+COPY frontend/package*.json ./
+RUN npm ci
+
+COPY frontend/ ./
+
+ENV VITE_USE_MOCK=false
+ENV VITE_API_BASE_URL=
+
+RUN npm run build
+# ----------------------------------------
+# Stage 2: Build Java Application
+# ----------------------------------------
+FROM maven:3.9-eclipse-temurin-21 AS java-build
 WORKDIR /app
-COPY --from=build /app/target/avanza-portal-1.0-SNAPSHOT.jar app.jar
+
+COPY backend/AvanzaPortal/pom.xml .
+RUN mvn dependency:resolve -q
+
+COPY backend/AvanzaPortal/src ./src
+
+# Include React production build in Spring Boot
+COPY --from=frontend-build /app/frontend/dist/ ./src/main/resources/static/
+
+RUN mvn package -DskipTests -q
+# ----------------------------------------
+# Stage 3: Build C++ Native Library
+# ----------------------------------------
+FROM eclipse-temurin:21-jdk-jammy AS cpp-build
+WORKDIR /app/native
+
+# Install Linux build tools
+RUN apt-get update && apt-get install -y git cmake g++ build-essential libssl-dev
+
+# Copy the native source code from the context root
+COPY native/ ./
+
+# Navigate into the backtest directory where CMakeLists.txt is located and compile
+RUN cd backtest && \
+    rm -rf build && \
+    cmake -B build -DCMAKE_BUILD_TYPE=Release && \
+    cmake --build build
+
+# ----------------------------------------
+# Stage 4: Final Runtime Image
+# ----------------------------------------
+FROM eclipse-temurin:21-jre-jammy
+WORKDIR /app
+
+# Copy the Java executable from Stage 1
+COPY --from=java-build /app/target/avanza-portal-1.0-SNAPSHOT.jar app.jar
+
+# Copy the compiled C++ library. Note the updated path including /backtest/
+COPY --from=cpp-build /app/native/backtest/build/libbacktest.so /usr/lib/libbacktest.so
+
 EXPOSE 8082
 ENTRYPOINT ["java", "-jar", "app.jar"]

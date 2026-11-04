@@ -1,0 +1,80 @@
+{
+  "userName": "Anna Lindqvist",
+  "totalValueSek": 698450,
+  "fx": {
+    "usdSek": 10.45,
+    "eurSek": 11.32
+  },
+  "accounts": [
+    { "name": "ISK", "type": "ISK", "valueSek": 412000 },
+    { "name": "KF", "type": "KF", "valueSek": 186200 },
+    { "name": "Depå", "type": "DEPA", "valueSek": 100250 },
+    { "name": "Pension", "type": "PENSION", "valueSek": 0 }
+  ],
+  "allocation": {
+    "actualAktierPct": 75,
+    "actualStabiltPct": 25,
+    "targetAktierPct": 60,
+    "targetStabiltPct": 40,
+    "thresholdPct": 5,
+    "overThreshold": true
+  },
+  "holdings": [
+    {
+      "ticker": "AAPL",
+      "name": "Apple Inc",
+      "account": "DEPA",
+      "quantity": 10,
+      "currency": "USD",
+      "valueSek": 21000,
+      "returnPct": 12,
+      "assetClass": "AKTIER"
+    },
+    {
+      "ticker": "VOLV-B",
+      "name": "Volvo",
+      "account": "ISK",
+      "quantity": 40,
+      "currency": "SEK",
+      "valueSek": 112000,
+      "returnPct": 4,
+      "assetClass": "AKTIER"
+    },
+    {
+      "ticker": "INVE-B",
+      "name": "Investor B",
+      "account": "ISK",
+      "quantity": 80,
+      "currency": "SEK",
+      "valueSek": 300000,
+      "returnPct": 6,
+      "assetClass": "AKTIER"
+    },
+    {
+      "ticker": "GLOB-R",
+      "name": "Global Räntefond",
+      "account": "KF",
+      "quantity": 250,
+      "currency": "SEK",
+      "valueSek": 186200,
+      "returnPct": 2,
+      "assetClass": "STABILT"
+    },
+    {
+      "ticker": "MSFT",
+      "name": "Microsoft",
+      "account": "DEPA",
+      "quantity": 12,
+      "currency": "USD",
+      "valueSek": 79250,
+      "returnPct": 8,
+      "assetClass": "AKTIER"
+    }
+  ],
+  "alerts": [
+    {
+      "type": "DRIFT",
+      "message": "Portföljen har glidit från målet — aktier 75% mot mål 60% (gräns 5%)."
+    }
+  ]
+}

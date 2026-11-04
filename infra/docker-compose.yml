@@ -1,5 +1,5 @@
 # =====================================================================
-# PLATTFORMSFIL: ändra denna fil med försiktighet. Se DRIFT.md.
+# PLATTFORMSFIL: ändra denna fil med försiktighet. Se docs/DRIFT.md.
 # Er deploy-miljö (stage/prod) kräver att:
 #   1. filen ligger kvar som infra/docker-compose.yml
 #   2. webbtjänsten heter "app"
@@ -21,7 +21,7 @@ services:
       POSTGRES_PASSWORD: avanza123
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./seed.sql:/docker-entrypoint-initdb.d/seed.sql
+
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U avanza"]
       interval: 5s
@@ -30,8 +30,8 @@ services:
 
   app:
     build:
-      context: ../backend/AvanzaPortal
-      dockerfile: Dockerfile
+      context: ..
+      dockerfile: backend/AvanzaPortal/Dockerfile
     expose:
       - "8082"
     environment:
