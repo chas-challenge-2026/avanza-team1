@@ -42,7 +42,7 @@ cd frontend && npm install && npm run dev
 * I följande dokument går vi igenom på djupet kring varje dels funktionalitet, körning, tester och teststatus, beslutsloggar, kända brister och avgränsningar. Bredvid länkarna framgår det huruvida dokumentationen är på svenska eller engelska.
  
 ### Frontend:
-[Frontend README](docs/frontend/README.md) ← All dokumentation på svenska.
+[Frontend README](frontend/docs/README-frontend.md) ← All dokumentation på svenska.
  
 ### Backend: 
 [Backend README](backend/docs/README.md) ← All dokumentation på svenska.

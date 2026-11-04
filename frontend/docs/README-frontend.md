@@ -77,7 +77,7 @@ http://localhost:4173
 
 Preview-servern ersätter inte Spring Boot-backend.
 
-För mer information om drift och backendmiljö, se [DRIFT.md](../../DRIFT.md).
+För mer information om drift och backendmiljö, se [DRIFT.md](../../docs/DRIFT.md).
 
 ## Available npm scripts
 
@@ -149,7 +149,7 @@ TanStack Query används för asynkron datahantering.
 
 API-lagret är utformat för att separera gränssnittet från datakällorna. Det har gjort det möjligt att utveckla frontend parallellt med backend.
 
-Arkitekturella vägval dokumenteras i [BESLUT.md](BESLUT.md).
+Arkitekturella vägval dokumenteras i [BESLUT.md](BESLUT-frontend.md).
 
 ## Implemented functionality
 
@@ -295,7 +295,7 @@ Frontendteamet fokuserar därför på:
 
 Ofullständiga integrationer dokumenteras som kvarstående arbete.
 
-Beslutets motivering och konsekvenser ska även dokumenteras i [BESLUT.md](BESLUT.md).
+Beslutets motivering och konsekvenser ska även dokumenteras i [BESLUT.md](BESLUT-frontend.md).
 
 ## Testing
 
@@ -370,9 +370,9 @@ Frontendteamet har dokumenterat tekniska beslut och individuella bidrag under pr
 
 | Dokument | Innehåll |
 |---|---|
-| [BESLUT.md](BESLUT.md) | Tekniska beslut, motiveringar och avgränsningar |
-| [BIDRAG.md](BIDRAG.md) | Individuella bidrag, AI-användning och koppling till issues/PR |
-| [Frontend-dokumentation](README.md) | Översikt över dokumentationsstrukturen |
+| [BESLUT.md](BESLUT-frontend.md) | Tekniska beslut, motiveringar och avgränsningar |
+| [BIDRAG.md](BIDRAG-frontend.md) | Individuella bidrag, AI-användning och koppling till issues/PR |
+| [Frontend-dokumentation](README-frontend.md) | Översikt över dokumentationsstrukturen |
 | [STYLING.md](STYLING.md) | Stylingregler och komponentkonventioner |
 
 Beslutsloggen omfattar bland annat CSS-struktur, datahantering, API-adaptrar, driftberäkning, autentisering och testverktyg.

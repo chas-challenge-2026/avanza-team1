@@ -89,11 +89,11 @@ chas-avanza/
 │   │   ├── BESLUT.md
 │   │   ├── BIDRAG.md
 │   │   └── README.md
+│   ├── DRIFT.md               ← Drift, deploy och plattformskontrakt
 │   ├── architecture.md        ← Systembeskrivning
 │   ├── known-bugs.md          ← Kända fel (er uppgiftslista)
 │   ├── README-pain-points.md  ← Vad som spricker vid skala
 │   └── v2-targets.md          ← Målarkitektur för v2
-├── DRIFT.md                   ← Drift, deploy och plattformskontrakt
 ├── frontend/                  ← React 18 + Vite + TypeScript (v2)
 │   ├── .env.development
 │   ├── .gitignore
